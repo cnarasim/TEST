@@ -1,0 +1,9 @@
+# This project runs with the Python standard library ONLY — nothing here
+# is needed to run the demo locally.
+#
+# Uncomment these to go live against real SAP services (see
+# docs/04-going-live-on-btp.md). Install them in a real virtualenv with
+# network access, NOT required for the offline demo.
+#
+# ai-core-sdk
+# generative-ai-hub-sdk
