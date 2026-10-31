@@ -10,6 +10,9 @@ inbound traffic except SSH.
 | `bootstrap.sh` | Sets up a fresh Ubuntu/Debian VM: Docker, firewall, `hermes` user, swap, pulls the image |
 | `docker-compose.yml` | Runs the gateway and the dashboard in one container. Dashboard is on loopback only |
 | `hermes.env.example` | Starter secrets template (LLM key, Telegram allowlist) if you don't use the wizard |
+| [`GUIDE.md`](GUIDE.md) | **Start here.** Deployment options compared, step-by-step Claude cloud setup, and recommended ways to use it |
+| `claude-cloud/setup-script.sh` | Paste into a Claude cloud environment's Setup script. Caches the Hermes image |
+| `claude-cloud/hermes-cc.sh` | Runs Hermes as a test sandbox inside a Claude cloud session (`start`, `ask`, `sync`, `stop`) |
 
 ## 1. Create the VM
 
