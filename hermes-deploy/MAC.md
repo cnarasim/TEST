@@ -6,7 +6,7 @@ Assessed from the machine's own readout:
 |---|---|---|
 | Chip / RAM | Apple M2 Pro, 10 cores, 16 GB | Plenty. The Hermes gateway idles at about 330 MB |
 | Memory free | 40% (about 6 GB) | Fine for Hermes with a cloud model |
-| Disk free | **18 GB of 460 GB** | **Too low. Free up space first** (target 50 GB or more) |
+| Disk free | `df` shows 18 GB, but macOS Storage shows **174 GB available** (about 155 GB is purgeable space, such as Time Machine local snapshots, that macOS frees automatically) | OK. Tidying is optional |
 | Sleep | `sleep 1`: sleeps after 1 min idle, only kept awake by other apps | **Must change.** If those apps close, the bot goes offline |
 | Restart after power cut | `autorestart 0` | Turn on |
 | Uptime / load | 17 days, load about 3 on 10 cores | Good, stable |
@@ -21,7 +21,7 @@ makes replies slow.
 
 ---
 
-## Step 1: Free disk space (aim for 50 GB or more free)
+## Step 1 (optional): Tidy up disk space
 
 Find what's big (read-only):
 
