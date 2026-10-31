@@ -15,7 +15,7 @@ place to host your always-on bot. Production belongs on a small VM
 | 1 | **Cloud VM + Docker** (this kit) | Yes | **$0** (GCP free e2-micro) to $30/mo | Low | **Production default.** Telegram/Slack bot, Hermes cron, persistent memory |
 | 2 | Cloud VM, native install + systemd | Yes | $0–30/mo | Low | Same as 1 without Docker: `curl -fsSL https://hermes-agent.nousresearch.com/install.sh \| bash`, then `sudo hermes gateway install --system` |
 | 3 | PaaS: Fly.io / Railway / Render, Telegram **webhook mode** | Sleeps when idle, wakes on each message | Low, pay per use | Medium | Cheap personal bot. Needs a persistent volume for `/opt/data`, plus `TELEGRAM_WEBHOOK_URL` and `TELEGRAM_WEBHOOK_SECRET`. Scheduled jobs run only while it's awake |
-| 4 | Your own hardware: Mac mini, home server, Raspberry Pi 5 | While powered on | $0 | Low | Home lab. The Docker kit works on any Linux box, and the image is published for arm64 |
+| 4 | Your own hardware: Mac mini, home server, Raspberry Pi 5 | While powered on | about $1/mo electricity | Low | Home lab. Macs install natively and run as a launchd service ([MAC.md](MAC.md)). The Docker kit works on any Linux box (arm64 too) |
 | 5 | **Claude Code cloud session** (`claude-cloud/`) | **No**, active session only | Included in your Claude plan | Low | **Development and testing**: persona, skills, model choice, prompts |
 | 6 | Hybrid: small VM + Modal/Daytona *terminal backend* | Yes (the gateway) | VM plus per-use compute | Medium | Hermes runs its shell commands in serverless sandboxes that hibernate when idle. Good for heavy or untrusted tool work |
 

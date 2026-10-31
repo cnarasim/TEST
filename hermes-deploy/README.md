@@ -9,6 +9,7 @@ inbound traffic except SSH.
 |---|---|
 | `bootstrap.sh` | Sets up a fresh Ubuntu/Debian VM: Docker, firewall, `hermes` user, swap, pulls the image |
 | `docker-compose.yml` | Runs the gateway and the dashboard in one container. Dashboard is on loopback only |
+| [`MAC.md`](MAC.md) | Run Hermes on your own Mac (native install, launchd service, separate user) |
 | `gcp-free-vm.sh` | Creates a free Google Cloud e2-micro VM and runs the bootstrap on it (cheapest option) |
 | `hermes.env.example` | Starter secrets template (LLM key, Telegram allowlist) if you don't use the wizard |
 | [`GUIDE.md`](GUIDE.md) | **Start here.** Deployment options compared, step-by-step Claude cloud setup, and recommended ways to use it |
