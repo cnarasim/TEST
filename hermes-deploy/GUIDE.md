@@ -12,8 +12,8 @@ place to host your always-on bot. Production belongs on a small VM
 
 | # | Option | Always on? | Rough cost | Effort | Use it for |
 |---|---|---|---|---|---|
-| 1 | **Cloud VM + Docker** (this kit) | Yes | $5–30/mo | Low | **Production default.** Telegram/Slack bot, Hermes cron, persistent memory |
-| 2 | Cloud VM, native install + systemd | Yes | $5–30/mo | Low | Same as 1 without Docker: `curl -fsSL https://hermes-agent.nousresearch.com/install.sh \| bash`, then `sudo hermes gateway install --system` |
+| 1 | **Cloud VM + Docker** (this kit) | Yes | **$0** (GCP free e2-micro) to $30/mo | Low | **Production default.** Telegram/Slack bot, Hermes cron, persistent memory |
+| 2 | Cloud VM, native install + systemd | Yes | $0–30/mo | Low | Same as 1 without Docker: `curl -fsSL https://hermes-agent.nousresearch.com/install.sh \| bash`, then `sudo hermes gateway install --system` |
 | 3 | PaaS: Fly.io / Railway / Render, Telegram **webhook mode** | Sleeps when idle, wakes on each message | Low, pay per use | Medium | Cheap personal bot. Needs a persistent volume for `/opt/data`, plus `TELEGRAM_WEBHOOK_URL` and `TELEGRAM_WEBHOOK_SECRET`. Scheduled jobs run only while it's awake |
 | 4 | Your own hardware: Mac mini, home server, Raspberry Pi 5 | While powered on | $0 | Low | Home lab. The Docker kit works on any Linux box, and the image is published for arm64 |
 | 5 | **Claude Code cloud session** (`claude-cloud/`) | **No**, active session only | Included in your Claude plan | Low | **Development and testing**: persona, skills, model choice, prompts |
@@ -21,6 +21,39 @@ place to host your always-on bot. Production belongs on a small VM
 
 **Recommended setup:** option 1 for production and option 5 as your workbench.
 Section 4 shows how they fit together.
+
+### Cheapest setup: about $1–5/month total
+
+| Piece | Choice | Cost |
+|---|---|---|
+| Server | **Google Cloud Always Free e2-micro** (1 GB RAM, 30 GB standard disk, us-west1/us-central1/us-east1), created with [`gcp-free-vm.sh`](gcp-free-vm.sh) | $0 within free-tier limits (billing account required, so set a budget alert) |
+| Model | **OpenAI `gpt-6-luna`** via `OPENAI_API_KEY` (Hermes provider `openai-api`) | $0.10 / 1M input, $0.01 / 1M cached input, $0.50 / 1M output |
+
+Other server choices, cheapest first:
+
+| Server | Monthly | Catch |
+|---|---|---|
+| GCP e2-micro (Always Free) | $0 | 1 GB RAM. Hermes idles at about 330 MB, and bootstrap adds swap. No heavy browser automation |
+| Oracle Cloud Always Free (Ampere ARM) | $0 | More RAM, but capacity is often unavailable, and Oracle may reclaim idle free instances. An idle chat bot looks idle |
+| Hetzner CX23 / CAX11 (2 vCPU, 4 GB) | about €5.50–6 | Cheapest reliable paid option. Prices rose twice in 2026, and new-order stock has been patchy |
+| A box you already own | $0 | Must stay on |
+
+Why the model matters more than the server: every Hermes request carries
+about 13K tokens of system prompt and tool definitions (measured: a 51 KB
+request body for a one-word question). Rough estimate for 50 messages a day
+at about 3 model calls each, with most of the prompt cached:
+
+| Model | Input / output per 1M tokens | Rough monthly bill |
+|---|---|---|
+| `gpt-6-luna` | $0.10 / $0.50 | **about $3** |
+| `gpt-6-sol` | $2.00 / $10.00 | about $60 |
+| Claude Sonnet (for comparison) | $3.00 / $15.00 | about $90 |
+
+Prices are from Hermes v0.22.5's built-in pricing table, which cites OpenAI's
+and Anthropic's docs as of September 2026. Check
+[openai.com/api/pricing](https://openai.com/api/pricing/) before you commit.
+Start on `gpt-6-luna` and switch a task to `gpt-6-sol` only if Luna struggles
+with it (`hermes model` changes it).
 
 ---
 
@@ -32,7 +65,7 @@ Tested in a Claude cloud session with Hermes v0.22.5:
 |---|---|
 | Hermes container starts in under a minute (image cached by the setup script) | Running 24/7. The VM pauses after a few minutes without Claude activity |
 | One-shot questions: `hermes-cc.sh ask "..."` | Hermes's own cron. It runs inside the gateway, which stops when the VM pauses |
-| Reaching `api.anthropic.com` under the default **Trusted** network level | OpenRouter and Telegram are blocked until you allow those domains (step 4 below) |
+| Reaching `api.anthropic.com` under the default **Trusted** network level | **OpenAI (`api.openai.com`)**, OpenRouter and Telegram are blocked until you allow those domains (step 4 below) |
 | Testing your `SOUL.md` and skills from the repo (`hermes-cc.sh sync`) | Long-term memory. The sandbox's data lives on the session VM and is lost when the VM is reclaimed |
 | A test Telegram bot, while the session is active | The dashboard and the interactive Hermes TUI. Use the VM for those |
 
@@ -61,26 +94,31 @@ start with the image already on disk. The cache rebuilds about every 7 days.
 Select **Environment variables** and add (in `.env` format):
 
 ```text
-ANTHROPIC_API_KEY=sk-ant-...      # a separate key just for Hermes, with a spend limit
-HERMES_CC_PROVIDER=anthropic
-# HERMES_INFERENCE_MODEL=...      # optional; unset uses the provider default
+OPENAI_API_KEY=sk-...             # a separate key just for Hermes, with a spend limit
+HERMES_CC_PROVIDER=openai-api
+HERMES_CC_MODEL=gpt-6-luna
 ```
 
 - Hermes needs **its own** LLM key. It can't use Claude Code's built-in access.
-- Anyone who uses this environment can read these values, so use a dedicated,
-  spend-limited key. (Network secrets don't help here: the proxy never
-  attaches them to `api.anthropic.com`.)
+- Anyone who uses this environment can read these values, so use a dedicated
+  key and set a monthly limit at platform.openai.com → Settings → Limits.
+- With OpenAI you must also do step 4. `api.openai.com` is blocked by default.
+  (Anthropic would work without it: `ANTHROPIC_API_KEY` + `HERMES_CC_PROVIDER=anthropic`.)
 
-### Step 4 (optional): Let it reach Telegram or OpenRouter
+### Step 4: Allow the hosts Hermes needs
 Under **Network access**, choose **Custom** and keep the default list ticked.
-Then add, one per line:
+Then add, one per line, the hosts you use:
 
 ```text
+api.openai.com
 api.telegram.org
 openrouter.ai
 ```
 
-For Telegram, create a **separate test bot** with @BotFather. Don't reuse
+If a host is missing, `hermes-cc.sh ask` stops after 5 minutes (it doesn't
+hang forever) and tells you to check Allowed domains.
+
+Telegram is optional in the sandbox. If you use it, create a **separate test bot** with @BotFather. Don't reuse
 your production bot: if the sandbox and the VM poll the same bot, they fight
 over its messages. Then add `TELEGRAM_BOT_TOKEN=...` and
 `TELEGRAM_ALLOWED_USERS=<your numeric id>` to the environment variables.

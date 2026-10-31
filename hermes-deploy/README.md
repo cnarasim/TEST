@@ -9,6 +9,7 @@ inbound traffic except SSH.
 |---|---|
 | `bootstrap.sh` | Sets up a fresh Ubuntu/Debian VM: Docker, firewall, `hermes` user, swap, pulls the image |
 | `docker-compose.yml` | Runs the gateway and the dashboard in one container. Dashboard is on loopback only |
+| `gcp-free-vm.sh` | Creates a free Google Cloud e2-micro VM and runs the bootstrap on it (cheapest option) |
 | `hermes.env.example` | Starter secrets template (LLM key, Telegram allowlist) if you don't use the wizard |
 | [`GUIDE.md`](GUIDE.md) | **Start here.** Deployment options compared, step-by-step Claude cloud setup, and recommended ways to use it |
 | `claude-cloud/setup-script.sh` | Paste into a Claude cloud environment's Setup script. Caches the Hermes image |
@@ -21,6 +22,7 @@ Hermes calls a hosted LLM API, so the VM needs no GPU.
 
 | Cloud | Instance type | Rough cost |
 |---|---|---|
+| **GCP Always Free** | `e2-micro` in us-west1/us-central1/us-east1, 30 GB standard disk. Run [`./gcp-free-vm.sh <project-id>`](gcp-free-vm.sh) to create it and bootstrap it in one go | **$0** within free-tier limits |
 | AWS | `t3.medium` (or `t4g.medium` ARM) | ~$30/mo on-demand |
 | GCP | `e2-medium` | ~$25/mo |
 | Azure | `B2s` | ~$30/mo |
@@ -68,13 +70,27 @@ the same bot. The `hermes` command inside the container drops to the `hermes`
 user automatically, so file ownership stays correct.
 
 The wizard asks for:
-1. **LLM provider and API key.** Options include Anthropic, OpenRouter,
-   Gemini, and Nous Portal (OAuth). The key is saved to `/srv/hermes/data/.env`.
+1. **LLM provider and API key.** The cheapest good option is **OpenAI API**
+   with model **`gpt-6-luna`** (see [GUIDE.md](GUIDE.md#cheapest-setup-about-15month-total)).
+   The key is saved to `/srv/hermes/data/.env`.
 2. **A messaging platform.** For Telegram:
    - Message **@BotFather**, send `/newbot`, and copy the bot token.
    - Message **@userinfobot** to get your numeric user ID.
    - Enter both. **Always set the allowed-users list**, or anyone who finds
      the bot can run commands on your VM through it.
+
+**OpenAI without the wizard** (tested on v0.22.5). The key is read without
+echoing, so it stays out of your shell history:
+
+```bash
+read -rs -p "OpenAI API key: " K; echo
+sudo docker exec hermes hermes config set OPENAI_API_KEY "$K"; unset K
+sudo docker exec hermes hermes config set model.provider openai-api
+sudo docker exec hermes hermes config set model.default gpt-6-luna
+sudo docker compose restart
+```
+
+Then set a monthly spend limit at platform.openai.com → Settings → Limits.
 
 ## 5. Verify
 

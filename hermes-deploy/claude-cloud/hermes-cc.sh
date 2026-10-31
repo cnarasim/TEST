@@ -15,8 +15,9 @@
 # Keys are read from the cloud environment's variables (environment settings
 # -> Environment variables) and passed through with `docker run -e NAME`, so
 # their values never appear on a command line. Optional settings:
-#   HERMES_CC_PROVIDER   provider for `ask`, e.g. anthropic | openrouter | gemini
-#   HERMES_INFERENCE_MODEL  model for `ask` (unset = the provider default)
+#   HERMES_CC_PROVIDER   e.g. openai-api | anthropic | openrouter | gemini
+#   HERMES_CC_MODEL      e.g. gpt-6-luna (unset = the provider default)
+#   HERMES_CC_ASK_TIMEOUT  seconds to wait for an answer (default 300)
 
 set -euo pipefail
 
@@ -27,8 +28,8 @@ HUID=10000   # the image's default hermes user
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_CFG="$(cd "$SCRIPT_DIR/../.." && pwd)/hermes-config"
 
-LLM_VARS=(ANTHROPIC_API_KEY OPENROUTER_API_KEY GOOGLE_API_KEY GEMINI_API_KEY
-          OPENAI_API_KEY HERMES_INFERENCE_MODEL)
+LLM_VARS=(OPENAI_API_KEY ANTHROPIC_API_KEY OPENROUTER_API_KEY GOOGLE_API_KEY
+          GEMINI_API_KEY)
 # Messaging tokens are opt-in (--with-chat). If the sandbox and the production
 # VM poll the same bot, they fight over its updates. Use a separate test bot.
 CHAT_VARS=(TELEGRAM_BOT_TOKEN TELEGRAM_ALLOWED_USERS SLACK_BOT_TOKEN
@@ -101,9 +102,15 @@ cmd_start() {
     -e HERMES_UID="$HUID" -e HERMES_GID="$HUID" \
     "${args[@]}" -v "$DATA:/opt/data" "$IMG" gateway run >/dev/null
 
-  for _ in $(seq 1 60); do
-    docker exec "$NAME" hermes --version >/dev/null 2>&1 && break; sleep 1
-  done
+  wait_ready
+  # Provider and model go into config.yaml. A per-run model override env var
+  # was not honoured on the gateway path in v0.22.5, so we don't rely on one.
+  if [[ -n "${HERMES_CC_PROVIDER:-}" || -n "${HERMES_CC_MODEL:-}" ]]; then
+    [[ -n "${HERMES_CC_PROVIDER:-}" ]] && docker exec "$NAME" hermes config set model.provider "$HERMES_CC_PROVIDER" >/dev/null
+    [[ -n "${HERMES_CC_MODEL:-}" ]] && docker exec "$NAME" hermes config set model.default "$HERMES_CC_MODEL" >/dev/null
+    docker restart "$NAME" >/dev/null && wait_ready
+    echo "hermes-cc: model set to ${HERMES_CC_PROVIDER:-(unchanged)} / ${HERMES_CC_MODEL:-(provider default)}" >&2
+  fi
   docker exec "$NAME" hermes --version | head -1
   local names=()
   for v in "${vars[@]}"; do [[ -n "${!v:-}" ]] && names+=("$v"); done
@@ -113,10 +120,21 @@ cmd_start() {
 cmd_ask() {
   [[ $# -gt 0 ]] || die 'usage: ask "your prompt"'
   need_running
-  local extra=()
-  [[ -n "${HERMES_CC_PROVIDER:-}" ]] && extra+=(--provider "$HERMES_CC_PROVIDER")
-  # -z prints only the final answer; exit 0 = done, 2 = failed/partial
-  docker exec -i "$NAME" hermes -z "$*" "${extra[@]}"
+  # -z prints only the final answer; exit 0 = done, 2 = failed/partial.
+  # If the provider is unreachable, Hermes keeps retrying for minutes, so cap it.
+  local rc=0
+  timeout "${HERMES_CC_ASK_TIMEOUT:-300}" docker exec -i "$NAME" hermes -z "$*" || rc=$?
+  if [[ $rc -eq 124 ]]; then
+    echo "hermes-cc: no answer within ${HERMES_CC_ASK_TIMEOUT:-300}s. Is the provider's host (e.g. api.openai.com) in the environment's Allowed domains? See: $0 logs" >&2
+  fi
+  return "$rc"
+}
+
+wait_ready() {
+  for _ in $(seq 1 60); do
+    docker exec "$NAME" hermes --version >/dev/null 2>&1 && return; sleep 1
+  done
+  die "container did not become ready (see: docker logs $NAME)"
 }
 
 case "${1:-}" in
