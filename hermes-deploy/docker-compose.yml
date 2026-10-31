@@ -1,0 +1,35 @@
+# Hermes Agent: always-on gateway for a cloud VM.
+#
+# Based on the upstream docker-compose.yml (NousResearch/hermes-agent) but
+# runs the published image, so the VM doesn't need to build it.
+#
+#   - One container runs the messaging gateway and the web dashboard, both
+#     supervised by s6.
+#   - The dashboard listens on the VM's loopback (127.0.0.1:9119) only.
+#     Reach it with an SSH tunnel; never bind it to 0.0.0.0.
+#   - The OpenAI-compatible API server (port 8642) stays off.
+#   - All state (config, .env keys, memory, skills, sessions) is kept in
+#     ${HERMES_DATA} on the host. The image holds no state.
+#
+# Values come from /srv/hermes/.env, which bootstrap.sh writes.
+
+services:
+  hermes:
+    image: nousresearch/hermes-agent:${HERMES_IMAGE_TAG:-stable}
+    container_name: hermes
+    restart: unless-stopped
+    network_mode: host          # same as upstream; nothing is published
+    volumes:
+      - ${HERMES_DATA:-/srv/hermes/data}:/opt/data
+    environment:
+      - HERMES_UID=${HERMES_UID:-10000}
+      - HERMES_GID=${HERMES_GID:-10000}
+      - HERMES_DASHBOARD=1
+      - HERMES_DASHBOARD_HOST=127.0.0.1
+      - HERMES_DASHBOARD_PORT=9119
+    command: ["gateway", "run"]
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"
