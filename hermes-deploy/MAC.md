@@ -67,8 +67,7 @@ hermes config set OPENAI_API_KEY "$K"; unset K
 hermes config set model.provider openai-api
 hermes config set model.default gpt-6-luna
 
-hermes gateway setup      # Telegram: bot token from @BotFather + YOUR user id as allowed user
-hermes gateway install    # installs the launchd background service
+hermes gateway install    # launchd background service (the installer may already have done this)
 hermes gateway status     # should say running
 hermes doctor
 ```
@@ -77,11 +76,36 @@ hermes doctor
 
 Set a monthly spend limit at platform.openai.com → Settings → Limits.
 
+### Connect WhatsApp (instead of Telegram)
+
+Hermes links to WhatsApp as a **linked device** (like WhatsApp Web) through an
+unofficial bridge, so there's a small risk of WhatsApp restricting the number.
+Use a **dedicated number**, not your personal one: the linked session gives
+full access to that WhatsApp account.
+
+1. Get a free US number at voice.google.com.
+2. On your iPhone, install **WhatsApp Business** and register it with that
+   number. The verification code arrives in the Google Voice app.
+3. As the `hermes` user, run `hermes whatsapp`, choose **bot** mode, and scan
+   the QR code from WhatsApp Business → Settings → Linked Devices → Link a Device.
+4. Lock it to your personal number and keep strangers silent:
+   ```bash
+   hermes config set WHATSAPP_ENABLED true
+   hermes config set WHATSAPP_MODE bot
+   hermes config set WHATSAPP_ALLOWED_USERS 1XXXXXXXXXX   # your number: country code, no + or spaces
+   hermes config set whatsapp.unauthorized_dm_behavior ignore
+   chmod 700 ~/.hermes/platforms/whatsapp/session
+   hermes gateway restart
+   ```
+5. From your personal WhatsApp, message the bot number.
+
+Keep the phone with the bot number online now and then. WhatsApp unlinks
+devices after long inactivity, and `hermes whatsapp` re-pairs if that happens.
+
 ## Step 5: Switch back to your own account and leave `hermes` logged in
 
 Apple menu → Lock Screen → pick your account. **Don't log `hermes` out.**
-Its background service runs only while that user has a session. Message the
-bot on Telegram to confirm it replies.
+Its background service runs only while that user has a session.
 
 ## Reboots and power cuts
 
