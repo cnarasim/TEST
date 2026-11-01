@@ -99,6 +99,18 @@ full access to that WhatsApp account.
    ```
 5. From your personal WhatsApp, message the bot number.
 
+**Using your personal number instead** (what this Mac ended up with): set
+`hermes config set WHATSAPP_MODE self-chat`, put your own number in
+`WHATSAPP_ALLOWED_USERS`, run `hermes whatsapp` in a light Terminal window
+(Shell → New Window → Basic, because dark themes can stop the QR scanning),
+and scan from WhatsApp → Settings → Linked Devices. You then talk to Hermes in
+the **Message Yourself** chat. Hermes then has access to your whole WhatsApp
+account.
+
+**Always run `hermes gateway restart` after pairing.** A gateway started
+before pairing logs "No messaging platforms enabled" and ignores WhatsApp
+until it's restarted.
+
 Keep the phone with the bot number online now and then. WhatsApp unlinks
 devices after long inactivity, and `hermes whatsapp` re-pairs if that happens.
 
