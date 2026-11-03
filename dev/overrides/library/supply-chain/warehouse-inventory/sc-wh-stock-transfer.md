@@ -34,7 +34,7 @@ Layout: swimlane handoffs
 ## The systems and data it runs on
 | Step | What the system does | Records it keeps |
 |---|---|---|
-| Transfer order | A transfer order says what moves where | Transfer order |
+| Transfer order | Says what moves where, and when | Transfer document |
 | Delivery | The sending site creates the delivery | Outbound delivery |
 | Goods issue | Stock moves into in-transit | Goods issue, in-transit stock |
 | In transit | In-transit stock is visible and valued | In-transit list |

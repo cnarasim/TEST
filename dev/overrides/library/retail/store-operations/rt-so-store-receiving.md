@@ -61,7 +61,7 @@ Layout: process chevrons
 |---|---|---|
 | Receipt to shelf time | Hours from delivery to shelf | Receipt and task times |
 | Delivery accuracy | Deliveries with no discrepancy | Receipt differences |
-| Open claims | Claims older than a week | Open claims |
+| Open claims | Claims older than a week | Claims log |
 | Store transfer volume | Units moved between stores | Transfer volume |
 
 ## Today and target

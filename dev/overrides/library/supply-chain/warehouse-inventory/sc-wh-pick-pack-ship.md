@@ -34,7 +34,7 @@ Layout: swimlane handoffs
 ## The systems and data it runs on
 | Step | What the system does | Records it keeps |
 |---|---|---|
-| Waves | Orders grouped by route and cut-off | Waves |
+| Waves | Orders grouped by route and cut-off | Wave plan |
 | Picking | RF or voice picking to totes and carts | Pick tasks |
 | Packing | Pack stations weigh, label and manifest | Cartons, labels |
 | Loading | Cartons loaded by stop and door | Load, trailer |

@@ -34,7 +34,7 @@ Layout: swimlane handoffs
 ## The systems and data it runs on
 | Step | What the system does | Records it keeps |
 |---|---|---|
-| Price records | Prices, discounts and surcharges kept with validity dates | Price records |
+| Price records | Prices and discounts with valid dates | Price tables |
 | Price elements | Each element has a role: base price, discount, freight, tax | Price element definitions |
 | Search order | The most specific record wins: customer-item, then group, then list | Search sequence |
 | Price calculation | Elements are applied in order with subtotals and rules | Calculation steps, net price |

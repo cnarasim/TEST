@@ -52,6 +52,10 @@ styles, fit, accessibility, type scale, plain punctuation), the delivery gate, a
 - Card headings inside the template's text boxes keep the box's own face, made bold: the Studio's Medium face became
   Circular Bold at 15 pt, a size the type standard has no role for, so every two-box slide with headings failed. Figures
   in those boxes are bold, not orange (the template's boxes hold black text).
+- Card titles keep the template's 24 pt when an icon is placed beside them: the Studio measured an inherited header
+  size as 18 pt and wrote 18 pt into every card title ("had to shrink - the template sets it at 24 pt").
+- A headline the engine computes from the slide's figures is used only when it fits one line (42 characters); the
+  Studio allowed 60, so several metric slides failed "does not fit one line at the standard 36 pt".
 - Scorecards fill both lists: "Lowlight:" / "Highlight:" lines in the page, else the page's own KPIs by status (off
   target under Lowlights). The Studio left both empty, so every scorecard kept the template's empty rows.
 - A template infographic (scorecard, OGSM, vision house, quad, funnel, donut, map) is filled on the template's own
@@ -60,7 +64,7 @@ styles, fit, accessibility, type scale, plain punctuation), the delivery gate, a
 - The same colour in the template's notation: a run that shows white as FFFFFF where the template cell says bg1 (or
   black as 000000 for tx1), or no colour of its own on an unchanged cell, takes the template run's colour as written.
 - Gate refinements, each the same intent applied to the Studio's output: rating words, [placeholders], dates and figures
-  may repeat across a table row; a template infographic may mark status in the brand's status colours; the Studio's named
+  (signed ones too: +0%, -1.8 pts) may repeat across a table row; a template infographic may mark status in the brand's status colours; the Studio's named
   overlays (pictograms, the takeaway line) are additions like the summary layer, in the fidelity check and in the
   structure check's copy; an added pictogram passes the picture clearance check when it covers no text (a moved template
   picture still fails).

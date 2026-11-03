@@ -38,7 +38,7 @@ Layout: swimlane handoffs
 | Planning | Routes and loads built by an optimiser | Planned loads |
 | Tendering | Loads offered to carriers through a portal | Tenders, acceptances |
 | Tracking | Carrier events update every stop | Tracking events, proof of delivery |
-| Freight settlement | The rate table calculates the cost; the invoice is matched | Freight cost, carrier invoice |
+| Freight settlement | Rate table cost, invoice matched | Freight cost, carrier invoice |
 
 ## Six steps from delivery to settled freight
 Layout: process arrow
@@ -54,7 +54,7 @@ Layout: process arrow
 |---|---|---|
 | Rate from contract | Freight cost calculated from the rate table | Transport planner |
 | Tender acceptance window | Unanswered tenders roll to the next carrier | Transport planner |
-| Freight audit | Carrier invoice matched to the calculation | Freight audit |
+| Freight audit | Carrier invoice matched to the calculation | Audit result |
 | Proof of delivery | POD captured for every stop | Carrier |
 
 ## KPIs that show it works

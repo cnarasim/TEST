@@ -37,7 +37,7 @@ Layout: swimlane handoffs
 | Upload | Each register closes the day and uploads | POS transaction log |
 | Sales and stock | Sales post to stock and revenue | Sales postings, stock movements |
 | Tenders | Cash, card and gift card post to finance | Tender postings |
-| Monitor | One view of stores posted and messages in error | Interface monitor |
+| Monitor | Stores posted and messages in error | Interface monitor |
 | Reprocess | Corrected transactions posted again | Error queue |
 
 ## Three sources must agree before the day is closed

@@ -175,7 +175,7 @@ def build(upc, rk, out):
           "\nRATING = re.compile(r\"(?i)^\\s*(\\[[^\\]]{1,24}\\]|high|medium|low|strong|moderate|weak|none|partial|full|yes|no|n/?a|done|open|"
           "closed|on track|at risk|late|green|amber|red|good|fair|poor|planned|in progress|complete|not started|must|should|could|won't"
           "|(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\\.? \\d{1,2},? \\d{4}|\\d{4}-\\d{2}-\\d{2}|q[1-4] \\d{4}"
-          "|[$€£]?\\d[\\d,.]*\\s?(?:%|[kmb]|h|hrs?|hours?|days?|weeks?|pts?)?)\\s*$\")   # scale words, placeholders, dates and figures are data\n"
+          "|[+\\-\\u2212]?[$€£]?\\d[\\d,.]*\\s?(?:%|[kmb]|h|hrs?|hours?|days?|weeks?|pts?)?)\\s*$\")   # scale words, placeholders, dates and figures (signed too) are data\n"
           "STATUS_COLOURS = {\"00B050\", \"0BA03E\", \"FFC000\", \"FF0000\"}   # the brand's status palette (brand.json)\n"
           "STATUS_MARKS = set(\"●○■□▲▼◆◇★►◀▶◄•\")   # dot, square, arrow ... (brand_colours.MARKS)\n"
           "REPEAT_OK = ")
@@ -282,6 +282,12 @@ def build(upc, rk, out):
     patch(eng / "family_rules.py",
           "    return out if len(out) <= 60 else (say[:1].upper() + say[1:] if len(say) <= 60 else None)",
           "    return out if len(out) <= 42 else (say[:1].upper() + say[1:] if len(say) <= 42 else None)   # (1o) one line at 36 pt")
+    # (1p) a card header that inherits its size from the template (24 pt in the display serif) is measured at 24 pt when
+    #      an icon is added beside it: the Studio assumed 18 pt for any inherited size and wrote 18 pt into every card
+    #      title, which the type-scale check fails ("had to shrink to 18 pt - the template sets it at 24 pt")
+    patch(bfs, "        avail = (tbl.columns[c].width - 2 * pad) / 914400; words = cell.text.split() or ['']\n        pt = _run_pt(cell, 18.0)\n",
+          "        avail = (tbl.columns[c].width - 2 * pad) / 914400; words = cell.text.split() or ['']\n"
+          "        pt = _run_pt(cell, 24.0 if serif else 18.0)   # (1p) an inherited serif header is the template's 24 pt\n")
     # (1i) a status mark is a mark, not text: the content gate skips a run that is only a dot, square or arrow in a status
     #      colour, as the brand colours gate already does ("status colours on marks only"); the words beside it are checked
     patch(vd, '                continue\n            rpr = r.find("a:rPr", NS)\n            lat = rpr.find("a:latin", NS) if rpr is not None else None\n',

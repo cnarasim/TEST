@@ -37,7 +37,7 @@ Layout: swimlane handoffs
 | Price calculation | Proposed price from cost and margin rules | Price proposal, margin |
 | Price record | The approved price with its effective date | Price record by zone or store |
 | Worklist | Pending changes reviewed in one list | Price change worklist |
-| Send to POS | New prices sent to every register before the date | POS price file |
+| Send to POS | New prices on every register in time | POS price file |
 | Labels | Shelf labels printed by store | Label batch |
 
 ## Five steps take a price from proposal to shelf

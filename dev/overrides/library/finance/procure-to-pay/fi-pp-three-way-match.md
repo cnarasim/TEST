@@ -35,10 +35,10 @@ Layout: swimlane handoffs
 | Step | What the system does | Records it keeps |
 |---|---|---|
 | Capture | Invoices read by EDI or OCR | Inbound invoice |
-| Post and match | Invoice matched to the purchase order and the receipt | Vendor invoice, match result |
-| Tolerances | Price and quantity limits decide what blocks | Tolerance rules |
+| Post and match | Invoice matched to the PO and receipt | Vendor invoice, match result |
+| Tolerances | Price and quantity limits set blocks | Tolerance rules |
 | Release blocks | Resolved invoices released for payment | Payment block status |
-| Received-not-invoiced | Receipts without invoices cleared or accrued | Received-not-invoiced account |
+| Received-not-invoiced | Uninvoiced receipts cleared or accrued | Accrual account |
 
 ## Three documents must agree before a vendor is paid
 Layout: retail three-way-match

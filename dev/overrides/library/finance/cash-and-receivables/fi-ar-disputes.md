@@ -34,9 +34,9 @@ Layout: swimlane handoffs
 ## The systems and data it runs on
 | Step | What the system does | Records it keeps |
 |---|---|---|
-| Dispute case | A case for every short payment | Dispute case |
+| Dispute case | A case for every short payment | Case record, reason code |
 | From payment | The unpaid difference becomes the case | Residual item |
-| Credit memo | A valid claim becomes a credit memo | Credit memo |
+| Credit memo | A valid claim becomes a credit memo | Credit memo posting |
 | Write-off | Small balances written off within limits | Write-off posting |
 | Root cause | Reason codes reported every month | Case reasons |
 

@@ -10,7 +10,7 @@ plain punctuation (no em or en dashes; the build replaces any left), at least th
 that keep text at the template's type sizes:
   slide heading <= 42 characters    card bullet (under ###) <= 52    table: <= 5 rows, cell <= 64 (first column <= 30)
   swimlane step <= 40               process / timeline line <= 70
-Build: the page body -> tools/playbook.py page (render check off for speed) -> status, the FAIL lines, Standards Match.
+Build: the page body -> tools/playbook.py page (render check off for speed; --render runs it) -> status, FAIL lines, Standards Match.
 The gate is the measure: a page is OK when it has no lint error, no FAIL line and builds READY (or DRAFT where no
 renderer is installed). Exit 0 only when every page is OK.
 """
@@ -88,12 +88,12 @@ def lint(path, LIB):
     return meta, body, probs, warns
 
 
-def build(skill, path, meta, body):
+def build(skill, path, meta, body, render=False):
     with tempfile.TemporaryDirectory(prefix="ulta-verify-") as d:
         page = Path(d) / "page.md"
         page.write_text(body, encoding="utf-8")
         out = Path(d) / f"{path.stem}.pptx"
-        env = dict(os.environ, ULTA_NO_LIBREOFFICE="1")
+        env = dict(os.environ) if render else dict(os.environ, ULTA_NO_LIBREOFFICE="1")   # --render: the full check, READY
         r = subprocess.run([sys.executable, "-I", f"{skill}/tools/playbook.py", "page", str(page), "--out", str(out),
                             "--title", (meta or {}).get("l2") or path.stem], capture_output=True, text=True, env=env, timeout=900)
         o = r.stdout + r.stderr
@@ -111,6 +111,7 @@ def main():
     ap.add_argument("paths", nargs="+"); ap.add_argument("--skill", default=os.environ.get("ULTA_SKILL", DEFAULT_SKILL))
     ap.add_argument("--jobs", type=int, default=3); ap.add_argument("--lint-only", action="store_true")
     ap.add_argument("--strict", action="store_true", help="size and dash warnings fail too (for new pages)")
+    ap.add_argument("--render", action="store_true", help="render each deck (LibreOffice): READY instead of DRAFT")
     a = ap.parse_args()
     sys.path.insert(0, f"{a.skill}/studio")
     import process_library as LIB
@@ -122,7 +123,7 @@ def main():
     results = {}
     if not a.lint_only:
         with cf.ThreadPoolExecutor(a.jobs) as ex:
-            futs = {ex.submit(build, a.skill, f, meta, body): f for f, meta, body, _, _w in linted if meta}
+            futs = {ex.submit(build, a.skill, f, meta, body, a.render): f for f, meta, body, _, _w in linted if meta}
             for fu in cf.as_completed(futs):
                 results[futs[fu]] = fu.result()
     bad = 0

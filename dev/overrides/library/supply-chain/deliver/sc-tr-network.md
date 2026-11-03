@@ -35,7 +35,7 @@ Layout: swimlane handoffs
 | Sites | Every DC, store and fulfilment centre set up from a template | Site master |
 | Sourcing between sites | Each store has its supplying DC | Sourcing rules |
 | Transport lanes | Lanes with carriers, modes and transit times | Lanes, zones |
-| Stock by site | One view of stock across the network | Stock by site |
+| Stock by site | One view of stock across the network | Network stock snapshot |
 
 ## One network of DCs serves stores and online guests
 Layout: retail supply-chain

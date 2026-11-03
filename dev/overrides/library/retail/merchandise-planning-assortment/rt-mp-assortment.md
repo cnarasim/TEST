@@ -37,7 +37,7 @@ Layout: swimlane handoffs
 | Assortments | Ranges built by store cluster | Assortment, store clusters |
 | Listing | Items listed to the stores of the cluster | Listing by store and date |
 | Delisting | Items leave the range on an end date | Listing end dates |
-| Items | Every listed item complete in the product master | Item master |
+| Items | Listed items complete in the master | Item master |
 | Space | Planograms published from the range | Planograms, fixtures |
 
 ## Five steps from range review to reset shelf

@@ -35,9 +35,9 @@ Layout: swimlane handoffs
 | Step | What the system does | Records it keeps |
 |---|---|---|
 | Agreement | Each deal stored with its terms and dates | Rebate agreement |
-| Accrual | Accruals post as purchases or sales happen | Accrual postings |
+| Accrual | Accrued as purchases or sales happen | Accrual postings |
 | Settlement | A settlement run on the agreed dates | Settlement document |
-| Invoice or deduction | The vendor is billed or the amount deducted | Vendor invoice or deduction |
+| Invoice or deduction | Billed to the vendor or deducted | Vendor invoice or deduction |
 | Reporting | Volume and funds earned by deal | Rebate report |
 
 ## Five steps from deal to cash

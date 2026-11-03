@@ -34,7 +34,7 @@ Layout: swimlane handoffs
 ## The systems and data it runs on
 | Step | What the system does | Records it keeps |
 |---|---|---|
-| Billing queue | Shipped deliveries waiting for an invoice | Billing queue |
+| Billing queue | Shipped deliveries waiting for an invoice | Billing due list |
 | Create invoice | A scheduled run invoices what shipped | Invoice header and lines |
 | Credit and debit memos | Approved requests become credit or debit memos | Memo requests, memos |
 | Cancel | A wrong invoice is cancelled, never deleted | Cancellation document |

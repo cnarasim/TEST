@@ -36,9 +36,9 @@ Layout: swimlane handoffs
 | Step | What the system does | Records it keeps |
 |---|---|---|
 | Promotion | Offer, items, channels and dates | Promotion record |
-| Promo price | A temporary price or discount with an end date | Promotional price |
+| Promo price | A temporary price with an end date | Promotional price |
 | Activation | Prices and offers sent to POS and the site | POS and site offer files |
-| Stock build | Expected lift added to forecast or allocation | Lift, allocation |
+| Stock build | Lift added to forecast or allocation | Lift, allocation |
 | Results | Sales during vs before the event | Promotion results |
 
 ## Five steps take a promotion from idea to results

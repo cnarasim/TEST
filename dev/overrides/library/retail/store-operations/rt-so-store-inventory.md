@@ -34,11 +34,11 @@ Layout: swimlane handoffs
 ## The systems and data it runs on
 | Step | What the system does | Records it keeps |
 |---|---|---|
-| Count list | Count lists by department or for the whole store | Count document |
+| Count list | Count lists by department or store | Count document |
 | Count | Associates count with handhelds | Counted quantities |
-| Differences | Approved differences adjust stock and the ledger | Inventory adjustment |
+| Differences | Approved differences adjust stock | Inventory adjustment |
 | Value of shrink | Shrink by store, department and cause | Shrink report |
-| Follow-up | Cases and action plans for high-shrink stores | Loss prevention case |
+| Follow-up | Action plans for high-shrink stores | Loss prevention case |
 
 ## Five steps turn a physical count into accurate stock
 Layout: retail inventory-count

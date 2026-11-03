@@ -35,8 +35,8 @@ Layout: swimlane handoffs
 | Step | What the system does | Records it keeps |
 |---|---|---|
 | Open items | Vendor invoices due by date and terms | Open payables |
-| Payment proposal | The run proposes what to pay | Payment proposal |
-| Payment methods | Methods and banks by vendor and country | Payment method rules |
+| Payment proposal | The run proposes what to pay | Proposal list, exceptions |
+| Payment methods | Method and bank by vendor, country | Payment method rules |
 | Bank file | Approved payments sent as a bank file | Payment file |
 | Checks | Issued checks recorded for positive pay | Check register |
 
@@ -62,7 +62,7 @@ Layout: process chevrons
 | On-time payment | Invoices paid by the due date | Due date vs payment date |
 | Discounts captured | Cash discounts taken vs available | Discount terms and payments |
 | Days payable outstanding | Average days to pay | Payables vs purchases |
-| Manual payments | Payments outside the run | Payments outside the run |
+| Manual payments | Payments outside the run | Manual payment log |
 
 ## Today and target
 ### Today

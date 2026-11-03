@@ -34,7 +34,7 @@ Layout: swimlane handoffs
 ## The systems and data it runs on
 | Step | What the system does | Records it keeps |
 |---|---|---|
-| Import statement | Bank statements and lockbox files loaded daily | Bank statement lines |
+| Import statement | Bank and lockbox files loaded daily | Bank statement lines |
 | Match | Rules match payments to invoices | Matched items |
 | Manual clearing | Analysts clear what rules could not | Clearing postings |
 | Collections | Worklists ranked by value and risk | Collection worklist |

@@ -34,9 +34,9 @@ Layout: swimlane handoffs
 ## The systems and data it runs on
 | Step | What the system does | Records it keeps |
 |---|---|---|
-| Item | Items and their variants (shade, size) created once | Item master, variants |
+| Item | Items, shades and sizes set up once | Item master, variants |
 | Barcodes | Each sellable unit has its own barcode | Barcodes, units of measure |
-| Merchandise hierarchy | Department, class and subclass | Merchandise hierarchy |
+| Merchandise hierarchy | Department, class and subclass | Hierarchy levels |
 | Site | Stores and DCs with their profiles | Site master |
 | Governance | Requests and approvals before activation | Data request workflow |
 

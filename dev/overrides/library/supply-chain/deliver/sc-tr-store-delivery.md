@@ -41,7 +41,7 @@ Layout: swimlane handoffs
 | Delivery days | Set by store volume | Supply planning |
 | Load sequence | Last stop loaded first | DC shipping |
 | Proof of delivery | Electronic sign-off at the store | Store team |
-| Return trip | Totes, returns and damages back to the DC | Driver |
+| Return trip | Totes and returns back to the DC | Driver |
 
 ## KPIs that show it works
 | KPI | What it measures | Data source |
