@@ -93,7 +93,44 @@ def conform_runs(deck, slides, skip):
             styles.append(r)
         first = next((s for s in styles if s is not None and not _bare(s)), None)
         return [s if s is not None and not _bare(s) else first for s in styles] or [first]
-    def apply(txbody, ref):
+    import zipfile, re as _re
+    _theme = zipfile.ZipFile(str(B.current().template)).read("ppt/theme/theme1.xml").decode("utf-8", "ignore")
+    slots = {k: (v2 or v1).upper() for k, v1, v2 in _re.findall(
+        r'<a:(dk1|lt1|dk2|lt2|accent\d|hlink|folHlink)>\s*<a:(?:srgbClr val="([0-9A-Fa-f]{6})"|sysClr [^>]*lastClr="([0-9A-Fa-f]{6})")', _theme)}
+    alias = {"tx1": "dk1", "bg1": "lt1", "tx2": "dk2", "bg2": "lt2"}
+    def colour(fill):
+        """The RGB a solidFill shows, or None when it is not a plain colour (tints and shades are left alone)."""
+        c = fill[0] if fill is not None and len(fill) else None
+        if c is None or len(c):
+            return None
+        tag = c.tag.split("}")[-1]
+        if tag == "srgbClr":
+            return (c.get("val") or "").upper()
+        if tag == "schemeClr":
+            return slots.get(alias.get(c.get("val"), c.get("val")))
+        return None
+    def same_colour(rpr, st, same_fill):
+        """The template run's colour, in the template's own notation, where the run shows that colour written another way
+        (FFFFFF for the theme's bg1, 000000 for tx1) or none of its own on an unchanged cell or box. Returns 1 when set."""
+        tf = st.find(f"{{{A_NS}}}solidFill")
+        if rpr is None or tf is None:
+            return 0
+        own = rpr.find(f"{{{A_NS}}}solidFill")
+        if own is None:
+            if not same_fill:
+                return 0
+            ln = rpr.find(f"{{{A_NS}}}ln")
+            (ln.addnext(copy.deepcopy(tf)) if ln is not None else rpr.insert(0, copy.deepcopy(tf)))
+            return 1
+        if etree.tostring(own) != etree.tostring(tf) and colour(own) and colour(own) == colour(tf):
+            own.getparent().replace(own, copy.deepcopy(tf))
+            return 1
+        return 0
+    def fill_of(el, tag):
+        pr = el.find(tag) if el is not None else None
+        f = None if pr is None else next((c for c in pr if c.tag.split("}")[-1] in ("noFill", "solidFill", "gradFill", "pattFill", "blipFill")), None)
+        return b"" if f is None else etree.tostring(f)
+    def apply(txbody, ref, same_fill=False):
         n = 0
         styles = para_styles(ref)
         if not any(s is not None for s in styles):
@@ -104,6 +141,11 @@ def conform_runs(deck, slides, skip):
                 continue
             for r in p.findall(f"{{{A_NS}}}r"):
                 rpr = r.find(f"{{{A_NS}}}rPr")
+                t = r.find(f"{{{A_NS}}}t")
+                mark = t is not None and (t.text or "").strip() and set((t.text or "").strip()) <= set("●○■□▲▼◆◇★►◀▶◄•")
+                if not _bare(rpr):
+                    n += 0 if mark else same_colour(rpr, st, same_fill)   # a status mark keeps its own colour
+                    continue
                 if _bare(rpr):
                     new = copy.deepcopy(st)
                     own_fill = rpr.find(f"{{{A_NS}}}solidFill") if rpr is not None else None
@@ -133,9 +175,13 @@ def conform_runs(deck, slides, skip):
                 for r in range(len(t.rows)):
                     for c in range(len(t.columns)):
                         rc = rt.cell(min(r, len(rt.rows) - 1), min(c, len(rt.columns) - 1))
-                        total += apply(t.cell(r, c).text_frame._txBody, rc.text_frame._txBody)
+                        tcp = f"{{{A_NS}}}tcPr"
+                        same = fill_of(t.cell(r, c)._tc, tcp) == fill_of(rc._tc, tcp)   # the cell keeps the template's fill
+                        total += apply(t.cell(r, c).text_frame._txBody, rc.text_frame._txBody, same)
             elif sh.has_text_frame and rs.has_text_frame:
-                total += apply(sh.text_frame._txBody, rs.text_frame._txBody)
+                spp = "{http://schemas.openxmlformats.org/presentationml/2006/main}spPr"
+                same = fill_of(sh._element, spp) == fill_of(rs._element, spp)
+                total += apply(sh.text_frame._txBody, rs.text_frame._txBody, same)
     if total:
         import atomic
         atomic.save(prs, deck)
@@ -158,6 +204,7 @@ def finish(deck, spec, rec, story):
                  and k not in exempt and k not in keep]
     probs = typeset.apply(deck, {k: s.get("source") for k, s in enumerate(slides, 1)}, exempt, keep=keep, component=component)
     plain.clean_all([deck])
+    conform_runs(deck, slides, set(rec["diagram_slides"]))   # last: the accessibility pass writes white as FFFFFF; the template says bg1
     return mapping, probs, fh.returncode
 
 

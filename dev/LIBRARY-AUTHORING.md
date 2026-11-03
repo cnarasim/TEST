@@ -84,7 +84,7 @@ Under a heading, choose ONE body:
 - Short, concrete, active sentences. One message per slide. US spelling is fine; keep the existing templates' tone.
 
 ## Done
-Each of your files prints `OK` in `verify_templates.py` (no lint problem, no FAIL line, built READY, or DRAFT where no
+Each of your files prints `OK` in `verify_templates.py --strict` (no lint problem or warning, no FAIL line, built READY, or DRAFT where no
 renderer is installed). If a FAIL line remains that is
 NOT about your text (an engine or check problem), leave it and list it in your final report with the template id.
 Report: the files you wrote (paths), the verify summary line, and any residual non-content FAILs.

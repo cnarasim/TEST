@@ -209,6 +209,77 @@ def build(upc, rk, out):
     #      is a label, and a red or green dot beside it misreads the table
     patch(bfs, "        if low in words or any(low.startswith(w + ' ') for w in words):",
           "        if low in words or any(re.match(re.escape(w) + r'(\\s*[-\\u2013:(,;]|\\s+\\d|\\s+(?:by|until|since)\\b)', low) for w in words):   # (1h)")
+    # (1j) a heading inside a text box keeps the template box's own face, made bold (b=1): the Studio switched it to the
+    #      Medium face, which the type standard maps to Circular Bold, at a size (15 pt) the standard has no role for, so
+    #      the gate failed every two-box slide with card headings ("formatting not in the template box")
+    patch(bfs, "            for tag in ('latin', 'cs'):           # the template's bold style = b=1 + the Medium face of the same family\n"
+               "                f = rpr.find(f'a:{tag}', NS)\n"
+               "                if f is not None and f.get('typeface', '').endswith(' Book'):\n"
+               "                    f.set('typeface', f.get('typeface')[:-5] + ' Medium')\n",
+          "            # (1j) the template box's own face, bold by b=1 (the Medium face became Circular Bold at a size off the type standard)\n")
+    # (1k) a figure in a template text box is made bold, not orange: the template's boxes hold black text only (the gate's
+    #      "write into the existing runs" rule); figures keep their emphasis, drawn slides keep their colours
+    patch(eng / "page_to_spec.py", "        return f'{{{accent}}}**{tok}**{{/}}'",
+          "        return f'**{tok}**'   # (1k) bold, in the box's own colour")
+    # (1l) the scorecard's two lists (lowlights, highlights) come from the page: its "Lowlight:" / "Highlight:" lines, else
+    #      the KPIs themselves by status (off target = lowlight); the Studio left both empty, so every scorecard slide kept
+    #      the template's empty rows ("emptied template structure") - nothing is invented, only the page's own figures
+    patch(eng / "family_rules.py",
+          "    grp = {}\n    for k, l in enumerate(plain(x) for x in lines):\n"
+          "        lab, body = split_label(l); p = [x.strip() for x in body.split('|')] if lab else []\n"
+          "        if len(p) < 4: return None\n",
+          "    grp, lows, highs = {}, [], []\n    for k, l in enumerate(plain(x) for x in lines):\n"
+          "        lab, body = split_label(l)\n"
+          "        if lab in ('lowlight', 'lowlights', 'highlight', 'highlights'):   # (1l) the page's own notes for the two lists\n"
+          "            (lows if lab.startswith('low') else highs).append(body.strip()); continue\n"
+          "        p = [x.strip() for x in body.split('|')] if lab else []\n"
+          "        if len(p) < 4: return None\n")
+    patch(eng / "family_rules.py",
+          "    return {'scorecard': {'columns': ['Prior', 'Target', 'Actual'], 'note': 'vs target', 'groups': [{'name': g, 'kpis': v} for g, v in grp.items()],\n"
+          "                          'lowlights': [], 'highlights': []}}",
+          "    if not lows and not highs:                       # (1l) else the KPIs by status: off target -> lowlights, on target -> highlights\n"
+          "        for row in (r for v in grp.values() for r in v):\n"
+          "            name, st = row[0][:1].upper() + row[0][1:], str(row[4]).strip().lower()\n"
+          "            (lows if st in ('red', 'amber', 'at risk', 'off track') else highs if st in ('green', 'on track', 'done') else []).append(f'{name} {row[3]} vs {row[2]} target')\n"
+          "    return {'scorecard': {'columns': ['Prior', 'Target', 'Actual'], 'note': 'vs target', 'groups': [{'name': g, 'kpis': v} for g, v in grp.items()],\n"
+          "                          'lowlights': lows[:5] or ['No measure off target'], 'highlights': highs[:5] or ['No measure on target yet']}}")
+    # (2b) the structure-check copy also leaves out the Studio's named overlays (pictograms, the takeaway line), as it
+    #      leaves out Presentation Central's summary layer: additions on top of the template's shapes, not changed shapes;
+    #      the picture clearance check still measures every pictogram on the real deck
+    patch(vd, '        if re.match(r"ppt/slides/slide\\d+\\.xml$", n) and (b"ULTA summary" in d or b"ULTA decision" in d):\n'
+              '            x = etree.fromstring(d)\n'
+              '            for nv in list(x.iter("{%s}cNvPr" % NS["p"])):\n'
+              '                if nv.get("name") in ("ULTA summary", "ULTA decision"):\n',
+          '        if re.match(r"ppt/slides/slide\\d+\\.xml$", n) and any(k in d for k in (b"ULTA summary", b"ULTA decision", b"ULTA takeaway", b"ULTA icon ")):\n'
+          '            x = etree.fromstring(d)\n'
+          '            for nv in list(x.iter("{%s}cNvPr" % NS["p"])):\n'
+          '                if nv.get("name") in ("ULTA summary", "ULTA decision", "ULTA takeaway") or (nv.get("name") or "").startswith("ULTA icon "):   # (2b)\n')
+    # (1m) the contrast pass leaves a status mark alone: an amber dot (FFC000) on a white cell sits under 3:1 and was turned
+    #      black, so "Amber" lost its colour and the gate saw black text it did not expect; the dot is a mark (the brand
+    #      rule: status colours on marks only) and the word beside it says the status in text
+    patch(bfs, "        for r in holder.findall('.//a:r', NS):\n            rpr = r.find('a:rPr', NS)\n"
+               "            if rpr is None: rpr = r.makeelement(A + 'rPr', {}); r.insert(0, rpr)\n",
+          "        for r in holder.findall('.//a:r', NS):\n            rpr = r.find('a:rPr', NS)\n"
+          "            t_, c_ = r.find('a:t', NS), r.find('a:rPr/a:solidFill/a:srgbClr', NS)\n"
+          "            if t_ is not None and (t_.text or '').strip() and set(t_.text.strip()) <= set('●○■□▲▼◆◇★►◀▶◄•') \\\n"
+          "                    and c_ is not None and (c_.get('val') or '').upper() in ('00B050', '0BA03E', 'FFC000', 'FF0000'):\n"
+          "                continue                       # (1m) a status mark keeps its colour: it is the mark's message\n"
+          "            if rpr is None: rpr = r.makeelement(A + 'rPr', {}); r.insert(0, rpr)\n")
+    # (1n) a template infographic (scorecard, OGSM, house, quad, funnel, donut, map) is filled by Presentation
+    #      Central's filler on the template's own slide, as in build_deck: the Studio first cleared every region it did not
+    #      fill itself, so the filler found the OGSM's row labels (Objective, Goals ...), the scorecard's Highlights and
+    #      Lowlights headers and the goal numbers already gone ("emptied template structure")
+    patch(bfs, "        for key, sh in regions.items():\n            if key in fills or key in keep:\n                continue\n            if sh.has_table:\n",
+          "        c_ = sd.get('central') if isinstance(sd.get('central'), dict) else {}\n"
+          "        tmpl_info = c_.get('family') == 'infographic'   # (template timelines keep the clean-up: their filler expects it)\n"
+          "        for key, sh in regions.items():\n            if key in fills or key in keep or tmpl_info:   # (1n) the filler works on the template's own slide\n"
+          "                continue\n            if sh.has_table:\n")
+    # (1o) a takeaway headline computed from the data only when it fits the template's one-line headline: the Studio
+    #      allowed 60 characters, so "1,450 hours saved a month, $520K cost saved a year" failed "does not fit one line at
+    #      the standard 36 pt" on every deck it wrote; longer, the author's own heading stays
+    patch(eng / "family_rules.py",
+          "    return out if len(out) <= 60 else (say[:1].upper() + say[1:] if len(say) <= 60 else None)",
+          "    return out if len(out) <= 42 else (say[:1].upper() + say[1:] if len(say) <= 42 else None)   # (1o) one line at 36 pt")
     # (1i) a status mark is a mark, not text: the content gate skips a run that is only a dot, square or arrow in a status
     #      colour, as the brand colours gate already does ("status colours on marks only"); the words beside it are checked
     patch(vd, '                continue\n            rpr = r.find("a:rPr", NS)\n            lat = rpr.find("a:latin", NS) if rpr is not None else None\n',

@@ -44,11 +44,23 @@ styles, fit, accessibility, type scale, plain punctuation), the delivery gate, a
 - A status dot only for a status: the Studio marked any table cell that began with a status word ("Late changes",
   "Failed messages", "Live or drop") with a red or green dot; now the cell must be the status, or the status and a
   note ("At risk - vendor", "Done (Mar 3)", "Late by 2 days"). The content gate treats the dot itself as a mark,
-  as the brand colour gate already did (status colours on marks only); the words beside it are still checked.
+  as the brand colour gate already did (status colours on marks only); the words beside it are still checked. The
+  engine's contrast pass no longer turns an amber dot black (amber on white is under 3:1; the dot is a mark).
+- Card headings inside the template's text boxes keep the box's own face, made bold: the Studio's Medium face became
+  Circular Bold at 15 pt, a size the type standard has no role for, so every two-box slide with headings failed. Figures
+  in those boxes are bold, not orange (the template's boxes hold black text).
+- Scorecards fill both lists: "Lowlight:" / "Highlight:" lines in the page, else the page's own KPIs by status (off
+  target under Lowlights). The Studio left both empty, so every scorecard kept the template's empty rows.
+- A template infographic (scorecard, OGSM, vision house, quad, funnel, donut, map) is filled on the template's own
+  slide, as Presentation Central does: the Studio first cleared the regions it did not fill itself, so the OGSM lost its
+  row labels (Objective, Goals, Strategies, Measurements) and the scorecard its Highlights and Lowlights headers.
+- The same colour in the template's notation: a run that shows white as FFFFFF where the template cell says bg1 (or
+  black as 000000 for tx1), or no colour of its own on an unchanged cell, takes the template run's colour as written.
 - Gate refinements, each the same intent applied to the Studio's output: rating words, [placeholders], dates and figures
   may repeat across a table row; a template infographic may mark status in the brand's status colours; the Studio's named
-  overlays (pictograms, the takeaway line) are additions like the summary layer; an added pictogram passes the picture
-  clearance check when it covers no text (a moved template picture still fails).
+  overlays (pictograms, the takeaway line) are additions like the summary layer, in the fidelity check and in the
+  structure check's copy; an added pictogram passes the picture clearance check when it covers no text (a moved template
+  picture still fails).
 - The 40-layout reference and the fontconfig cache live under the temp folder by this skill's name, so this skill and
   Presentation Central installed side by side never read each other's cache.
 

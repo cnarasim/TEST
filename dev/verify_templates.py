@@ -3,25 +3,29 @@
 
     python3 dev/verify_templates.py [--skill DIR] [--jobs 3] <file.md | folder> [...]
 
-Lint (fast, no build): front matter (id = file name, domain, l1, l2, summary, systems, tags, order), "# Title", at least
-three "## " slides, application-agnostic wording (no product names, transaction codes or table names), plain punctuation
-(no em or en dashes), and the size rules that keep text at the template's type sizes:
+Lint errors (fail the page): front matter (id = file name, domain, l1, l2, summary, tags, order; systems optional),
+"# Title", application-agnostic wording (no product names, transaction codes or table names).
+Lint warnings (the authoring guide's margins; they fail a page only with --strict, which new pages should pass):
+plain punctuation (no em or en dashes; the build replaces any left), at least three "## " slides, and the size rules
+that keep text at the template's type sizes:
   slide heading <= 42 characters    card bullet (under ###) <= 52    table: <= 5 rows, cell <= 64 (first column <= 30)
   swimlane step <= 40               process / timeline line <= 70
 Build: the page body -> tools/playbook.py page (render check off for speed) -> status, the FAIL lines, Standards Match.
-Prints one block per template; exit 0 only when every template has no lint problem, no FAIL line and builds READY
-(or DRAFT where no renderer is installed).
+The gate is the measure: a page is OK when it has no lint error, no FAIL line and builds READY (or DRAFT where no
+renderer is installed). Exit 0 only when every page is OK.
 """
 import argparse, concurrent.futures as cf, os, re, subprocess, sys, tempfile
 from pathlib import Path
 
 DEFAULT_SKILL = "/tmp/claude-0/-home-user-TEST/12dcbf9d-aee8-5751-826b-81ab99be96ee/scratchpad/build/ulta-slideglam"
-REQ = ("id", "domain", "l1", "l2", "summary", "systems", "tags", "order")
+REQ = ("id", "domain", "l1", "l2", "summary", "tags", "order")   # systems: optional (strategy pages name none)
 LIMITS = dict(heading=42, card=52, rows=5, cell=64, first_cell=30, swim=40, line=70)
 
 
 def lint(path, LIB):
-    probs = []
+    """(meta, body, errors, warnings): errors fail the page; warnings (sizes, dashes, a short page) are the authoring
+    guide's margins and fail it only when the build shows the problem too (the gate is the measure)."""
+    probs, warns = [], []
     text = path.read_text(encoding="utf-8")
     meta, body = LIB.parse(str(path))
     m = re.match(r"^---\s*\n(.*?)\n---", text, re.S)
@@ -35,12 +39,12 @@ def lint(path, LIB):
     if not body.lstrip().startswith("# "):
         probs.append('the page does not start with "# Title"')
     if len(re.findall(r"^##\s+\S", body, re.M)) < 3:
-        probs.append("fewer than three '## ' slides")
+        warns.append("fewer than three '## ' slides")
     hits = LIB.vendor_terms(text)
     if hits:
         probs.append("not application-agnostic: " + ", ".join(dict.fromkeys(hits)))
     if "—" in text or "–" in text:
-        probs.append("em or en dash: use a hyphen, a colon or a comma")
+        warns.append("em or en dash: use a hyphen, a colon or a comma (the build replaces them)")
     section, layout, in_card, table = None, None, False, []
     def flush_table():
         if not table:
@@ -48,13 +52,13 @@ def lint(path, LIB):
         rows = [r for r in table if not re.match(r"^\s*\|?\s*:?-{2,}", r)]
         data = rows[1:]
         if len(data) > LIMITS["rows"]:
-            probs.append(f"'{section}': table has {len(data)} rows (at most {LIMITS['rows']}: split it or keep the top ones)")
+            warns.append(f"'{section}': table has {len(data)} rows (at most {LIMITS['rows']}: split it or keep the top ones)")
         for r in rows:
             cells = [c.strip() for c in r.strip().strip("|").split("|")]
             for j, c in enumerate(cells):
                 lim = LIMITS["first_cell"] if j == 0 else LIMITS["cell"]
                 if len(c) > lim:
-                    probs.append(f"'{section}': cell over {lim} chars: '{c[:50]}...' ({len(c)})")
+                    warns.append(f"'{section}': cell over {lim} chars: '{c[:50]}...' ({len(c)})")
         table.clear()
     for line in body.splitlines():
         s = line.strip()
@@ -64,7 +68,7 @@ def lint(path, LIB):
         if s.startswith("## "):
             section, layout, in_card = s[3:].strip(), None, False
             if len(section) > LIMITS["heading"]:
-                probs.append(f"slide heading over {LIMITS['heading']} chars: '{section}' ({len(section)})")
+                warns.append(f"slide heading over {LIMITS['heading']} chars: '{section}' ({len(section)})")
         elif s.startswith("### "):
             in_card = True
         elif s.lower().startswith("layout:"):
@@ -74,14 +78,14 @@ def lint(path, LIB):
             if layout and layout.startswith("swimlane"):
                 step = item.split(":", 1)[1].strip() if ":" in item else item
                 if len(step) > LIMITS["swim"]:
-                    probs.append(f"'{section}': swimlane step over {LIMITS['swim']} chars: '{step[:45]}...'")
+                    warns.append(f"'{section}': swimlane step over {LIMITS['swim']} chars: '{step[:45]}...'")
             elif layout:
                 if len(item) > LIMITS["line"]:
-                    probs.append(f"'{section}': line over {LIMITS['line']} chars: '{item[:45]}...'")
+                    warns.append(f"'{section}': line over {LIMITS['line']} chars: '{item[:45]}...'")
             elif in_card and len(item) > LIMITS["card"]:
-                probs.append(f"'{section}': card bullet over {LIMITS['card']} chars: '{item[:45]}...' ({len(item)})")
+                warns.append(f"'{section}': card bullet over {LIMITS['card']} chars: '{item[:45]}...' ({len(item)})")
     flush_table()
-    return meta, body, probs
+    return meta, body, probs, warns
 
 
 def build(skill, path, meta, body):
@@ -106,6 +110,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("paths", nargs="+"); ap.add_argument("--skill", default=os.environ.get("ULTA_SKILL", DEFAULT_SKILL))
     ap.add_argument("--jobs", type=int, default=3); ap.add_argument("--lint-only", action="store_true")
+    ap.add_argument("--strict", action="store_true", help="size and dash warnings fail too (for new pages)")
     a = ap.parse_args()
     sys.path.insert(0, f"{a.skill}/studio")
     import process_library as LIB
@@ -117,17 +122,22 @@ def main():
     results = {}
     if not a.lint_only:
         with cf.ThreadPoolExecutor(a.jobs) as ex:
-            futs = {ex.submit(build, a.skill, f, meta, body): f for f, meta, body, _ in linted if meta}
+            futs = {ex.submit(build, a.skill, f, meta, body): f for f, meta, body, _, _w in linted if meta}
             for fu in cf.as_completed(futs):
                 results[futs[fu]] = fu.result()
     bad = 0
-    for f, meta, body, probs in linted:
+    for f, meta, body, probs, warns in linted:
         st, fails, pct, fix = results.get(f, ("not built", [], "?", ""))
         ok = not probs and (a.lint_only or (not fails and st in ("READY", "DRAFT (no renderer)")))
+        if a.strict:
+            ok, probs = ok and not warns, probs + warns
+            warns = []
         bad += 0 if ok else 1
         print(f"{'OK ' if ok else 'FIX'} {f.stem}  [{st}, Standards Match {pct}%{', open: ' + fix if fix else ''}]")
         for p in probs:
             print(f"    lint: {p}")
+        for w in warns:
+            print(f"    warn: {w}")
         for l in fails[:12]:
             print(f"    {l[:240]}")
     print(f"{len(files)} template(s), {bad} to fix")
