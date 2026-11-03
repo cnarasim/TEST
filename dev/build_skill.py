@@ -68,6 +68,8 @@ STUDIO_ENGINE = ["page_to_spec.py", "build_from_storyboard.py", "family_rules.py
 KIT_REL = "modules/ultabranddeliverables/scripts/kit"
 # self-test library cases (templates that build READY), and the library's minimum size
 LIB_ONE, LIB_TWO, LIB_SEARCH = "sc-wh-cycle-count", ["rt-oc-fulfilment", "fi-pp-three-way-match"], ("cycle count", "sc-wh-cycle-count")
+LIB_PICK = ("three-way match controls; cycle count swimlane; cutover timeline",   # one slide per request, each from its template
+            ["fi-pp-three-way-match (", "sc-wh-cycle-count (", "pp-dl-cutover ("])
 LIBRARY_MIN = 294
 
 
@@ -389,6 +391,11 @@ def build(upc, rk, out):
           "    t0 = time.time()\n"
           "    r = subprocess.run([PY, str(T / \"playbook.py\"), \"search\", *LIB_SEARCH[0].split()], capture_output=True, text=True)\n"
           "    rows.append((\"library search\", LIB_SEARCH[1] in r.stdout, \"-\", (r.stdout.strip().splitlines() or ['no output'])[-1][:60], round(time.time() - t0, 1)))\n"
+          "    t0 = time.time()\n"
+          "    r = subprocess.run([PY, str(T / \"playbook.py\"), \"pick\", LIB_PICK[0], \"--out\", str(w / \"picked.md\"), \"--title\", \"Picked\"], capture_output=True, text=True)\n"
+          "    page = (w / \"picked.md\").read_text(encoding=\"utf-8\") if (w / \"picked.md\").exists() else \"\"\n"
+          "    rows.append((\"library pick (one slide per request, any template)\", all(f\"template {i}\" in page for i in LIB_PICK[1]), \"-\",\n"
+          "                 f\"{page.count(chr(10) + '## ')} slides from {len(LIB_PICK[1])} templates\", round(time.time() - t0, 1)))\n"
           "    return rows\n\n\ndef slides(p):")
     patch(st, "    import importlib.util\n    tools = {k: bool(shutil.which(k)) for k in (\"soffice\", \"pdftoppm\")}\n",
           "    rows.extend(library_checks(w))\n"
@@ -400,7 +407,7 @@ def build(upc, rk, out):
           "    if skipped:\n"
           "        print(f\"not part of this PowerPoint skill (not run): {', '.join(skipped)}\")\n")
     patch(st, "\nT = Path(__file__).resolve().parent\n",
-          f"\nT = Path(__file__).resolve().parent\nLIB_ONE, LIB_TWO, LIB_SEARCH = {LIB_ONE!r}, {LIB_TWO!r}, {LIB_SEARCH!r}   # library cases\n")
+          f"\nT = Path(__file__).resolve().parent\nLIB_ONE, LIB_TWO, LIB_SEARCH, LIB_PICK = {LIB_ONE!r}, {LIB_TWO!r}, {LIB_SEARCH!r}, {LIB_PICK!r}   # library cases\n")
 
     # the chart test keeps its PowerPoint half (every chart kind with axis ids PowerPoint reads; an old deck refused and
     # healed); the dashboard deck and the Excel workbook it also checked are not part of this skill

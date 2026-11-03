@@ -5,6 +5,9 @@
     python tools/playbook.py search cycle count                    ids whose name, summary, systems, tags or slide titles match
     python tools/playbook.py show <id>                             the template's page (Markdown): read it to adapt it
     python tools/playbook.py md <id> [<id> ...] --out page.md      one page from several templates (a chapter each), to edit
+    python tools/playbook.py pick "three-way match controls; payment run KPIs; cutover timeline" --out page.md [--title T]
+                                                                   the best slide for each request, from any template, as one page
+                                                                   (--list: the candidates only; "<id>: words" picks inside one template)
     python tools/playbook.py build <id> [<id> ...] --out Deck.pptx [--title T] [--owner N] [--classification internal]
     python tools/playbook.py page page.md --out Deck.pptx [--title T] ...      an edited page (or any Markdown page) -> deck
     python tools/playbook.py check [--agnostic]                    library health: front matter, sections, product names
@@ -37,6 +40,145 @@ def _opt(args, name, default=None):
         del args[i:i + 2]
         return v
     return default
+
+
+# ---------------------------------------------------------------------------------------------- pick: slides, not templates
+PICK_STOP = {"a", "an", "the", "and", "or", "of", "for", "to", "in", "on", "with", "our", "we", "us", "slide", "slides", "page",
+             "deck", "from", "by", "at", "is", "are", "how", "what", "who", "it", "its", "this", "that", "show", "me", "about"}
+
+
+PERIODS = {"daily": "day", "weekly": "week", "monthly": "month", "quarterly": "quarter", "yearly": "year", "annual": "year"}
+
+
+def _norm(w):
+    """Light stemming so "KPIs", "controls" and "processes" meet "KPI", "control", "process" (and "monthly" meets "month")."""
+    if w in PERIODS:
+        return PERIODS[w]
+    if len(w) > 4 and w.endswith("ies"):
+        return w[:-3] + "y"
+    if len(w) > 4 and w.endswith(("ses", "xes", "zes")):
+        return w[:-2]
+    if len(w) > 3 and w.endswith("s") and not w.endswith(("ss", "us", "is")):
+        return w[:-1]
+    return w
+
+
+def _toks(text):
+    out = set()
+    for w in __import__("re").findall(r"[a-z0-9][a-z0-9&'-]*", str(text).lower()):
+        w = w.strip("-'")
+        if w and w not in PICK_STOP:
+            out.add(_norm(w))
+            if "-" in w:
+                out.update(_norm(p) for p in w.split("-") if p and p not in PICK_STOP)
+    return out
+
+
+def _sections(body):
+    """[(heading, text)] - one per "## " slide, the text from the heading to the next one."""
+    import re
+    out, cur = [], None
+    for line in body.splitlines():
+        m = re.match(r"^##\s+(.+?)\s*$", line)
+        if m:
+            cur = [m.group(1), [line]]; out.append(cur)
+        elif cur is not None and not line.startswith("# "):
+            cur[1].append(line)
+    return [(h, "\n".join(ls).rstrip()) for h, ls in out]
+
+
+LAYOUT_KINDS = (   # a slide's layout answers to the words people use for that kind of slide
+    (("timeline", "process phases", "gantt"), "timeline plan schedule roadmap milestone phase calendar date"),
+    (("swimlane",), "swimlane handoff flow role who raci"),
+    (("process",), "process flow step"),
+    (("retail",), "diagram flow network"),
+    (("kpi cards", "four numbers", "scorecard", "bullet", "rings"), "kpi number metric measure target scorecard"),
+    (("matrix",), "matrix priority quadrant"),
+    (("hub",), "stakeholder hub"),
+)
+
+
+def pick(requests, top=3):
+    """For each request ("three-way match controls"), the library slides ranked by the words they share with it: the
+    template's name, tags, summary and L1 say WHAT (three-way match; a word few templates use counts most), the slide's
+    heading, layout and text say WHICH SLIDE (controls; a word few of the template's slides use counts most). Rules, no
+    AI: the same answer every time. "<id>: words" (or "<id>#words") picks inside one template.
+    Returns [(request, [(rank key, id, heading, text)])], best first."""
+    import re
+    items = LIB.templates()
+    index = []
+    for tid, (meta, body) in items.items():
+        tw = {}
+        for field, w in ((meta["l2"], 3), (" ".join(meta["tags"]), 2), (tid.replace("-", " "), 1), (meta["l1"], 1),
+                         (meta["domain"], 1), (meta.get("summary", ""), 1)):
+            for t in _toks(field):
+                tw[t] = max(tw.get(t, 0), w)
+        for h, text in _sections(body):
+            layout = " ".join(re.findall(r"(?im)^layout:\s*(.+)$", text)).lower()
+            kinds = " ".join(words for keys, words in LAYOUT_KINDS if any(layout.startswith(k) or f" {k}" in f" {layout}" for k in keys))
+            sw = {}
+            for field, w in ((h, 3), (layout + " " + kinds, 2), (text, 1)):
+                for t in _toks(field):
+                    sw[t] = max(sw.get(t, 0), w)
+            index.append((tid, meta, h, text, tw, sw))
+    import math
+    df, seen, sec_df, n_sec = {}, {}, {}, {}
+    for tid, meta, h, text, tw, sw in index:
+        seen.setdefault(tid, set()).update(tw, sw)
+        n_sec[tid] = n_sec.get(tid, 0) + 1
+        for t in sw:
+            sec_df[(tid, t)] = sec_df.get((tid, t), 0) + 1
+    for words in seen.values():
+        for t in words:
+            df[t] = df.get(t, 0) + 1
+    idf = lambda t: math.log(1 + len(seen) / max(1, df.get(t, 0)))      # which template: a rare word (cutover) says more
+    idf_in = lambda tid, t: math.log(1 + n_sec[tid] / sec_df[(tid, t)]) if sec_df.get((tid, t)) else 0.0   # which slide: a word few of its slides share
+    out = []
+    for req in requests:
+        only, words = None, req
+        m = re.match(r"^\s*([a-z]{2}-[a-z0-9-]+)\s*[:#]\s*(.*)$", req)
+        if m and m.group(1) in items:
+            only, words = m.group(1), m.group(2) or items[m.group(1)][0]["l2"]
+        q = _toks(words)
+        def rank(strict):
+            ranked = []
+            for tid, meta, h, text, tw, sw in index:
+                if only and tid != only:
+                    continue
+                cover = sum(1 for t in q if t in tw or t in sw)
+                if not cover or not any(t in sw for t in q) or (strict and not only and not any(t in tw for t in q)):
+                    continue                              # the slide must answer the request, inside the right template
+                score = round(sum(idf(t) * tw.get(t, 0) + idf_in(tid, t) * sw.get(t, 0) * (0.25 if t in tw else 1.0)
+                                  for t in q), 3)   # the topic picks the template; the other words pick its slide
+                ranked.append(((score, cover, -meta.get("order", 999)), tid, h, text))
+            ranked.sort(key=lambda r: r[0], reverse=True)
+            return ranked
+        ranked = rank(True) or rank(False)            # a request that names only a kind of slide ("risks") still finds one
+        out.append((req, ranked[:max(1, top)]))
+    return out
+
+
+def picked_page(results, title):
+    """One library page of the first choice for each request, in the order asked; each slide's notes name its template."""
+    import re
+    items = LIB.templates()
+    parts, seen = [f"# {title}", ""], set()
+    for req, ranked in results:
+        if not ranked:
+            continue
+        _, tid, h, text = ranked[0]
+        if (tid, h) in seen:
+            continue
+        seen.add((tid, h))
+        src = f"From the library template {tid} ({items[tid][0]['l2']})."
+        lines = text.splitlines()
+        q = [k for k, l in enumerate(lines) if l.lstrip().startswith(">")]
+        if q:                                          # one note per slide: the source joins the slide's own note
+            k = q[-1]; lines[k] = lines[k].rstrip().rstrip(".") + ". " + src
+        else:
+            lines.append(f"> Notes: {src}")
+        parts += lines + [""]
+    return "\n".join(parts).rstrip() + "\n"
 
 
 def record(deck, spec):
@@ -308,6 +450,36 @@ def main():
             print(f"{h:36} {m['domain']} > {m['l1']} > {m['l2']}: {m.get('summary', '')[:90]}")
         print(f"{len(hits)} match(es)" if hits else "no match - try fewer or broader words, or: python tools/playbook.py list")
         return 0
+    if cmd == "pick":
+        out, title = _opt(args, "--out"), _opt(args, "--title")
+        top = int(_opt(args, "--top", "3") or 3)
+        only_list = "--list" in args
+        args = [a for a in args if a != "--list"]
+        text = " ".join(args).strip()
+        reqs = [r.strip() for r in (text.split(";") if ";" in text else text.split(",")) if r.strip()]
+        if not reqs:
+            print('pick needs requests: "three-way match controls; payment run KPIs" (one per slide, separated by ";")'); return 2
+        if not out and not only_list:
+            print("--out is required (or --list to see the candidates)"); return 2
+        res = pick(reqs, top)
+        items = LIB.templates()
+        for n, (req, ranked) in enumerate(res, 1):
+            if not ranked:
+                print(f"{n}. {req} -> no match: try other words (python tools/playbook.py search <words>)"); continue
+            (_, tid, h, _t), rest = ranked[0], ranked[1:]
+            print(f"{n}. {req} -> {tid} | {h}  ({items[tid][0]['l2']})")
+            if rest:
+                print("   also: " + "; ".join(f"{t} | {hh}" for _, t, hh, _x in rest))
+        if only_list:
+            return 0
+        got = [r for r in res if r[1]]
+        if not got:
+            print("NOT WRITTEN | nothing matched"); return 1
+        Path(out).write_text(picked_page(res, title or "Selected process slides"), encoding="utf-8")
+        print(f"FILES: {out}")
+        print(f"next: put the user's facts into the page (placeholders, names, dates), then "
+              f"python tools/playbook.py page {out} --out <Name>.pptx" + ("" if title else '  (give the deck its own --title)'))
+        return 0 if len(got) == len(res) else 1
     if cmd == "show":
         items = LIB.templates()
         for i in args:

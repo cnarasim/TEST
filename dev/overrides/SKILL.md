@@ -25,7 +25,7 @@ so and offer the content as slides).
 ## Read the guide for the request, then build
 | The user wants | Read |
 |---|---|
-| A deck on a standard process or project artefact - retail, supply chain, finance, enterprise architecture, programs and projects, proposals, strategy, timelines and roadmaps, infographics, technology operations, data and AI, people and change ("a deck on cycle count", "a cutover plan", "a solution options review", "an incident review") | `library` - search the library first, build, then adapt it with the user's facts |
+| A deck on a standard process or project artefact - retail, supply chain, finance, enterprise architecture, programs and projects, proposals, strategy, timelines and roadmaps, infographics, technology operations, data and AI, people and change ("a deck on cycle count", "a cutover plan", "a solution options review", "an incident review"), or slides from several processes ("three-way match controls and the cutover timeline") | `library` - search or pick from the library first, build, then adapt it with the user's facts |
 | A new deck from notes, a document or a storyboard; a process flow; a retail diagram (supply chain with trucks and DCs, cross-dock, store replenishment, online orders, returns, procure to pay, month-end close); other ways to show a slide; a PDF or another deck rebuilt on the template | `decks`, then `deck-layouts` |
 | An infographic or one-pager slide, a status report, a visual summary, a story told around the user's screenshots or product photos | `infographics` |
 | A C1-C3 architecture diagram to the ULTA Enterprise Diagram Standards (editable draw.io, PNG, PDF); a diagram on a slide inside a deck is a diagram slide (`deck-layouts`) | `architecture` |
@@ -108,9 +108,12 @@ else:
 python3 {SKILL_DIR}/tools/playbook.py search cycle count                 # find templates (ids, domain > L1 > L2)
 python3 {SKILL_DIR}/tools/playbook.py build sc-wh-cycle-count --out <out>/Cycle-Count.pptx
 python3 {SKILL_DIR}/tools/playbook.py md sc-wh-cycle-count sc-oc-pricing --out page.md   # to adapt or combine
+python3 {SKILL_DIR}/tools/playbook.py pick "three-way match controls; payment run KPIs" --out page.md   # slides from any template
 python3 {SKILL_DIR}/tools/playbook.py page page.md --out <out>/<Name>.pptx                # the adapted page, same checks
 ```
-Several ids make one deck with a chapter (divider and agenda line) per template.
+Several ids make one deck with a chapter (divider and agenda line) per template; `pick` takes the best slide for each
+request from across the library. Content prepared elsewhere: write it as a library page (`# Title`, one `## takeaway`
+per slide, `Layout:` lines) and build it with `page`.
 
 ## On Claude (claude.ai, Claude Code, Cowork)
 - Uploads are in `/mnt/user-data/uploads` (read it for `/mnt/data` in the guides). Build into a working folder (for

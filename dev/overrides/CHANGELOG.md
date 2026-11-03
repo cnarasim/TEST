@@ -27,7 +27,10 @@ the self-test lists any check it did not run.
 **The process library**: 294 templates - the Studio's 146 (its 147 less the ARB submission deck) and 148 new ones in the
 same Markdown format, three new
 domains (Technology Operations, Data and AI, People and Change), `tools/playbook.py` (list, search, show, md, build, page,
-check). A library deck is held to the same standard as every deck: the Eco build is followed by a build record
+check, pick). `pick` takes one request per slide ("three-way match controls; payment run KPIs; cutover timeline") and
+returns the best slide for each from any template as one page, by rules: the topic words choose the template (a word
+few templates use counts most), the other words choose its slide (heading, layout, text); each slide's notes name its
+source. Content prepared elsewhere is written in the same page format and built with `page`. A library deck is held to the same standard as every deck: the Eco build is followed by a build record
 (`.ulta.json`: drawn visuals, template infographics, shortened lists), Presentation Central's finishing (template run
 styles, fit, accessibility, type scale, plain punctuation), the delivery gate, a stamp and the RESULT line.
 

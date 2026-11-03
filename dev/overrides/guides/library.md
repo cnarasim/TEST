@@ -25,7 +25,16 @@ A build turns the page into a deck by rules (no AI): cover, the slides, closing;
    the user's content (keep one `## ` per slide and every `Layout:` line; replace generic lines and `[placeholders]`;
    delete sections that do not apply; add a section in the same style), then
    `python {SKILL_DIR}/tools/playbook.py page /mnt/data/out/<Name>.md --out /mnt/data/out/<Name>.pptx`.
-4. **Review and deliver** like every deck: the status line, FAIL lines, `PICTURE` (look at the contact sheet), `FILES`,
+4. **Pick slides from several templates** when the user lists topics or slides rather than one process ("three-way match
+   controls, payment run KPIs and the cutover timeline"): one request per slide, separated by `;`:
+   `python {SKILL_DIR}/tools/playbook.py pick "three-way match controls; payment run KPIs; cutover timeline" --out /mnt/data/out/<Name>.md --title "..."`
+   It prints the slide chosen for each request (`id | heading`) and the runners-up (`also:`). Wrong pick: name the
+   template, `"<id>: words"` (`"fi-pp-three-way-match: KPIs"`), or see the candidates first with `--list`. Then adapt
+   the page as in step 3 and build it with `page`. Each slide's notes name the template it came from.
+5. **Content prepared elsewhere** (another assistant, a document, the user's notes): write it as a page in this format
+   (`# Title`, one `## takeaway` per slide, a `Layout:` line where a picture tells it better; "How a page is written"
+   below) and build it with `page` - the same rules and checks as a library deck. Mix in library slides with `pick`.
+6. **Review and deliver** like every deck: the status line, FAIL lines, `PICTURE` (look at the contact sheet), `FILES`,
    and the `RESULT` line copied exactly. Library pages carry placeholders and illustrative sample figures: tell the user
    which ones are still placeholders unless they gave you the facts.
 

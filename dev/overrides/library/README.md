@@ -8,6 +8,7 @@ Data and AI, People and Change. Every page is application-agnostic: it names kin
 never a product, a transaction code or a table.
 
     python tools/playbook.py list | search <words> | show <id> | md <id> ... --out page.md | build <id> ... --out deck.pptx
+    python tools/playbook.py pick "three-way match controls; cutover timeline" --out page.md   the best slide per request
     python tools/playbook.py page page.md --out deck.pptx      an adapted or new page, same checks
     python tools/playbook.py check --agnostic                  front matter, sections, no product names
 
