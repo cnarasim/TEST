@@ -42,7 +42,8 @@ Under a heading, choose ONE body:
   `| Step | What the system does | Records it keeps |`, `| Control | How it works | Owner |`, `| KPI | What it measures | Data source |`.
 - **Today and target**: `### Today` and `### Target` (or `### Tomorrow`), 2 bullets each -> two contrast bands.
 - **A Layout line** (exact spelling) over bullet lines:
-  - `Layout: swimlane handoffs` - who does what. Lines `- Role: step`, roles reused (2-4 roles, 5-8 lines). A decision is
+  - `Layout: swimlane handoffs` - who does what. Lines `- Role: step`, a step 1-5 words (verb and object: the engine shows
+    only the first 5), roles reused (2-4 roles, 5-8 lines). A decision is
     a line ending with `?`, followed by `- Role: If yes, ...` and `- Role: If no, ...`. Other swimlane styles:
     `swimlane sipoc`, `swimlane lanes`, `swimlane columns`, `swimlane phased`, `swimlane blueprint`, `swimlane timed`, `swimlane systems`.
   - `Layout: process chevrons | numbered | arrow | cycle | snake | vertical | phases | pipeline | io | converge | diverge` -
@@ -66,7 +67,9 @@ Under a heading, choose ONE body:
 - `## Heading` at most 42 characters (aim for 30-38). `# Title` at most 40.
 - Card bullet (under `###`) at most 52 characters; 2 bullets per card; 2-3 cards.
 - Tables: at most 5 data rows; first column at most 30 characters, other cells at most 64 (aim for 30-50).
-- Swimlane step at most 40 characters; process / timeline line at most 70 (title part 1-3 words).
+- Swimlane step at most 5 words (and 40 characters); process / timeline line at most 70 (title part 1-3 words).
+- Matrix (2 x 2): `- Name: <row words>, <column words> - action`, the first line the quadrant to act on (it stands out).
+  The same row words on lines 1-2 and 3-4 and the same column words on lines 1 and 3, 2 and 4 become the axis labels.
 - Never repeat the same value across one table row unless it is a rating word (High/Medium/Low, Strong/Weak, Yes/No ...).
 `verify_templates.py` lints these and then builds the page; a FAIL line from the build says what to shorten.
 

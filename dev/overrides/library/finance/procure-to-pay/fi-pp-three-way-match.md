@@ -23,7 +23,7 @@ order: 101
 
 ## AP matches, buyers resolve the differences
 Layout: swimlane handoffs
-- Vendor: Sends the invoice (EDI 810 or PDF)
+- Vendor: Sends the invoice (EDI 810)
 - AP clerk: Captures and posts the invoice
 - AP clerk: PO, receipt and invoice agree?
 - AP clerk: If yes, release for payment

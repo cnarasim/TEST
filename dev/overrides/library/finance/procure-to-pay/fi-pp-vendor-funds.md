@@ -23,7 +23,7 @@ order: 103
 
 ## Merchants agree, finance accrues and collects
 Layout: swimlane handoffs
-- Merchant: Agrees the funding with the vendor
+- Merchant: Agrees funding with the vendor
 - Vendor funds team: Creates the rebate agreement
 - Vendor funds team: Accrues as purchases post
 - Vendor funds team: Settlement due?

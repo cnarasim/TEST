@@ -70,6 +70,9 @@ KIT_REL = "modules/ultabranddeliverables/scripts/kit"
 LIB_ONE, LIB_TWO, LIB_SEARCH = "sc-wh-cycle-count", ["rt-oc-fulfilment", "fi-pp-three-way-match"], ("cycle count", "sc-wh-cycle-count")
 LIB_PICK = ("three-way match controls; cycle count swimlane; cutover timeline",   # one slide per request, each from its template
             ["fi-pp-three-way-match (", "sc-wh-cycle-count (", "pp-dl-cutover ("])
+LIB_REVIEW = ("# Update\n\n## Milestones\n- Design signed off: Mar 15, 2027\n- Pilot in 20 stores: May 1, 2027\n"
+              "- Wave 1 live: Jul 15, 2027\n- All stores live: Oct 1, 2027\n\n## Risks\n- Data quality in the item master\n"
+              "- Store staffing in peak: [owner]\n- Vendor readiness for ASNs\n")   # the expert review must see 3 things on this page
 LIBRARY_MIN = 294
 
 
@@ -92,6 +95,9 @@ def rm(p):
         p.unlink()
     else:
         sys.exit(f"DROP STOP: {p} not in the source (the drop list is out of date)")
+
+
+MATRIX_NEW = "    elif kind == 'matrix':   # (1q) a 2 x 2 read as a matrix: row and column labels in the author's own words, the first quadrant (the one to act on) strong, the rest a light tint\n        def descr_(it):\n            t_ = str(it.get('text', '') or '')\n            parts_ = [p_.strip() for p_ in t_.split(' - ', 1)[0].split(',') if p_.strip()] if ' - ' in t_ else []\n            return parts_ if len(parts_) == 2 else None\n        ds = [descr_(it) for it in items[:4]]\n        full = len(items) >= 4 and all(ds)\n        rows_l = (ds[0][0], ds[2][0]) if full and ds[0][0].lower() == ds[1][0].lower() and ds[2][0].lower() == ds[3][0].lower() else None\n        cols_l = (ds[0][1], ds[1][1]) if full and ds[0][1].lower() == ds[2][1].lower() and ds[1][1].lower() == ds[3][1].lower() else None\n        lab_w = Inches(1.6) if rows_l else 0; lab_h = Inches(0.5) if cols_l else 0\n        gx = Inches(0.9) + lab_w; gw = Inches(12.4) - gx; gap = Inches(0.16); gh = avail - lab_h\n        cw = (gw - gap) / 2; ch = (gh - gap) / 2\n        STRONG, TINT = 'D01381', 'FDE1D2'\n        for k, it in enumerate(items[:4]):\n            x = gx + (k % 2) * (cw + gap); y = top0 + (k // 2) * (ch + gap)\n            sh = seg(MSO_SHAPE.ROUNDED_RECTANGLE, x, y, cw, ch, STRONG if k == 0 else TINT); sh.name = f'ULTA graphic {k + 1}'\n            geom = sh._element.find('.//a:prstGeom', NS); av = geom.find('a:avLst', NS)\n            if av is None: av = etree.SubElement(geom, A + 'avLst')\n            for g in list(av): av.remove(g)\n            etree.SubElement(av, A + 'gd', name='adj', fmla='val 8000')\n            tf = sh.text_frame; tf.word_wrap = True; tf.vertical_anchor = MSO_ANCHOR.MIDDLE   # the text is IN the quadrant\n            tf.margin_left = tf.margin_right = Inches(0.35); tf.margin_top = tf.margin_bottom = Inches(0.2)\n            p = tf.paragraphs[0]; p.alignment = PP_ALIGN.LEFT; r = p.add_run(); r.text = str(it.get('title', '')).strip(); r.font.size = Pt(22); r.font.bold = True; r.font.name = FONT_HEAD\n            r.font.color.rgb = RGBColor.from_string('FFFFFF' if k == 0 else STRONG)\n            body = str(it.get('text', '') or '').strip()\n            if (rows_l or cols_l) and ' - ' in body: body = body.split(' - ', 1)[1].strip()   # the axes say the rest\n            if body:\n                p2 = tf.add_paragraph(); p2.alignment = PP_ALIGN.LEFT; p2.space_before = Pt(6); r2 = p2.add_run(); r2.text = body[:1].upper() + body[1:]; r2.font.size = Pt(16); r2.font.name = FONT_BODY\n                r2.font.color.rgb = RGBColor.from_string('FFFFFF' if k == 0 else '000000')\n        def axis_label(x, y, w, h, text, align, name):\n            tb = slide.shapes.add_textbox(int(x), int(y), int(w), int(h)); tb.name = name\n            tf_ = tb.text_frame; tf_.word_wrap = True; tf_.vertical_anchor = MSO_ANCHOR.MIDDLE\n            tf_.margin_left = tf_.margin_right = Inches(0.05)\n            p_ = tf_.paragraphs[0]; p_.alignment = align; r_ = p_.add_run(); r_.text = text[:1].upper() + text[1:]\n            r_.font.size = Pt(16); r_.font.bold = True; r_.font.name = FONT_BODY; r_.font.color.rgb = RGBColor.from_string('404040')\n        def axis_line(x1, y1, x2, y2, name):\n            from pptx.enum.shapes import MSO_CONNECTOR as MC_\n            ln = slide.shapes.add_connector(MC_.STRAIGHT, int(x1), int(y1), int(x2), int(y2)); ln.name = name\n            ln.line.color.rgb = RGBColor.from_string('D9D9D9'); ln.line.width = Pt(1.5)\n        if rows_l:\n            for j, lab in enumerate(rows_l):\n                axis_label(Inches(0.9), top0 + j * (ch + gap), lab_w - Inches(0.3), ch, lab, PP_ALIGN.RIGHT, f'ULTA graphic row label {j + 1}')\n            axis_line(gx - Inches(0.14), top0, gx - Inches(0.14), top0 + gh, 'ULTA graphic axis rows')\n        if cols_l:\n            for j, lab in enumerate(cols_l):\n                axis_label(gx + j * (cw + gap), top0 + gh + Inches(0.14), cw, lab_h - Inches(0.1), lab, PP_ALIGN.CENTER, f'ULTA graphic column label {j + 1}')\n            axis_line(gx, top0 + gh + Inches(0.08), gx + gw, top0 + gh + Inches(0.08), 'ULTA graphic axis columns')\n"
 
 
 def build(upc, rk, out):
@@ -288,6 +294,20 @@ def build(upc, rk, out):
     patch(bfs, "        avail = (tbl.columns[c].width - 2 * pad) / 914400; words = cell.text.split() or ['']\n        pt = _run_pt(cell, 18.0)\n",
           "        avail = (tbl.columns[c].width - 2 * pad) / 914400; words = cell.text.split() or ['']\n"
           "        pt = _run_pt(cell, 24.0 if serif else 18.0)   # (1p) an inherited serif header is the template's 24 pt\n")
+    # (1q) the 2 x 2 matrix reads as a matrix, not four equal blocks: the row and column labels come from the author's own
+    #      words ("- Do now: high value, ready - pilot this quarter": rows high value / lower value, columns ready / not
+    #      ready), the first quadrant (the one to act on) in the strong colour and the others in the light tint, larger type
+    src_ = bfs.read_text(encoding="utf-8")
+    a_, b_ = src_.index("    elif kind == 'matrix':"), src_.index("    elif kind == 'hub':")
+    patch(bfs, src_[a_:b_], MATRIX_NEW)
+    # (2c) the package check also catches a connector glued to a shape that is not on the slide (a slide edited by hand or
+    #      by another tool after the build; PowerPoint drops the glue or offers a repair) - one more check, none removed
+    patch(out / "tools/ooxml_check.py",
+          '                if dup:\n                    out.append((n, 0, f"shape id {\', \'.join(dup[:3])} used twice on the slide"))\n',
+          '                if dup:\n                    out.append((n, 0, f"shape id {\', \'.join(dup[:3])} used twice on the slide"))\n'
+          '                glued = [c.get("id") for c in y.iter(f"{{{A}}}stCxn", f"{{{A}}}endCxn") if c.get("id") not in ids]\n'
+          '                if glued:                        # (2c)\n'
+          '                    out.append((n, 0, f"a connector is glued to shape {glued[0]}, which is not on the slide"))\n')
     # (1i) a status mark is a mark, not text: the content gate skips a run that is only a dot, square or arrow in a status
     #      colour, as the brand colours gate already does ("status colours on marks only"); the words beside it are checked
     patch(vd, '                continue\n            rpr = r.find("a:rPr", NS)\n            lat = rpr.find("a:latin", NS) if rpr is not None else None\n',
@@ -402,6 +422,12 @@ def build(upc, rk, out):
           "    page = (w / \"picked.md\").read_text(encoding=\"utf-8\") if (w / \"picked.md\").exists() else \"\"\n"
           "    rows.append((\"library pick (one slide per request, any template)\", all(f\"template {i}\" in page for i in LIB_PICK[1]), \"-\",\n"
           "                 f\"{page.count(chr(10) + '## ')} slides from {len(LIB_PICK[1])} templates\", round(time.time() - t0, 1)))\n"
+          "    t0 = time.time()\n"
+          "    (w / \"weak.md\").write_text(LIB_REVIEW, encoding=\"utf-8\")\n"
+          "    r = subprocess.run([PY, str(T / \"playbook.py\"), \"review\", str(w / \"weak.md\")], capture_output=True, text=True)\n"
+          "    seen = [k for k in (\"a timeline\", \"name a topic\", \"placeholders\") if k in r.stdout]\n"
+          "    rows.append((\"library expert review (dates, topic headings, placeholders)\", len(seen) == 3, \"-\",\n"
+          "                 f\"{len(seen)} of 3 findings: {', '.join(seen) or 'none'}\", round(time.time() - t0, 1)))\n"
           "    return rows\n\n\ndef slides(p):")
     patch(st, "    import importlib.util\n    tools = {k: bool(shutil.which(k)) for k in (\"soffice\", \"pdftoppm\")}\n",
           "    rows.extend(library_checks(w))\n"
@@ -413,7 +439,8 @@ def build(upc, rk, out):
           "    if skipped:\n"
           "        print(f\"not part of this PowerPoint skill (not run): {', '.join(skipped)}\")\n")
     patch(st, "\nT = Path(__file__).resolve().parent\n",
-          f"\nT = Path(__file__).resolve().parent\nLIB_ONE, LIB_TWO, LIB_SEARCH, LIB_PICK = {LIB_ONE!r}, {LIB_TWO!r}, {LIB_SEARCH!r}, {LIB_PICK!r}   # library cases\n")
+          f"\nT = Path(__file__).resolve().parent\nLIB_ONE, LIB_TWO, LIB_SEARCH, LIB_PICK = {LIB_ONE!r}, {LIB_TWO!r}, {LIB_SEARCH!r}, {LIB_PICK!r}   # library cases\n"
+          f"LIB_REVIEW = {LIB_REVIEW!r}\n")
 
     # the chart test keeps its PowerPoint half (every chart kind with axis ids PowerPoint reads; an old deck refused and
     # healed); the dashboard deck and the Excel workbook it also checked are not part of this skill

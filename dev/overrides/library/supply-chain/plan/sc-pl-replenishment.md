@@ -28,7 +28,7 @@ Layout: swimlane handoffs
 - Replenishment run: Quantity above the limit?
 - Inventory analyst: If yes, review and approve
 - Inventory analyst: If no, release automatically
-- DC: Picks and ships the store order
+- DC: Picks and ships store orders
 - Store team: Receives and fills the shelf
 
 ## The systems and data it runs on

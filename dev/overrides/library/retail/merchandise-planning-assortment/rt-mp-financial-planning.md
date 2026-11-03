@@ -23,8 +23,8 @@ order: 101
 
 ## Finance sets the frame, merchants fill it
 Layout: swimlane handoffs
-- Finance: Sets the top-down sales and margin target
-- Merch planner: Builds the category plan by month
+- Finance: Sets top-down sales, margin targets
+- Merch planner: Builds monthly category plans
 - Merch planner: Plan meets the target?
 - Merch planner: If yes, submit for sign-off
 - Merch planner: If no, rebalance categories

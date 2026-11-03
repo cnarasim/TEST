@@ -29,7 +29,7 @@ Layout: swimlane handoffs
 - ATP check: If yes, confirm the date
 - ATP check: If no, confirm partly or later
 - Supply planner: Runs backorder processing
-- Customer service: Tells the customer the new date
+- Customer service: Tells customer the new date
 
 ## The systems and data it runs on
 | Step | What the system does | Records it keeps |

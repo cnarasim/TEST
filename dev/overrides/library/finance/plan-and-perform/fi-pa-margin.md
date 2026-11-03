@@ -24,7 +24,7 @@ order: 404
 ## FP&A explains, merchants act
 Layout: swimlane handoffs
 - Accounting: Posts sales, cost and adjustments
-- FP&A: Builds the margin bridge by driver
+- FP&A: Builds the margin bridge
 - FP&A: Margin on plan?
 - FP&A: If yes, publish the margin pack
 - Merchants: If no, explain and plan actions

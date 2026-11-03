@@ -54,8 +54,8 @@ Layout: matrix
 ## How we escalate
 Layout: swimlane handoffs
 - Workstream lead: Raises the issue with options
-- Project manager: Assesses impact on plan and budget
+- Project manager: Assesses plan and budget impact
 - Project manager: Within the board's tolerance?
 - Project manager: If yes, decides at the weekly board
-- Steering committee: If no, decides at the next meeting or by email
-- Project manager: Logs the decision and tells the teams
+- Steering committee: If no, decides at the next meeting
+- Project manager: Logs it and tells teams

@@ -68,4 +68,4 @@ Layout: swimlane handoffs
 - Change lead: Any area not ready?
 - Workstream lead: If yes, agrees actions and dates
 - Change lead: If no, records the site as ready
-- Business owner: Signs off for the go / no-go
+- Business owner: Signs off for go-live

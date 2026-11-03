@@ -21,12 +21,12 @@ Layout: four numbers
 ## How a user gets help
 Layout: swimlane handoffs
 - User: Raises the question or problem
-- Floor walker: Answers how-to questions on the spot
+- Floor walker: Answers questions on the spot
 - Service desk: Logs and routes every ticket
 - Hypercare team: Known fix?
-- Hypercare team: If yes, applies it and closes the ticket
-- Project team: If no, finds the cause and fixes it
-- Service desk: Tells the user and closes the ticket
+- Hypercare team: If yes, applies it, closes the ticket
+- Project team: If no, finds and fixes the cause
+- Service desk: Tells the user, closes ticket
 
 ## The daily rhythm
 Layout: process cycle

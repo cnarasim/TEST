@@ -59,10 +59,10 @@ Layout: timeline quarters
 Layout: swimlane handoffs
 - Product owner: Proposes moving an item
 - Release manager: Checks capacity and dependencies
-- Release manager: Does the release goal still hold?
+- Release manager: Release goal still holds?
 - Release manager: If yes, updates the release plan
 - Steering committee: If no, decides on scope or date
-- Product owner: Tells the teams and the business
+- Product owner: Tells teams and the business
 
 ## What each release depends on
 Layout: process converge

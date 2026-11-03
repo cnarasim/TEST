@@ -45,7 +45,7 @@ Layout: swimlane handoffs
 - Product compliance: Regulated for transport?
 - Product compliance: If yes, sets hazmat flags
 - Product compliance: If no, clears the item
-- DC packing: Packs and marks by the flag
+- DC packing: Packs and marks per flag
 - Shipping system: Blocks air for flagged items
 
 ## Controls and exceptions

@@ -73,9 +73,9 @@ Layout: timeline phases
 
 ## How people move into roles
 Layout: swimlane handoffs
-- HR business partner: Maps people to the new roles
+- HR business partner: Maps people to new roles
 - Line leader: Same role, little change?
-- HR business partner: If yes, confirms it in the HR system
+- HR business partner: If yes, records it in HR
 - Line leader: If no, opens a fair selection
-- Line leader: Tells each person one to one
+- Line leader: Tells each person directly
 - HR business partner: Updates the org chart

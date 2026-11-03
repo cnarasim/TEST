@@ -47,7 +47,7 @@ Layout: gantt
 
 ## How a release slot is booked
 Layout: swimlane handoffs
-- Product owner: Requests a slot for the change
+- Product owner: Requests a change slot
 - Release manager: Checks freezes and clashes
 - Release manager: Is the slot free?
 - Release manager: If yes, books it on the calendar

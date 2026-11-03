@@ -32,7 +32,7 @@ order: 203
 
 ## Changes are approved once
 Layout: swimlane handoffs
-- Requester: Proposes a new or changed KPI
+- Requester: Proposes a KPI change
 - KPI owner: Reviews the definition
 - KPI owner: Conflicts with another KPI?
 - KPI owner: If yes, takes it to the council

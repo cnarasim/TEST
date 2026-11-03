@@ -23,10 +23,10 @@ order: 204
 
 ## Late changes need the DC's view first
 Layout: swimlane handoffs
-- Buyer: Requests a quantity or date change
+- Buyer: Requests quantity or date changes
 - Purchasing system: Checks the ship status
 - Purchasing system: Past the change cut-off?
-- Purchasing system: If yes, routes it to the DC lead
+- Purchasing system: If yes, routes it to DC lead
 - Purchasing system: If no, sends the change
 - Vendor: Accepts or rejects the change
 - Buyer: Confirms the revised order

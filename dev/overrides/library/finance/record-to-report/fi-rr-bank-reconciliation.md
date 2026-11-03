@@ -24,7 +24,7 @@ order: 308
 ## Rules match, accountants clear the rest
 Layout: swimlane handoffs
 - Bank: Sends the daily statement file
-- Reconciliation tool: Matches bank lines to the ledger
+- Reconciliation tool: Matches bank lines to ledger
 - Cash accountant: Every line matched?
 - Cash accountant: If yes, prepare the reconciliation
 - Cash accountant: If no, book fees or research items

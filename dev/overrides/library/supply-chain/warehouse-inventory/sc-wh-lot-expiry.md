@@ -31,7 +31,7 @@ Layout: process numbered
 
 ## Receiving checks life before putaway
 Layout: swimlane handoffs
-- Receiving: Scans the lot and expiry date
+- Receiving: Scans lot and expiry date
 - WMS: Checks the remaining shelf life
 - WMS: Enough life left?
 - WMS: If yes, directs putaway by lot

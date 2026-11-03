@@ -31,12 +31,12 @@ Layout: process numbered
 
 ## The planner builds, the WMS releases
 Layout: swimlane handoffs
-- Wave planner: Builds waves for the next cut-off
-- WMS: Checks stock in the pick faces
-- WMS: Enough stock to pick in full?
+- Wave planner: Builds waves per cut-off
+- WMS: Checks pick-face stock
+- WMS: Enough stock to pick?
 - WMS: If yes, releases the wave
 - WMS: If no, replenishes the faces first
-- Pickers: Pick and send totes to packing
+- Pickers: Pick totes, send to packing
 - Shipping: Loads before the cut-off
 
 ## Each order type has its own wave rule

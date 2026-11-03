@@ -73,7 +73,7 @@ Layout: gantt
 
 ## How impacts turn into actions
 Layout: swimlane handoffs
-- Change lead: Runs impact sessions with each group
+- Change lead: Runs impact sessions per group
 - Group leader: Confirms the impact and timing
 - Change lead: High impact?
 - Change lead: If yes, builds a support plan

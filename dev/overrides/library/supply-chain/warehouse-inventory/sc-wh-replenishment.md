@@ -24,7 +24,7 @@ order: 408
 ## The WMS triggers, drivers move the stock
 Layout: swimlane handoffs
 - WMS: Checks pick-face levels
-- WMS: Below the minimum or the wave?
+- WMS: Below minimum or wave need?
 - WMS: If yes, creates a move task
 - WMS: If no, checks again after the wave
 - Reach driver: Moves cases from reserve

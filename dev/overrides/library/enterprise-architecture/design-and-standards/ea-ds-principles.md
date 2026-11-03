@@ -46,7 +46,7 @@ Layout: swimlane handoffs
 - Design authority: Every principle met?
 - Design authority: If yes, approves the design
 - Design authority: If no, reviews a waiver
-- Project team: Logs the decision and end date
+- Project team: Logs decision and end date
 
 ## When a principle can be waived
 | Rule | How it works | Owner |

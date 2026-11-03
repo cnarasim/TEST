@@ -24,7 +24,7 @@ order: 306
 ## Billing runs nightly, exceptions the next morning
 Layout: swimlane handoffs
 - Delivery: Goods issue posted
-- Billing run: Creates invoices from the due list
+- Billing run: Invoices the due list
 - Billing run: Posted to accounting?
 - Billing run: If yes, send the invoice
 - Billing clerk: If no, fix and release

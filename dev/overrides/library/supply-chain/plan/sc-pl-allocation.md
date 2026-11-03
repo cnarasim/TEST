@@ -23,7 +23,7 @@ order: 102
 
 ## Allocation turns one buy into store deliveries
 Layout: swimlane handoffs
-- Merchant: Confirms the buy and launch date
+- Merchant: Confirms buy and launch date
 - Allocator: Builds the allocation table
 - Allocator: Quantities fit store grades?
 - Allocator: If yes, release the table

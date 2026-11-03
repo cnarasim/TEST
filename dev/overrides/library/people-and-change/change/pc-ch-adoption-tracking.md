@@ -63,12 +63,12 @@ Layout: ranking
 
 ## When a site lags
 Layout: swimlane handoffs
-- Change lead: Flags sites below target each week
-- District manager: Finds the cause with the store
+- Change lead: Flags sites below target weekly
+- District manager: Finds the cause with stores
 - District manager: A skills gap?
-- Champion: If yes, coaches the team on the floor
+- Champion: If yes, coaches the team on shift
 - Project team: If no, fixes the process or system
-- Change lead: Checks the site again next week
+- Change lead: Rechecks the site next week
 
 ## The weekly adoption rhythm
 Layout: process cycle

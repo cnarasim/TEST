@@ -23,11 +23,11 @@ order: 416
 
 ## Report, secure, then find the cause
 Layout: swimlane handoffs
-- Associate: Reports the incident or near miss
+- Associate: Reports incident or near miss
 - Supervisor: Makes the area safe
 - Supervisor: Injury needing treatment?
 - Supervisor: If yes, arranges first aid or care
-- Supervisor: If no, logs it as a near miss
+- Supervisor: If no, logs a near miss
 - Safety lead: Investigates the root cause
 - Safety lead: Tracks the corrective action
 

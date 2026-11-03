@@ -64,12 +64,12 @@ Layout: kpi cards
 
 ## How a gap is approved
 Layout: swimlane handoffs
-- Workshop lead: Logs the gap with the business reason
+- Workshop lead: Logs the gap and reason
 - Process owner: Can we change the process?
 - Process owner: If yes, adopts the standard way
 - Design authority: If no, reviews options and effort
 - Steering committee: Approves extensions over tolerance
-- Workshop lead: Updates the backlog and the design
+- Workshop lead: Updates backlog and design
 
 ## Signed off when
 | Criterion | Target | Evidence |

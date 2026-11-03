@@ -60,7 +60,7 @@ Layout: swimlane handoffs
 - Quality lead: Checks it against the criteria
 - Gate board: Criteria met?
 - Gate board: If yes, passes, conditions dated
-- Sponsor: If no, decides a waiver or a hold
+- Sponsor: If no, decides waiver or hold
 - Quality lead: Logs the decision and conditions
 
 ## Quality we measure at every gate

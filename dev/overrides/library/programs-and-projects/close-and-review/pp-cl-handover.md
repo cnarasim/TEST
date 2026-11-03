@@ -65,7 +65,7 @@ Layout: hub
 ## How the service is accepted
 Layout: swimlane handoffs
 - Project manager: Shares evidence against the criteria
-- Service owner: Reviews it with the support teams
+- Service owner: Reviews it with support teams
 - Service owner: Every criterion met?
 - Service owner: If yes, accepts it into service
 - Project manager: If no, extends hypercare with a plan

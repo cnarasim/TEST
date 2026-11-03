@@ -23,7 +23,7 @@ order: 402
 
 ## Finance builds the P&L, operations acts on it
 Layout: swimlane handoffs
-- Subledgers: Post sales, cost of goods and expenses
+- Subledgers: Post sales, costs and expenses
 - Cost accounting: Allocates shared costs
 - FP&A: Builds the store P&L
 - FP&A: Store below target?

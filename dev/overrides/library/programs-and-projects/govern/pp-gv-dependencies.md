@@ -56,10 +56,10 @@ Layout: process converge
 
 ## How a dependency is agreed
 Layout: swimlane handoffs
-- Workstream lead: Names what is needed, by when
-- Project manager: Logs it and finds the provider
-- Provider: Agrees the date and an owner
-- Project manager: Still on plan at the weekly check?
+- Workstream lead: Names the need and date
+- Project manager: Logs it, finds the provider
+- Provider: Agrees a date and owner
+- Project manager: On plan at weekly check?
 - Project manager: If yes, keeps tracking it
 - Steering committee: If no, decides on options
 

@@ -57,8 +57,8 @@ Layout: bullet
 
 ## How a resource request flows
 Layout: swimlane handoffs
-- Workstream lead: Names the role, dates and skills
-- Project manager: Checks it against plan and budget
+- Workstream lead: Names role, dates and skills
+- Project manager: Checks plan and budget fit
 - Resource manager: Someone free in time?
 - Resource manager: If yes, books the person
 - Project manager: If no, raises a gap with options

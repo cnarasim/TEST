@@ -47,7 +47,7 @@ Layout: process cycle
 
 ## From alert to fix
 Layout: swimlane handoffs
-- Monitoring: Detects a breach of the objective
+- Monitoring: Detects an objective breach
 - On-call engineer: Acknowledges the alert
 - On-call engineer: Guests affected?
 - On-call engineer: If yes, opens a major incident

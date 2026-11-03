@@ -31,10 +31,10 @@ Layout: process chevrons
 
 ## Value and feasibility rank the ideas
 Layout: matrix
-- Do now: high value, ready data - pilot this quarter
-- Prepare: high value, data not ready - fix data first
-- Quick help: lower value, easy - use standard AI tools
-- Park: lower value, hard - revisit next year
+- Do now: high value, ready to build - pilot this quarter
+- Prepare: high value, not ready - fix the data first
+- Quick help: lower value, ready to build - use standard AI tools
+- Park: lower value, not ready - revisit next year
 
 ## Every idea gets a risk tier
 | Tier | Example | Controls needed |
@@ -50,7 +50,7 @@ Layout: swimlane handoffs
 - AI team: Ready for a pilot?
 - AI team: If yes, recommends it to the council
 - AI team: If no, gives the gaps to close
-- AI council: Funds and sets the success measure
+- AI council: Funds it and sets measures
 
 ## KPIs that show it works
 | KPI | What it measures | Data source |

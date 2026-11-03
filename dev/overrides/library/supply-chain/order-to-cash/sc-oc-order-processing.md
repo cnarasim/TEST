@@ -23,11 +23,11 @@ order: 301
 
 ## Customer service owns the order from PO to release
 Layout: swimlane handoffs
-- Customer: Sends the purchase order (EDI 850 or portal)
+- Customer: Sends the order (EDI 850)
 - Customer service: Creates the sales order
 - Customer service: Price and stock confirmed?
 - Customer service: If yes, confirm the delivery date
-- Customer service: If no, offer a substitute or new date
+- Customer service: If no, offers substitute or new date
 - Credit: Checks exposure against the limit
 - Logistics: Releases the order to delivery
 

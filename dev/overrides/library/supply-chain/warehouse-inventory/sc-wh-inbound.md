@@ -23,7 +23,7 @@ order: 401
 
 ## Receiving turns trailers into available stock
 Layout: swimlane handoffs
-- Vendor: Sends the ASN and books a dock
+- Vendor: Sends ASN, books a dock
 - Yard: Checks the trailer in
 - Receiver: Unloads and scans cartons
 - Receiver: Matches the ASN?

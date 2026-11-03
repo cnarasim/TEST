@@ -23,8 +23,8 @@ order: 308
 
 ## Reason codes decide where a unit goes
 Layout: swimlane handoffs
-- Store team: Finds a damaged or opened unit
-- Store team: Scans it with a reason code
+- Store team: Finds damaged or opened units
+- Store team: Scans it with reason code
 - Store team: Brand takes it back?
 - Store team: If yes, hold for return to vendor
 - Store team: If no, destroy by the waste rules

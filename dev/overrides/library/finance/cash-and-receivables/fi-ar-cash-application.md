@@ -23,7 +23,7 @@ order: 201
 
 ## Cash is applied automatically, collectors work the rest
 Layout: swimlane handoffs
-- Bank: Sends the statement and lockbox file
+- Bank: Sends statement and lockbox file
 - Cash application: Imports and auto-matches
 - Cash application: Payment matched?
 - Cash application: If yes, clear the invoices

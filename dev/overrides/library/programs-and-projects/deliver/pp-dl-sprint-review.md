@@ -57,11 +57,11 @@ Layout: hexagons
 ## From feedback to backlog
 Layout: swimlane handoffs
 - Stakeholder: Gives feedback on the demo
-- Scrum master: Logs it as a backlog item
+- Scrum master: Logs it in the backlog
 - Product owner: Worth doing now?
-- Product owner: If yes, ranks it for the next sprint
+- Product owner: If yes, ranks it for next sprint
 - Product owner: If no, parks it with a reason
-- Team: Plans the next sprint from the backlog
+- Team: Plans the next sprint
 
 ## Who comes and why
 | Who | Role in the review | Brings |

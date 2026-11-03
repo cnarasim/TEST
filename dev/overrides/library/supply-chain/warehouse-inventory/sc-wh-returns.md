@@ -26,7 +26,7 @@ Layout: retail returns
 
 ## Every return gets one disposition
 Layout: swimlane handoffs
-- Receiving: Scans the return to its order
+- Receiving: Scans returns to their orders
 - Returns team: Grades the item
 - Returns team: Sellable as new?
 - Returns team: If yes, restocks it

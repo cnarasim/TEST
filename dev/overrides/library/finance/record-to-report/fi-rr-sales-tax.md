@@ -23,12 +23,12 @@ order: 310
 
 ## The engine calculates, tax files and pays
 Layout: swimlane handoffs
-- POS and checkout: Call the tax engine on every sale
+- POS and checkout: Call the tax engine
 - Tax engine: Returns rate and taxability
-- Tax accountant: Collected tax agrees to the ledger?
+- Tax accountant: Tax collected matches ledger?
 - Tax accountant: If yes, file and pay the returns
 - Tax accountant: If no, research by state and store
-- Accounts payable: Accrues use tax on untaxed purchases
+- Accounts payable: Accrues use tax where unpaid
 
 ## Systems and data for sales and use tax
 | Step | What the system does | Records it keeps |

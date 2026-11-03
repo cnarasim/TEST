@@ -24,7 +24,7 @@ order: 403
 ## Cartons cross the dock in one shift
 Layout: swimlane handoffs
 - Vendor: Labels cartons by store
-- Receiver: Scans cartons at the inbound door
+- Receiver: Scans cartons at the door
 - Sorter: Routes cartons to store lanes
 - Sorter: Label readable?
 - Sorter: If yes, send to the store lane

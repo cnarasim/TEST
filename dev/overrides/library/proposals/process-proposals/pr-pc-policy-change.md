@@ -31,11 +31,11 @@ order: 208
 
 ## Requests follow the new limits
 Layout: swimlane handoffs
-- Requester: Raises the request in the workflow
+- Requester: Raises it in the workflow
 - Workflow: Within the approver's limit?
 - Approver: If yes, approve in the workflow
 - Workflow: If no, route to the next level
-- CFO office: Approves any exception and logs it
+- CFO office: Approves and logs exceptions
 
 ## Who is affected and how we help
 | Group | What changes for them | Support |

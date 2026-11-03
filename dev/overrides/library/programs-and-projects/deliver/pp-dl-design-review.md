@@ -59,11 +59,11 @@ Layout: bullet
 
 ## How the design authority decides
 Layout: swimlane handoffs
-- Designer: Submits the design and trace list
+- Designer: Submits design and trace list
 - Reviewers: Check it against the checklist
 - Design authority: Meets the standards?
 - Design authority: If yes, approves and baselines it
-- Designer: If no, reworks it by the agreed date
+- Designer: If no, reworks it by the date
 - Project manager: Tracks conditions to closure
 
 ## Common findings to avoid

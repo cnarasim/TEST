@@ -24,7 +24,7 @@ order: 301
 ## Stores check in, the DC answers discrepancies
 Layout: swimlane handoffs
 - DC: Ships with an ASN
-- Store team: Scans cartons at the back door
+- Store team: Scans cartons at the door
 - Store team: Cartons match the ASN?
 - Store team: If yes, confirm the receipt
 - Store team: If no, record the discrepancy

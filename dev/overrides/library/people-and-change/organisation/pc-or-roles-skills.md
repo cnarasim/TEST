@@ -63,9 +63,9 @@ Layout: matrix
 
 ## Who does what
 Layout: swimlane handoffs
-- Employee: Rates own skills every half year
-- Manager: Agrees the ratings with the employee
-- Manager: Below the level the role needs?
+- Employee: Rates own skills twice yearly
+- Manager: Agrees ratings with the employee
+- Manager: Below the role's level?
 - Manager: If yes, sets a development action
 - HR business partner: If no, records the rating
 - HR business partner: Reports gaps by team

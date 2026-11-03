@@ -23,7 +23,7 @@ order: 305
 
 ## The DC ships, the carrier takes over at the door
 Layout: swimlane handoffs
-- Shipping planner: Creates deliveries from the due list
+- Shipping planner: Creates deliveries from due list
 - DC picker: Picks the delivery
 - DC packer: Packs and labels the cartons
 - DC packer: Quantity matches the delivery?

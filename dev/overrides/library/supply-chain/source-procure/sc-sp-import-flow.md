@@ -24,12 +24,12 @@ order: 203
 ## Imports pass four hands before the DC
 Layout: swimlane handoffs
 - Vendor: Books the shipment and loads
-- Freight forwarder: Sends the ASN and bill of lading
+- Freight forwarder: Sends ASN and shipping documents
 - Customs broker: Files the entry
 - Customs broker: Cleared on arrival?
 - Customs broker: If yes, release to drayage
 - Customs broker: If no, resolve the hold
-- DC: Receives the container against the ASN
+- DC: Receives containers against the ASN
 
 ## The systems and data it runs on
 | Step | What the system does | Records it keeps |

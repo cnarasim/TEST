@@ -29,7 +29,7 @@ Layout: swimlane handoffs
 - Packer: Weight within tolerance?
 - Packer: If yes, send to staging
 - Problem solver: If no, audit the carton
-- Loader: Loads by stop and closes the trailer
+- Loader: Loads by stop, seals trailer
 
 ## The systems and data it runs on
 | Step | What the system does | Records it keeps |

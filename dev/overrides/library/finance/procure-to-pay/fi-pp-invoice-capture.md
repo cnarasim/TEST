@@ -23,7 +23,7 @@ order: 104
 
 ## AP captures, budget owners approve non-PO
 Layout: swimlane handoffs
-- Supplier: Sends the invoice by EDI, portal or PDF
+- Supplier: Sends the invoice (EDI, PDF)
 - AP automation: Captures and validates the data
 - AP clerk: Invoice has a purchase order?
 - AP clerk: If yes, send to the three-way match

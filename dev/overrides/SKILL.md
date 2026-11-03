@@ -18,6 +18,7 @@ so and offer the content as slides).
 - Scope: reads only the user's uploaded files and this folder; writes only to the output folder (and working copies in
   the temp folder). No network connections, downloads or installs. Nothing leaves the chat on the skill's initiative.
 - Files keep an honest record: every deck names this skill and its version in its properties (Producer, SkillVersion).
+- Runs on whatever model and mode the chat is set to (the scripts build and check); never ask the user to switch models.
 - Checks are added, never removed: templates and validators are compared to their pinned SHA-256. The templates are
   slimmed copies of the approved originals (XML identical, oversized pictures re-encoded): `assets/templates/PROVENANCE.json`
   records both hashes. Report results to the user as printed.
@@ -43,15 +44,18 @@ user's content (guides/library.md, "Adapt"). Edit an existing deck: Edit mode be
 4. **Never invent numbers, names or dates.** Missing facts: ask once, then "-". Library templates carry placeholders
    (`[target]`, `[owner]`, `[date]`) and sample figures marked illustrative in the notes: fill them from the user's facts
    or say they are placeholders.
-5. **Attach every file on the tool's `FILES` line** and end the reply with the `RESULT` line(s) exactly as printed.
+5. **Attach every file on the tool's `FILES` line, and only those,** and end the reply with the `RESULT` line(s) exactly
+   as printed. Before attaching a .pptx run `python3 {SKILL_DIR}/tools/stamp.py verify <file>`: it must say "slides
+   UNCHANGED since the stamp". A file without the stamp, or changed after it, was not checked: rebuild it, never send it.
 6. **Plain punctuation.** No em dashes anywhere you write: a hyphen, a colon or a comma. The scripts replace any left.
 7. **A crisp summary on the slide, the detail in the notes.** Headline = the takeaway (at most 45 characters), an optional
    `"summary"` line (one sentence, at most 24 words), body text 6-15 words per card; background goes in the speaker notes.
-8. **Think like a presentation expert.** Decide the deck's answer, the ask and the storyline first; every message on the
-   picture its content asks for (figures as big numbers or a chart, dates as a timeline, steps as a flow, systems as a
-   diagram, risks and actions in tables); retail first: a supply chain, DC, online order, return or finance process goes
-   on a retail diagram or flow with its pictograms; pictures on at least half the content slides; never two slides in a
-   row that tell their story the same way. Act on the build's EXPERT lines before you deliver.
+8. **The presentation standard.** The deck states its answer and its ask, and its slides follow one storyline; every
+   message on the picture its content asks for (figures as big numbers or a chart, dates as a timeline, steps as a flow,
+   systems as a diagram, risks and actions in tables); retail first: a supply chain, DC, online order, return or finance
+   process goes on a retail diagram or flow with its pictograms; pictures on at least half the content slides; never two
+   slides in a row that tell their story the same way. Every build prints an EXPERT REVIEW - the skill's own
+   presentation expert, run by its scripts: act on each EXPERT line (rebuild) or say why it does not apply.
 9. **Fix by rebuilding, never by hand.** To fix a FAIL change the storyboard (or the library page) and rebuild. Never edit
    a built .pptx with python-pptx or XML: it loses the template's formatting and checks. Every .pptx you deliver comes
    from `build_deck.py`, `playbook.py`, `onepager.py`, `fix_deck.py` or a pack tool; a .pptx from anywhere else goes
@@ -109,6 +113,7 @@ python3 {SKILL_DIR}/tools/playbook.py search cycle count                 # find 
 python3 {SKILL_DIR}/tools/playbook.py build sc-wh-cycle-count --out <out>/Cycle-Count.pptx
 python3 {SKILL_DIR}/tools/playbook.py md sc-wh-cycle-count sc-oc-pricing --out page.md   # to adapt or combine
 python3 {SKILL_DIR}/tools/playbook.py pick "three-way match controls; payment run KPIs" --out page.md   # slides from any template
+python3 {SKILL_DIR}/tools/playbook.py review page.md                                     # the expert review, before building
 python3 {SKILL_DIR}/tools/playbook.py page page.md --out <out>/<Name>.pptx                # the adapted page, same checks
 ```
 Several ids make one deck with a chapter (divider and agenda line) per template; `pick` takes the best slide for each

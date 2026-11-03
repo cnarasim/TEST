@@ -24,7 +24,7 @@ order: 201
 ## Buyers turn requirements into confirmed orders
 Layout: swimlane handoffs
 - Replenishment: Creates the requirement
-- Buyer: Converts it to a purchase order
+- Buyer: Converts it to a PO
 - Buyer: Value above the approval limit?
 - Merch manager: If yes, approve the PO
 - Buyer: If no, send the PO

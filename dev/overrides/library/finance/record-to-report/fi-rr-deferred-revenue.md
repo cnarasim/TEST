@@ -23,8 +23,8 @@ order: 306
 
 ## Guests redeem, accounting moves the value
 Layout: swimlane handoffs
-- Guest: Buys a gift card or earns points
-- POS and loyalty: Record the issue and the balance
+- Guest: Buys gift cards, earns points
+- POS and loyalty: Record issue and balance
 - Revenue accountant: Card or points redeemed?
 - Revenue accountant: If yes, move the value to revenue
 - Revenue accountant: If no, keep it in the liability

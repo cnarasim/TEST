@@ -31,7 +31,7 @@ Layout: process chevrons
 ## Who does what at each step
 Layout: swimlane handoffs
 - Guest: Places the order online
-- OMS: Routes the order to a store
+- OMS: Routes orders to a store
 - Store associate: All items on the shelf?
 - Store associate: If yes, pick and stage the order
 - Store associate: If no, offer a substitute

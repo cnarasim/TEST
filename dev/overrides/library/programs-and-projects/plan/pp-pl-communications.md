@@ -50,11 +50,11 @@ Layout: hub
 
 ## How a message gets out
 Layout: swimlane handoffs
-- Change lead: Drafts the message for an audience
+- Change lead: Drafts the message per audience
 - Workstream lead: Checks the facts and dates
 - Sponsor: Approves leader and company notes
 - Communications team: Edits and schedules it
-- Leaders: Cascade it in huddles and calls
+- Leaders: Cascade it in huddles
 - Change lead: Collects questions and feedback
 
 ## Six rules for every message

@@ -23,9 +23,9 @@ order: 204
 
 ## The processor pays, finance proves it
 Layout: swimlane handoffs
-- POS and online: Authorize and capture the card sale
-- Processor: Settles the batch, pays net of fees
-- Cash accountant: Deposit agrees to sales and fees?
+- POS and online: Authorize and capture card sales
+- Processor: Pays out, net of fees
+- Cash accountant: Deposit matches sales less fees?
 - Cash accountant: If yes, clear the card receivable
 - Cash accountant: If no, research by store and date
 - Chargeback analyst: Answers disputes with evidence

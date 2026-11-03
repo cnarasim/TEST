@@ -25,8 +25,8 @@ order: 311
 Layout: swimlane handoffs
 - Inventory accountant: Sets shrink rates by store
 - Inventory accountant: Accrues shrink on sales monthly
-- Count team: Counts the store and posts results
-- Inventory accountant: Count loss in line with the rate?
+- Count team: Counts and posts results
+- Inventory accountant: Count loss within the rate?
 - Inventory accountant: If yes, true up the reserve
 - Loss prevention: If no, investigate and reset the rate
 - Controller: Approves the book-to-physical entry

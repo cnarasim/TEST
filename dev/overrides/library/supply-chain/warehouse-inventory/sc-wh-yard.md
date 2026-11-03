@@ -24,7 +24,7 @@ order: 411
 ## Appointments decide when trucks arrive
 Layout: swimlane handoffs
 - Carrier: Books a dock appointment
-- Yard team: Checks the slot and the PO
+- Yard team: Checks the slot and PO
 - Yard team: Arrived within the window?
 - Yard team: If yes, assigns a door
 - Yard team: If no, reschedules or works it in

@@ -40,7 +40,7 @@ Layout: process diverge
 
 ## Access follows the HR record
 Layout: swimlane handoffs
-- HR: Records the hire or the move
+- HR: Records the hire or move
 - Identity platform: Grants access by role
 - Manager: Extra access needed?
 - Manager: If yes, requests it with a reason

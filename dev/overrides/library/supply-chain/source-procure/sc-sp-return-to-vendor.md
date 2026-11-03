@@ -28,7 +28,7 @@ Layout: swimlane handoffs
 - Vendor: Authorizes the return?
 - Vendor: If yes, issues the RA number
 - Vendor: If no, gives a destroy-in-field credit
-- DC returns: Picks, packs and ships the RTV
+- DC returns: Picks, packs, ships the RTV
 - Accounts payable: Raises the debit memo
 
 ## Return reasons and how each is treated

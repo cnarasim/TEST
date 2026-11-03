@@ -77,6 +77,9 @@ def lint(path, LIB):
             item = s[2:].strip()
             if layout and layout.startswith("swimlane"):
                 step = item.split(":", 1)[1].strip() if ":" in item else item
+                core = re.sub(r"(?i)^if (yes|no)\s*,?\s*", "", step)
+                if len(core.split()) > 5:                # the engine shows the first 5 words of a step and drops the rest
+                    probs.append(f"'{section}': swimlane step over 5 words (the slide would show only the first 5): '{step}'")
                 if len(step) > LIMITS["swim"]:
                     warns.append(f"'{section}': swimlane step over {LIMITS['swim']} chars: '{step[:45]}...'")
             elif layout:

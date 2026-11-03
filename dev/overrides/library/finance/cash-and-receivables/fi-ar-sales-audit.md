@@ -23,10 +23,10 @@ order: 203
 
 ## Stores close, sales audit clears the day
 Layout: swimlane handoffs
-- Store team: Closes registers and preps the deposit
+- Store team: Closes registers, preps deposit
 - Sales audit system: Polls POS and online sales
 - Sales auditor: Tenders agree to deposits?
-- Sales auditor: If yes, release the day to the ledger
+- Sales auditor: If yes, posts the day to ledger
 - Sales auditor: If no, research the over/short
 - Store manager: Explains or corrects the variance
 - Sales auditor: Posts the sales journal

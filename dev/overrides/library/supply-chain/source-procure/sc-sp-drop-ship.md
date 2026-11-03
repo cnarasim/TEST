@@ -23,12 +23,12 @@ order: 206
 
 ## The vendor ships, the guest sees one order
 Layout: swimlane handoffs
-- Guest: Orders on ulta.com or the app
-- OMS: Routes the line to the vendor
+- Guest: Orders online or in-app
+- OMS: Routes it to the vendor
 - Vendor: Can ship within the promise?
 - Vendor: If yes, ships and sends tracking
 - Vendor: If no, rejects the line
-- OMS: Updates the guest, refunds if needed
+- OMS: Updates guest, refunds if needed
 
 ## Systems and data for drop ship
 | Step | What the system does | Records it keeps |

@@ -10,12 +10,15 @@
                                                                    (--list: the candidates only; "<id>: words" picks inside one template)
     python tools/playbook.py build <id> [<id> ...] --out Deck.pptx [--title T] [--owner N] [--classification internal]
     python tools/playbook.py page page.md --out Deck.pptx [--title T] ...      an edited page (or any Markdown page) -> deck
+    python tools/playbook.py review page.md [--title T]            the expert review of a page before it is built (seconds)
     python tools/playbook.py check [--agnostic]                    library health: front matter, sections, product names
 
 A build: the page -> the Studio's Eco engine (studio/page_to_spec.py, rules, no AI) -> the deck on the approved template ->
 a build record (which slides are drawn visuals, template infographics, shortened lists) -> Presentation Central's own
 finishing (fit, accessibility, type scale, plain punctuation) -> the delivery gate (validate_deck.py) -> version stamp.
-Prints a status line, FAIL lines, PICTURE (the contact sheet to review), FILES and the RESULT line.
+Prints a status line, FAIL lines, the EXPERT REVIEW (Presentation Central's tools/deck_expert.py on the page: the answer
+first, the ask last, the right picture for each message, takeaway headlines, placeholders left), PICTURE (the contact
+sheet to review), FILES and the RESULT line.
 Pages live in library/<domain>/<l1>/<id>.md; a team folder can be added with ULTA_LIBRARY_DIR (several: separated by ':').
 """
 import argparse, contextlib, io, json, os, shutil, subprocess, sys, tempfile, time
@@ -156,6 +159,193 @@ def pick(requests, top=3):
         ranked = rank(True) or rank(False)            # a request that names only a kind of slide ("risks") still finds one
         out.append((req, ranked[:max(1, top)]))
     return out
+
+
+# ------------------------------------------------------------------------------------- the expert review, on a page
+PAGE_PICTURE = {   # deck_expert's better picture -> the page line that draws it
+    "the risk table": "a table | Risk | Mitigation | Owner |",
+    "the action table": "a table | Action | Owner | When |",
+    "a diagram": '"A -> B: what flows" lines (a system diagram)',
+    "a donut": "Layout: donut",
+    "big numbers with a context line": "Layout: kpi cards",
+    "a dumbbell": "Layout: slope",
+    "a timeline": 'Layout: timeline quarters (dated lines, ranges with "to")',
+    "big numbers": "Layout: four numbers",
+    "a chart": "Layout: ranking",
+    "a flow": "Layout: process chevrons",
+    "a process flow in two rows": "Layout: process snake",
+    "numbered tiles": "Layout: process numbered",
+}
+
+
+def _expert_slides(spec):
+    """The page's slides in the shape Presentation Central's expert review reads (tools/deck_expert.py)."""
+    import re
+    out = []
+    for s in spec.get("slides") or []:
+        f = s.get("fills") or {}
+        head = f.get("title")
+        c = s.get("central") if isinstance(s.get("central"), dict) else {}
+        head = head or c.get("headline")                # a template infographic's headline sits with its data
+        x = {"source": s.get("source"), "headline": " ".join(head) if isinstance(head, list) else str(head or "")}
+        if s.get("notes"):
+            x["notes"] = s["notes"]
+        if s.get("takeaway"):
+            x["summary"] = s["takeaway"]
+        fam, _, style = str(s.get("kind") or "").partition("-")
+        if s.get("central") or s.get("graphic") or s.get("flow") or s.get("board") or s.get("chart"):
+            if fam == "timeline":
+                x["timeline"] = {}
+            elif fam == "swimlane":
+                x["swimlane"] = {}
+            elif fam in ("process", "retail"):
+                x[fam], x["style"] = {}, style
+            elif fam == "infographic":
+                x[style if style in ("donut", "results", "quad", "journey", "scorecard", "map", "priorities", "ogsm", "funnel")
+                  else "graphic"] = {}
+            elif fam == "modern":
+                x["modern"], x["items"] = style, []
+            elif s.get("graphic"):
+                g = str((s.get("graphic") or {}).get("kind") or "graphic")
+                x["graphic"] = {"hexagons": "honeycomb"}.get(g, g)
+            elif s.get("flow"):
+                x["steps"] = [{"label": "step"}]
+            else:
+                x["graphic"] = "graphic"
+        else:
+            items = []
+            for k in ("text1", "text2"):
+                v = f.get(k)
+                for line in (v if isinstance(v, list) else [v] if v else []):
+                    line = str(line or "").strip()
+                    if line and not line.startswith("## "):
+                        items.append(re.sub(r"^[•–◦▪✓✗→]\s*", "", line))
+            if f.get("table") is not None:
+                x["table"] = f["table"]
+            elif items:
+                x["text"] = items
+            if s.get("bands"):
+                x["source"] = 42                       # Today / Target bands: a designed comparison, not a wall of text
+            asks = [v for v in (s.get("callouts") or {}).values() if v] + \
+                   [i for i in items if re.match(r"(?i)(decision|ask|next steps?)\s*:", i)]
+            if asks:
+                x["decision"] = asks[0]
+        out.append(x)
+    return out
+
+
+def _page_sections(md):
+    """[(heading, layout, kind, items)] for each "## " section of a page: kind is table, cards, bands or list."""
+    import re
+    out = []
+    for h, text in _sections(md or ""):
+        layout = " ".join(re.findall(r"(?im)^layout:\s*(.+)$", text)).strip()
+        lines = [l.strip() for l in text.splitlines()[1:] if l.strip() and not l.lstrip().startswith(">")]
+        rows = [l for l in lines if l.startswith("|") and not re.match(r"^\|?\s*:?-{2,}", l)]
+        subs = [l[4:].strip() for l in lines if l.startswith("### ")]
+        if rows:
+            kind_, items = "table", [" | ".join(c.strip() for c in r.strip("|").split("|")) for r in rows[1:]]
+        elif subs and {x.lower() for x in subs} & {"today", "target", "tomorrow", "before", "after"}:
+            kind_, items = "bands", []
+        elif subs:
+            kind_, items = "cards", [l[2:].strip() for l in lines if l.startswith(("- ", "* "))]
+        else:
+            kind_, items = "list", [l[2:].strip() for l in lines if l.startswith(("- ", "* "))]
+        out.append((h, layout, kind_, items))
+    return out
+
+
+def expert_review(spec, title, md=None):
+    """Presentation Central's expert review (tools/deck_expert.py: the answer first, the ask last, the right picture for
+    each message, takeaway lines, no run of text slides) on a library page, its advice in page terms, plus two checks a
+    page needs: headings that name a topic instead of the takeaway, and placeholders still on the slides."""
+    import re
+    import deck_expert as DX
+    slides = _expert_slides(spec)
+    try:
+        got = DX.review({"title": title}, slides)
+    except Exception as e:                             # noqa: BLE001  the review advises; it never stops a build
+        return [f"EXPERT REVIEW: not available here ({type(e).__name__})"]
+    head, lines = got[0], [l[len("EXPERT "):] for l in got[1:] if l.startswith("EXPERT ") and not l.startswith("EXPERT ...")]
+    page = []
+    secs = _page_sections(md) if md else []
+    if secs:                                           # a page is edited by section: the better picture for each section
+        lines = [l for l in lines if not re.match(r"slide \d+: ", l)]
+        K = DX.consts()
+        drawn = {x["headline"] for x in slides if any(x.get(k_) is not None for k_ in (
+            "timeline", "swimlane", "process", "retail", "graphic", "modern", "steps", "quad", "scorecard", "donut", "results",
+            "journey", "map", "priorities", "ogsm", "funnel"))}
+        for k, (h, layout, kind_, items) in enumerate(secs, 1):
+            if layout.lower().startswith("swimlane"):
+                long_ = [i.split(":", 1)[1].strip() for i in items if ":" in i
+                         and len(re.sub(r"(?i)^if (yes|no)\s*,?\s*", "", i.split(":", 1)[1].strip()).split()) > 5]
+                if long_:
+                    page.append(f"section '{h}': {len(long_)} swimlane step{'s' if len(long_) > 1 else ''} over 5 words - the "
+                                f"slide shows only the first 5 ('{long_[0]}'): say each in 5 words, verb and object")
+            if layout or kind_ in ("bands", "table") or len(items) < 2 or h in drawn:
+                continue                               # (a Layout line or a table is the author's choice; the engine drew some itself)
+            x = {"headline": h, "table": [["", ""]] + [[i, ""] for i in items]} if kind_ == "table" else {"headline": h, "text": items}
+            try:
+                sg = DX.suggest(x, k, K)
+            except Exception:                          # noqa: BLE001
+                sg = None
+            if sg and sg[1] in PAGE_PICTURE:
+                page.append(f"section '{h}': {sg[0].replace('text boxes', 'its lines')} - {sg[1]}: {PAGE_PICTURE[sg[1]]}")
+        for n, s in enumerate(spec.get("slides") or [], 1):   # two sections the engine packed onto one slide
+            f = s.get("fills") or {}
+            boxed = [str(l)[3:].strip() for k_ in ("text1", "text2") for l in (f.get(k_) if isinstance(f.get(k_), list) else [])
+                     if str(l).startswith("## ")]
+            sec_names = {h for h, *_ in secs}
+            merged = [b for b in boxed if b in sec_names]
+            if merged:
+                title_ = " ".join(f["title"]) if isinstance(f.get("title"), list) else str(f.get("title") or "")
+                page.append(f"slide {n} holds {len(merged) + 1} sections ({', '.join(repr(m) for m in merged)} and '{title_}'): "
+                            "one message a slide reads better - give each its own Layout: line or fold the lighter one "
+                            "into the notes")
+    for l in lines:
+        if l.startswith("polish:"):
+            continue                                   # (photo covers and dividers: storyboard choices a page does not make)
+        l = re.sub(r"open with the answer and the ask: .*", "open with the answer and the ask: make the first section an At a "
+                   "glance slide - a heading that states the answer and 3-5 \"Lead: detail\" lines, the decision needed among them", l)
+        l = re.sub(r"open with the answer: .*", "open with the answer: make the first section an At a glance slide (a heading "
+                   "that states the answer, 3-5 \"Lead: detail\" lines) or the headline numbers (Layout: four numbers)", l)
+        l = re.sub(r"end with the ask: .*", "end with the ask: a last section with \"- Decision: ...\", \"- Ask: ...\" and "
+                   "\"- Next step: ...\" lines, or an action table (| Action | Owner | When |)", l)
+        l = re.sub(r"(\d+) content slides and no chapters: .*", r"\1 content slides and no chapters: put a \"# Chapter\" line "
+                   "before each group of sections (2-4 chapters; each gets a divider and an agenda line)", l)
+        l = re.sub(r"no agenda: .*", "no agenda: give the page 2-4 chapters (\"# Chapter\" lines) - the agenda follows", l)
+        l = re.sub(r"\(a chart, big numbers, a timeline or a diagram of the same facts\)",
+                   "(a Layout: line - four numbers, a timeline, a process or a matrix of the same facts)", l)
+        l = re.sub(r"add \"summary\": .*", "add one sentence under its heading saying what the figures mean (it becomes "
+                   "the slide's takeaway line)", l)
+        l = re.sub(r"add \"decision\": .*", "add a \"- Decision: ...\" line to that section", l)
+        if l.startswith("retail:"):
+            l = re.sub(r" first: .*", " first: Layout: retail <starter> or a swimlane (guides/library.md lists the starters)", l)
+        m = re.match(r"(slide \d+: .+? - )(.+?): .*", l)
+        if m and m.group(2) in PAGE_PICTURE:
+            l = f"{m.group(1)}{m.group(2)}: {PAGE_PICTURE[m.group(2)]}"
+        page.append(l)
+    try:
+        import family_rules as FR
+        content = [x for x in slides if not str(x.get("source")) in ("1", "2", "5", "32")]
+        topics = [x["headline"] for x in content if x["headline"] and FR.is_label(x["headline"].replace(" (cont.)", ""))]
+    except Exception:                                  # noqa: BLE001
+        content, topics = [], []
+    if topics:
+        ex = ", ".join(f"'{t}'" for t in list(dict.fromkeys(topics))[:3])
+        page.append(f"headlines: {len(topics)} of {len(content)} name a topic, not the takeaway ({ex}): with the user's facts, "
+                    "say what each slide shows (at most 42 characters)")
+    held = {}
+    for n, s in enumerate(spec.get("slides") or [], 1):
+        for t in re.findall(r"\[[a-z][^\]\n]{0,23}\]", json.dumps({k: v for k, v in s.items() if k != "notes"})):   # text and drawn data
+            held.setdefault(t, set()).add(n)
+    if held:
+        where = sorted({n for v in held.values() for n in v})
+        page.append(f"placeholders on slide{'s' if len(where) > 1 else ''} {', '.join(map(str, where[:8]))}: "
+                    f"{', '.join(sorted(held)[:5])} - fill them with the user's facts, or tell the user they are placeholders")
+    more = len(page) - 8
+    return [head] + [f"EXPERT {l}" for l in page[:8]] + ([f"EXPERT ... {more} more: python tools/playbook.py review <page.md>"]
+                                                       if more > 0 else [])
 
 
 def picked_page(results, title):
@@ -419,6 +609,7 @@ def build(md, out, title=None, owner=None, classification=None, ids=()):
             if len(cells) >= 3 and cells[1] == "FAIL":
                 fails.append(f"FAIL  {cells[0]}: {cells[2][:200]}")
         said += [f"  {l}" for l in list(dict.fromkeys(fails))[:10]] + [f"  FAIL  {p}" for p in probs[:5]]
+        said += expert_review(spec, title or "", md)   # Presentation Central's expert review: act on its lines, then rebuild
         pic = vd / "contact-sheet.png"
         if pic.exists():
             said.append(f"PICTURE {pic}")
@@ -488,6 +679,28 @@ def main():
         print(f"next: put the user's facts into the page (placeholders, names, dates), then "
               f"python tools/playbook.py page {out} --out <Name>.pptx" + ("" if title else '  (give the deck its own --title)'))
         return 0 if len(got) == len(res) else 1
+    if cmd == "review":
+        title = _opt(args, "--title")
+        if not args:
+            print("review needs a page: python tools/playbook.py review page.md [--title T]"); return 2
+        md = Path(args[0]).read_text(encoding="utf-8")
+        m = LIB.FRONT.match(md)
+        if m:
+            title = title or next((l.split(":", 1)[1].strip() for l in m.group(1).splitlines() if l.lower().startswith("l2:")), None)
+            md = md[m.end():]
+        work = Path(tempfile.mkdtemp(prefix="ulta-review-"))
+        try:
+            (work / "page.md").write_text(md, encoding="utf-8")
+            r = subprocess.run([PY, str(STUDIO / "page_to_spec.py"), str(work / "page.md"), "--out", str(work / "spec.json")]
+                               + (["--title", title] if title else []), capture_output=True, text=True, cwd=str(work))
+            if r.returncode or not (work / "spec.json").exists():
+                print("NOT READ | the page could not be read: " + (r.stderr or r.stdout).strip()[-300:]); return 2
+            spec = json.loads((work / "spec.json").read_text(encoding="utf-8"))
+        finally:
+            shutil.rmtree(work, ignore_errors=True)
+        for l in expert_review(spec, title or "", md):
+            print(l)
+        return 0
     if cmd == "show":
         items = LIB.templates()
         for i in args:

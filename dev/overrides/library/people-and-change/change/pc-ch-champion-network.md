@@ -57,12 +57,12 @@ Layout: timeline countdown
 
 ## How feedback flows
 Layout: swimlane handoffs
-- Associate: Asks a question or raises a problem
+- Associate: Asks or raises a problem
 - Champion: Can I answer it?
 - Champion: If yes, answers and shares the tip
 - Change lead: If no, routes it to the project
 - Project team: Answers or fixes it
-- Change lead: Shares the answer with all champions
+- Change lead: Shares answers with all champions
 
 ## Is the network working
 | Measure | Target | Source |

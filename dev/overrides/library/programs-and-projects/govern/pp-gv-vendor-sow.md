@@ -54,7 +54,7 @@ Layout: swimlane handoffs
 - Reviewer: Checks it against the criteria
 - Business owner: Criteria met?
 - Business owner: If yes, signs the acceptance
-- Partner: If no, fixes it by the agreed date
+- Partner: If no, fixes it by the date
 - Vendor manager: Releases the milestone payment
 
 ## Partner performance

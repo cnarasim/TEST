@@ -29,7 +29,7 @@ Layout: swimlane handoffs
 - Commercial lead: If yes, approve the change
 - Pricing analyst: If no, activate the record
 - Sales order: Determines price at entry
-- Billing: Copies or re-prices on the invoice
+- Billing: Copies or re-prices the invoice
 
 ## The systems and data it runs on
 | Step | What the system does | Records it keeps |

@@ -23,8 +23,8 @@ order: 105
 
 ## Every request is verified before approval
 Layout: swimlane handoffs
-- Supplier: Requests the change on the portal
-- Supplier master team: Calls back a contact on file
+- Supplier: Requests the change online
+- Supplier master team: Calls the contact on file
 - Supplier master team: Change confirmed by the supplier?
 - Supplier master team: If yes, enter the new details
 - Supplier master team: If no, refuse and report it

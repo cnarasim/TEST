@@ -13,12 +13,12 @@ order: 201
 
 ## The process today
 Layout: swimlane handoffs
-- Store: Finds a damaged item and emails the DC
-- DC: Checks stock and replies the next day
+- Store: Finds damage, emails the DC
+- DC: Checks stock, replies next day
 - Store: Damage confirmed?
-- Store: If yes, raises a claim form by hand
+- Store: If yes, fills a paper claim form
 - Finance: If no, closes the request
-- Finance: Re-keys the claim and credits the store a week later
+- Finance: Re-keys, credits a week later
 
 ## Where it hurts
 Layout: kpi cards

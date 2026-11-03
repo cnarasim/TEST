@@ -30,7 +30,10 @@ domains (Technology Operations, Data and AI, People and Change), `tools/playbook
 check, pick). `pick` takes one request per slide ("three-way match controls; payment run KPIs; cutover timeline") and
 returns the best slide for each from any template as one page, by rules: the topic words choose the template (a word
 few templates use counts most), the other words choose its slide (heading, layout, text); each slide's notes name its
-source. Content prepared elsewhere is written in the same page format and built with `page`. A library deck is held to the same standard as every deck: the Eco build is followed by a build record
+source. Content prepared elsewhere is written in the same page format and built with `page`. Every library build,
+and `playbook.py review page.md` before one, runs Presentation Central's expert review (tools/deck_expert.py) with its
+advice in page terms - the answer first, the ask last, the better picture for each section as its `Layout:` line - plus
+headings that name a topic instead of the takeaway, two sections packed on one slide, and placeholders left. A library deck is held to the same standard as every deck: the Eco build is followed by a build record
 (`.ulta.json`: drawn visuals, template infographics, shortened lists), Presentation Central's finishing (text inside
 its drawn shapes, template run styles, fit, accessibility, type scale, plain punctuation), the delivery gate, a stamp and the RESULT line.
 
@@ -56,6 +59,10 @@ its drawn shapes, template run styles, fit, accessibility, type scale, plain pun
   size as 18 pt and wrote 18 pt into every card title ("had to shrink - the template sets it at 24 pt").
 - A headline the engine computes from the slide's figures is used only when it fits one line (42 characters); the
   Studio allowed 60, so several metric slides failed "does not fit one line at the standard 36 pt".
+- The 2 x 2 matrix reads as a matrix: axis labels from the author's own row and column words, the quadrant to act on in
+  the strong colour and the others in the light tint, larger type (the Studio drew four equal saturated blocks).
+- Swimlane steps hold 5 words: the engine shows the first 5 and drops the rest, so 150 library steps that ran longer
+  ("Funds and sets the success") were rewritten; the verifier and the expert review now flag a longer step.
 - Scorecards fill both lists: "Lowlight:" / "Highlight:" lines in the page, else the page's own KPIs by status (off
   target under Lowlights). The Studio left both empty, so every scorecard kept the template's empty rows.
 - A template infographic (scorecard, OGSM, vision house, quad, funnel, donut, map) is filled on the template's own
