@@ -335,6 +335,10 @@ def finish(deck, spec, rec, story):
     import build_deck as BD, typeset, plain, brand as B
     slides = spec["slides"]
     mapping = ",".join(str(s["source"]) for s in slides)
+    if rec["diagram_slides"]:                         # as build_deck: text on a drawn card goes INSIDE its shape (edits like hand-made)
+        nz = subprocess.run([PY, str(TOOLS / "nativize.py"), str(deck), "--slides", ",".join(map(str, rec["diagram_slides"]))],
+                            capture_output=True, text=True)
+        print((nz.stdout.strip().splitlines() or ["nativize: no output"])[-1])
     print(f"runs styled from the template: {conform_runs(deck, slides, set(rec['diagram_slides']))}")
     fh = subprocess.run([PY, str(TOOLS / "autofit.py"), str(deck), "--mapping", mapping, "--out", str(deck)], capture_output=True, text=True)
     print(fh.stdout.strip())
@@ -402,7 +406,11 @@ def build(md, out, title=None, owner=None, classification=None, ids=()):
         vd = out.parent / (out.stem + "_validation"); vd.mkdir(exist_ok=True)
         (vd / "build-log.txt").write_text(log.getvalue(), encoding="utf-8")
         shutil.copy2(spec_p, vd / "spec.json")
-        status = ("READY" if overall.startswith("READY") else "DRAFT - VERIFICATION INCOMPLETE (no renderer here)"
+        review = [c[0] for c in ([x.strip() for x in l.strip().strip("|").split("|")] for l in v.stdout.splitlines()
+                                 if l.lstrip().startswith("|")) if len(c) >= 3 and c[1] in ("REVIEW", "UNVERIFIED")
+                  and not c[0].startswith("Template structure")]
+        why = "no renderer here" if "LibreOffice not available" in v.stdout else "to review: " + ", ".join(review[:3])
+        status = ("READY" if overall.startswith("READY") else f"DRAFT - VERIFICATION INCOMPLETE ({why})"
                   if "VERIFICATION INCOMPLETE" in overall else "NEEDS CORRECTION")
         said = [f"{status} | {out} v{ver} | {len(spec['slides'])} slides" + (f" from {', '.join(ids)}" if ids else "")]
         fails = [l.strip() for l in log.getvalue().splitlines() if l.strip().startswith("FAIL")]

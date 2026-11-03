@@ -98,7 +98,8 @@ def build(skill, path, meta, body, render=False):
                             "--title", (meta or {}).get("l2") or path.stem], capture_output=True, text=True, env=env, timeout=900)
         o = r.stdout + r.stderr
         st = "READY" if re.search(r"^READY", o, re.M) else "NOT BUILT" if re.search(r"NOT (BUILT|WRITTEN)", o) else \
-             "CRASH" if "Traceback" in o else "DRAFT (no renderer)" if "VERIFICATION INCOMPLETE" in o else "NEEDS CORRECTION"
+             "CRASH" if "Traceback" in o else ("DRAFT (no renderer)" if "no renderer here" in o else "DRAFT (review)") \
+             if "VERIFICATION INCOMPLETE" in o else "NEEDS CORRECTION"
         fails = list(dict.fromkeys(l.strip() for l in o.splitlines() if l.strip().startswith("FAIL")))
         if st in ("NOT BUILT", "CRASH"):
             fails.append(o.strip().splitlines()[-1][:300] if o.strip() else "no output")
@@ -129,7 +130,7 @@ def main():
     bad = 0
     for f, meta, body, probs, warns in linted:
         st, fails, pct, fix = results.get(f, ("not built", [], "?", ""))
-        ok = not probs and (a.lint_only or (not fails and st in ("READY", "DRAFT (no renderer)")))
+        ok = not probs and (a.lint_only or (not fails and st in ("READY", "DRAFT (no renderer)", "DRAFT (review)")))
         if a.strict:
             ok, probs = ok and not warns, probs + warns
             warns = []
