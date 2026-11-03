@@ -1,9 +1,9 @@
 ---
-name: ulta-deckcraft
-description: Ulta Beauty PowerPoint on the approved Ulta template - new decks and slide edits, process flows, swimlanes, retail and supply chain diagrams, timelines, charts, one-pager slides, architecture slides, steering and report packs, plus a library of about 300 ready-made process and project decks. Use it for every Ulta deck, slide or presentation request, even when not named. Runs only its bundled scripts on the user's files.
+name: ulta-slideglam
+description: Ulta Beauty PowerPoint on the approved Ulta template - new decks and slide edits, process flows, swimlanes, retail and supply chain diagrams, timelines, charts, one-pager slides, architecture slides, steering and report packs, plus a library of nearly 300 ready-made process and project decks. Use it for every Ulta deck, slide or presentation request, even when not named. Runs only its bundled scripts on the user's files.
 ---
 
-# Ulta DeckCraft (v1.0)
+# ULTA SlideGlam (v1.0)
 
 A new PowerPoint skill for Ulta Beauty, built from Presentation Central's deck engine and delivery checks (v141) and
 Deliverable Studio's Eco engine and process library (6.37.1), on Ulta's approved template. PowerPoint only: Word
@@ -82,7 +82,7 @@ GUIDES = []                                          # the guide(s) for this req
 ok = lambda d: bool(d) and all(os.path.isfile(os.path.join(d, 'tools', f)) for f in ('build_deck.py', 'playbook.py', 'brand.py'))
 places = [GIVEN] + sorted(glob.glob('/home/*/skills/*') + glob.glob('/mnt/*/skills/*') + glob.glob('/mnt/skills/*/*')
                           + glob.glob('/skills/*') + glob.glob('/opt/skills/*') + glob.glob(os.path.expanduser('~/.claude/skills/*')))
-SKILL_DIR = next((d for d in places if ok(d) and 'deckcraft' in d), None) or next((d for d in places if ok(d)), None)
+SKILL_DIR = next((d for d in places if ok(d) and 'slideglam' in d), None) or next((d for d in places if ok(d)), None)
 def show(path):                                      # a picture IN the chat where the platform can (else open it yourself)
     try:
         from IPython.display import Image, display; display(Image(filename=path)); return print(f'SHOWN {path}')

@@ -1,6 +1,6 @@
-# Ulta DeckCraft - changelog
+# ULTA SlideGlam - changelog
 
-"Stamped" = the SkillVersion written into every file the skill builds (Producer "Ulta DeckCraft").
+"Stamped" = the SkillVersion written into every file the skill builds (Producer "ULTA SlideGlam").
 
 ## v1.0 - a new PowerPoint skill: Presentation Central + Deliverable Studio, a bigger library, a smaller package
 
@@ -24,7 +24,8 @@ ARB intake module and the ARB submission library deck are not shipped; the archi
 Key Design Decisions panel without naming a board. Guides, the self-test and the safety rules are scoped to PowerPoint;
 the self-test lists any check it did not run.
 
-**The process library**: the Studio's 147 templates plus this skill's new ones in the same Markdown format, three new
+**The process library**: 294 templates - the Studio's 146 (its 147 less the ARB submission deck) and 148 new ones in the
+same Markdown format, three new
 domains (Technology Operations, Data and AI, People and Change), `tools/playbook.py` (list, search, show, md, build, page,
 check). A library deck is held to the same standard as every deck: the Eco build is followed by a build record
 (`.ulta.json`: drawn visuals, template infographics, shortened lists), Presentation Central's finishing (template run
@@ -40,6 +41,10 @@ styles, fit, accessibility, type scale, plain punctuation), the delivery gate, a
   so the gate checks it with the template-fidelity rule (only the template's own shapes, same design) instead of
   failing it shape by shape; 13 strategy and proposal decks with a closing Decision / Ask slide were held back by this.
 - `playbook.py` names the gate check that failed (the gate's table rows), not only "NEEDS CORRECTION".
+- A status dot only for a status: the Studio marked any table cell that began with a status word ("Late changes",
+  "Failed messages", "Live or drop") with a red or green dot; now the cell must be the status, or the status and a
+  note ("At risk - vendor", "Done (Mar 3)", "Late by 2 days"). The content gate treats the dot itself as a mark,
+  as the brand colour gate already did (status colours on marks only); the words beside it are still checked.
 - Gate refinements, each the same intent applied to the Studio's output: rating words, [placeholders], dates and figures
   may repeat across a table row; a template infographic may mark status in the brand's status colours; the Studio's named
   overlays (pictograms, the takeaway line) are additions like the summary layer; an added pictogram passes the picture

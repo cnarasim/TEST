@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the Ulta DeckCraft skill from its two sources (reproducible, no network).
+"""Build the ULTA SlideGlam skill from its two sources (reproducible, no network).
 
     python3 dev/build_skill.py --upc <ulta-presentation-central dir> --studio <Deliverable Studio runtime-kit dir> --out <dir>
 
@@ -24,7 +24,7 @@ from pathlib import Path
 
 DEV = Path(__file__).resolve().parent
 OVERRIDES = DEV / "overrides"
-NAME, PRODUCER, VERSION = "ulta-deckcraft", "Ulta DeckCraft", "v1.0"
+NAME, PRODUCER, VERSION = "ulta-slideglam", "ULTA SlideGlam", "v1.0"
 
 # ---------------------------------------------------------------------------------------------------------------- what ships
 UPC_DROP = [   # not PowerPoint (Word, Excel, HTML dashboards and sites, UI screens, BigQuery demo) or not needed at run time
@@ -68,7 +68,7 @@ STUDIO_ENGINE = ["page_to_spec.py", "build_from_storyboard.py", "family_rules.py
 KIT_REL = "modules/ultabranddeliverables/scripts/kit"
 # self-test library cases (templates that build READY), and the library's minimum size
 LIB_ONE, LIB_TWO, LIB_SEARCH = "sc-wh-cycle-count", ["rt-oc-fulfilment", "fi-pp-three-way-match"], ("cycle count", "sc-wh-cycle-count")
-LIBRARY_MIN = 147
+LIBRARY_MIN = 294
 
 
 def sha(p):
@@ -165,7 +165,7 @@ def build(upc, rk, out):
     patch(eng / "page_to_spec.py",
           "    g12 = chunk_rows(data, n, kind)\n    if len(g12) <= 1 or kind != 'actions': return g12, None\n"
           "    g9 = chunk_rows(data, n, kind, pt=9)\n    return (g9, 9) if len(g9) < len(g12) else (g12, None)",
-          "    return chunk_rows(data, n, kind, pt=16 if kind == 'actions' else None), None   # Ulta DeckCraft: the template's 16 pt")
+          "    return chunk_rows(data, n, kind, pt=16 if kind == 'actions' else None), None   # ULTA SlideGlam: the template's 16 pt")
     # (1d) a rating grid repeats its scale words and a template its [placeholders]: not filler
     patch(out / "tools/validate_deck.py", "            seen = [v for v in vals if len(v) >= 3]",
           "            seen = [v for v in vals if len(v) >= 3 and not RATING.match(v)]   # a rating grid repeats its scale words")
@@ -203,7 +203,7 @@ def build(upc, rk, out):
           "            hl = max(1, _lines(head.text_frame.text, int(w * 0.94), int(hpt * 12700), BRAND.font(\"heading\"), _B.metrics_for(BRAND)))\n"
           "            text_end = head.top + Emu_(head.text_frame.margin_top) + int(hl * hpt * HEAD_LINE_EM / 72 * IN)\n"
           "            top = max(head.top + int(SUMMARY_TOP * IN), text_end + int(HEAD_GAP_IN * IN))\n",
-          "            top = head.top + int(SUMMARY_TOP * IN)   # Ulta DeckCraft: v141's place (see dev/build_skill.py, 1g)\n")
+          "            top = head.top + int(SUMMARY_TOP * IN)   # ULTA SlideGlam: v141's place (see dev/build_skill.py, 1g)\n")
     # (1h) a status dot only for a status: the whole cell is the status word, or the word and then a note ("At risk - vendor",
     #      "Done (Mar 3)", "Late by 2 days"); a label that starts with one ("Late changes", "Failed messages", "Live or drop")
     #      is a label, and a red or green dot beside it misreads the table
@@ -226,7 +226,7 @@ def build(upc, rk, out):
     patch(eng / "process_library.py",
           "    ('Infographics', 'bar-chart', 'Big numbers, scorecards, shares, rankings, funnels, maps and plans'),\n]",
           "    ('Infographics', 'bar-chart', 'Big numbers, scorecards, shares, rankings, funnels, maps and plans'),\n"
-          "    ('Technology Operations', 'server', 'Incidents, problems, monitoring, changes and releases, service requests, access and service levels'),   # Ulta DeckCraft\n"
+          "    ('Technology Operations', 'server', 'Incidents, problems, monitoring, changes and releases, service requests, access and service levels'),   # ULTA SlideGlam\n"
           "    ('Data and AI', 'database', 'Data governance, quality and master data, analytics products, AI use cases, responsible AI, agent reviews'),\n"
           "    ('People and Change', 'users', 'Organisation design, roles and skills, workforce plans, change impact, adoption and champions'),\n]")
 
@@ -272,21 +272,21 @@ def build(upc, rk, out):
     # ---- PowerPoint schemas only: a part whose schema is not shipped (a Word file) is skipped, never a crash
     oc = out / "tools/ooxml_check.py"
     patch(oc, "def _schema(name):\n    if name not in _CACHE:",
-          "def _schema(name):\n    if not (DIR / name).exists():                      # Ulta DeckCraft ships the PowerPoint schemas only\n"
+          "def _schema(name):\n    if not (DIR / name).exists():                      # ULTA SlideGlam ships the PowerPoint schemas only\n"
           "        return None\n    if name not in _CACHE:")
     patch(oc, "            else:\n                continue\n            try:\n                x = _resolve_mc(",
           "            else:\n                continue\n            if sc is None:\n                continue\n            try:\n                x = _resolve_mc(")
     kd = out / "modules/ultabranddeliverables"
     patch(kd / "MODULE.md", "one picture per style in `references/gallery/diagrams/`)",
-          "style pictures are not shipped in Ulta DeckCraft: draw a small sample to see one)")
+          "style pictures are not shipped in ULTA SlideGlam: draw a small sample to see one)")
     patch(kd / "references/diagram-styles.md", "`gallery/diagrams/` holds a picture of each one (01-bands.png ... 17-cloud.png).",
-          "(Ulta DeckCraft does not ship the style pictures: draw a small sample to see one.)")
+          "(ULTA SlideGlam does not ship the style pictures: draw a small sample to see one.)")
 
     # ---- PowerPoint only: the tools that offered a Word copy or checked the site publisher keep working without them
     patch(out / "tools/audience.py", "        import ulta_word; ulta_word.brand(p, made=True); made.append(p)",
-          "        made.append(p)   # Ulta DeckCraft: PowerPoint only - the Word copy is plain .docx (no Word letterhead tool shipped)")
+          "        made.append(p)   # ULTA SlideGlam: PowerPoint only - the Word copy is plain .docx (no Word letterhead tool shipped)")
     patch(out / "tools/brand_colours.py", "    import ulta_word\n    return set(ulta_word.WORD_PALETTE)",
-          "    try:\n        import ulta_word\n    except ImportError:   # Ulta DeckCraft ships no Word tools\n        return set()\n    return set(ulta_word.WORD_PALETTE)")
+          "    try:\n        import ulta_word\n    except ImportError:   # ULTA SlideGlam ships no Word tools\n        return set()\n    return set(ulta_word.WORD_PALETTE)")
 
     # ---- its own working folders: the 40-layout reference cache and the fontconfig live under the temp folder by
     # skill name, so this skill and Presentation Central installed side by side never read each other's cache
@@ -341,7 +341,7 @@ def build(upc, rk, out):
               '    if not deck.exists() or not book.exists():\n'
               '        return (name, False, "-", "BAD no deck or workbook: " + (r.stdout + r.stderr)[-150:], round(time.time() - t0, 1))\n'
               '    import data_slides, ooxml_check, ulta_excel\n',
-          '    deck, book, bad = None, None, []                     # Ulta DeckCraft: chart decks only (no dashboard, no workbook)\n'
+          '    deck, book, bad = None, None, []                     # ULTA SlideGlam: chart decks only (no dashboard, no workbook)\n'
           '    import data_slides, ooxml_check\n')
     patch(st, '    for f in (w / "kinds.pptx", deck):\n', '    for f in [w / "kinds.pptx"] + ([deck] if deck else []):\n')
     patch(st, '            f"deck: {len(kinds)} chart kinds and the dashboard deck\'s charts with axis ids PowerPoint reads, a v139 deck "\n'
@@ -354,7 +354,7 @@ def build(upc, rk, out):
     sr = out / "tools/safety_rules.py"
     patch(sr, '    skill = (ROOT / "SKILL.md").read_text(encoding="utf-8")\n    site = (TOOLS / "site.py").read_text(encoding="utf-8")\n',
           '    skill = (ROOT / "SKILL.md").read_text(encoding="utf-8")\n'
-          '    if not (TOOLS / "site.py").exists():                # Ulta DeckCraft publishes nothing: no page may say it publishes by default\n'
+          '    if not (TOOLS / "site.py").exists():                # ULTA SlideGlam publishes nothing: no page may say it publishes by default\n'
           '        for name, t in [("SKILL.md", skill)] + [(f"guides/{g.name}", g.read_text(encoding="utf-8")) for g in sorted((ROOT / "guides").glob("*.md"))]:\n'
           '            for m in DEFAULT_PUBLISH.finditer(t):\n'
           '                bad.append(f"{name}:{t.count(chr(10), 0, m.start()) + 1}: {m.group(0)!r}")\n'
@@ -364,7 +364,7 @@ def build(upc, rk, out):
               '                "dashboards": ("dashboard",), "diagrams": ("diagram",), "whiteboards": ("whiteboard",),\n'
               '                "UI and app screens": ("screen",), "Word documents": ("word",),\n'
               '                "Excel workbooks": ("excel",), "ChatGPT Sites": ("chatgpt site",)}',
-          'CAPABILITIES = {"decks": ("deck", "powerpoint"), "infographics and one-pagers": ("infographic", "one-pager"),   # Ulta DeckCraft\n'
+          'CAPABILITIES = {"decks": ("deck", "powerpoint"), "infographics and one-pagers": ("infographic", "one-pager"),   # ULTA SlideGlam\n'
           '                "diagrams": ("diagram",), "process flows": ("process flow", "swimlane"), "the process library": ("library",)}')
 
     # ---- identity: every file this skill makes names it (Producer, SkillVersion)

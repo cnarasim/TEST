@@ -1,8 +1,8 @@
-# The process library (Ulta DeckCraft)
+# The process library (ULTA SlideGlam)
 
 Ready-made, editable Ulta decks: one Markdown page per template, built on the approved Ulta template by the Studio's Eco
-rules (no AI, the same deck every time) and checked by Presentation Central's delivery gate. The 147 templates of
-Deliverable Studio 6.37.1 plus this skill's additions, in twelve domains: Retail, Supply Chain, Finance, Enterprise
+rules (no AI, the same deck every time) and checked by Presentation Central's delivery gate. 294 templates: 146 from
+Deliverable Studio 6.37.1 (its 147 less the ARB submission deck) and 148 written for this skill, in twelve domains: Retail, Supply Chain, Finance, Enterprise
 Architecture, Programs and Projects, Proposals, Strategy, Timelines and Roadmaps, Infographics, Technology Operations,
 Data and AI, People and Change. Every page is application-agnostic: it names kinds of system (ERP, WMS, OMS, POS ...),
 never a product, a transaction code or a table.

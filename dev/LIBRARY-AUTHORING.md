@@ -1,4 +1,4 @@
-# Writing process library templates (Ulta DeckCraft)
+# Writing process library templates (ULTA SlideGlam)
 
 The process library is a set of ready-made Ulta decks. Each template is ONE Markdown page; the skill builds it on the
 approved Ulta PowerPoint template with rules (no AI) and checks it with Presentation Central's delivery gate. A person

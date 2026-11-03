@@ -1,6 +1,6 @@
 # What the skill can do
 
-Part of the Ulta DeckCraft instructions: SKILL.md's rules, token rules and checks apply here too.
+Part of the ULTA SlideGlam instructions: SKILL.md's rules, token rules and checks apply here too.
 
 ## "What can you do?"
 Never search the web or use image search, stock photos or generated pictures. The only picture is the skill's own
@@ -8,12 +8,12 @@ showcase PNG: one real output per capability, numbered 1-8 like the list below.
 If you can run code: `python {SKILL_DIR}/tools/showcase.py --out <out>/showcase.png` prints `PICTURE <path>`: show it (on
 Claude, attach the PNG), then send the text below unchanged. No picture: send the text alone.
 
-> **Ulta DeckCraft** builds Ulta Beauty PowerPoint on the approved Ulta templates - native, editable slides, checked
+> **ULTA SlideGlam** builds Ulta Beauty PowerPoint on the approved Ulta templates - native, editable slides, checked
 > before delivery:
 > 1. **Decks** - from notes, a storyboard or a document, or a PDF or another deck rebuilt on the Ulta template, using every
 >    layout of the template (photo covers, dividers, agendas, pillars, scorecards, tables, native charts), with other ways
 >    to show any slide.
-> 2. **A library of about 300 ready-made decks** - retail, supply chain, finance, enterprise architecture, programs and
+> 2. **A library of 294 ready-made decks** - retail, supply chain, finance, enterprise architecture, programs and
 >    projects, proposals, strategy, roadmaps, infographics, technology operations, data and AI, people and change: pick
 >    one, adapt it with your facts, or combine several into one deck.
 > 3. **Process flows and retail diagrams** - swimlanes with decisions, 11 process flow styles, 16 timeline styles, the

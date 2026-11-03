@@ -1,6 +1,6 @@
 # Packs and data - decks made from files
 
-Part of the Ulta DeckCraft instructions: SKILL.md's rules for every deck, token rules and checks apply here too. Every
+Part of the ULTA SlideGlam instructions: SKILL.md's rules for every deck, token rules and checks apply here too. Every
 tool below builds on the Ulta template, runs the checks and prints its files; deliver every .pptx it names (companion
 .xlsx or .drawio files the tools write may go with it). Outputs go to `/mnt/data/out` (on Claude: your working folder).
 

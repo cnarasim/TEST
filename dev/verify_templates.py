@@ -15,7 +15,7 @@ Prints one block per template; exit 0 only when every template has no lint probl
 import argparse, concurrent.futures as cf, os, re, subprocess, sys, tempfile
 from pathlib import Path
 
-DEFAULT_SKILL = "/tmp/claude-0/-home-user-TEST/12dcbf9d-aee8-5751-826b-81ab99be96ee/scratchpad/build/ulta-deckcraft"
+DEFAULT_SKILL = "/tmp/claude-0/-home-user-TEST/12dcbf9d-aee8-5751-826b-81ab99be96ee/scratchpad/build/ulta-slideglam"
 REQ = ("id", "domain", "l1", "l2", "summary", "systems", "tags", "order")
 LIMITS = dict(heading=42, card=52, rows=5, cell=64, first_cell=30, swim=40, line=70)
 

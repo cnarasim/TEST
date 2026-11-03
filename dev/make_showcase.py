@@ -93,7 +93,7 @@ def main(skill, out):
     sheet = Image.new("RGB", (W, H), BLUSH); d = ImageDraw.Draw(sheet)
     font = lambda n, bold=False: ImageFont.truetype(str(skill / "fonts" / ("Inter-Bold.otf" if bold else "Inter-Regular.otf")), n)
     head = ImageFont.truetype(str(skill / "fonts" / "PlayfairDisplay-Black.ttf"), 46)
-    d.text((pad, 30), "Ulta DeckCraft: real outputs on the Ulta template", font=head, fill=INK)
+    d.text((pad, 30), "ULTA SlideGlam: real outputs on the Ulta template", font=head, fill=INK)
     for i, (pic, label) in enumerate(zip(pics, TILES)):
         x = pad + (i % 4) * (tw + pad); y = top + (i // 4) * (th + 54 + pad)
         im = Image.open(pic).convert("RGB"); im.thumbnail((tw, th)); sheet.paste(im, (x, y))

@@ -1,4 +1,4 @@
-# Ulta DeckCraft - workflows reference
+# ULTA SlideGlam - workflows reference
 Read only the section a request needs. SKILL.md rules (no waiting, edit mode, decks, checks) still apply.
 
 ## A. Workflows (one command each; read the tool's header for options)

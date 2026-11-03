@@ -1,7 +1,7 @@
 interface:
-  display_name: "Ulta DeckCraft"
+  display_name: "ULTA SlideGlam"
   short_description: "Ulta-branded PowerPoint decks and a library of ready-made process decks"
   brand_color: "#E65A24"
-  default_prompt: "Use $ulta-deckcraft to create an Ulta-branded PowerPoint deck from my content, or start from a ready-made process deck in its library."
+  default_prompt: "Use $ulta-slideglam to create an Ulta-branded PowerPoint deck from my content, or start from a ready-made process deck in its library."
 policy:
   allow_implicit_invocation: true

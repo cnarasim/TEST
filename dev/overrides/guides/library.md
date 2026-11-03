@@ -1,9 +1,9 @@
 # The process library - ready-made Ulta decks
 
-Part of the Ulta DeckCraft instructions: SKILL.md's rules for every deck, token rules and checks apply here too.
+Part of the ULTA SlideGlam instructions: SKILL.md's rules for every deck, token rules and checks apply here too.
 
 ## What it is
-About 300 predefined decks, each one Markdown page in `library/<domain>/<l1>/<id>.md`, from the end-to-end process (L1)
+294 predefined decks, each one Markdown page in `library/<domain>/<l1>/<id>.md`, from the end-to-end process (L1)
 to the sub-process (L2): **Retail** (merchandising, pricing and promotions, store operations, omnichannel and guest,
 brand partners), **Supply Chain** (plan, source and procure, order to cash, warehouse and inventory, deliver),
 **Finance** (procure to pay, cash and receivables, record to report, plan and perform), **Enterprise Architecture**
