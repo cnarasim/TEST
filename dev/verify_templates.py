@@ -9,12 +9,13 @@ three "## " slides, application-agnostic wording (no product names, transaction 
   slide heading <= 42 characters    card bullet (under ###) <= 52    table: <= 5 rows, cell <= 64 (first column <= 30)
   swimlane step <= 40               process / timeline line <= 70
 Build: the page body -> tools/playbook.py page (render check off for speed) -> status, the FAIL lines, Standards Match.
-Prints one block per template; exit 0 only when every template has no lint problem and no FAIL line.
+Prints one block per template; exit 0 only when every template has no lint problem, no FAIL line and builds READY
+(or DRAFT where no renderer is installed).
 """
 import argparse, concurrent.futures as cf, os, re, subprocess, sys, tempfile
 from pathlib import Path
 
-DEFAULT_SKILL = "/tmp/claude-0/-home-user-TEST/12dcbf9d-aee8-5751-826b-81ab99be96ee/scratchpad/agent-skill/ulta-ppt-studio"
+DEFAULT_SKILL = "/tmp/claude-0/-home-user-TEST/12dcbf9d-aee8-5751-826b-81ab99be96ee/scratchpad/build/ulta-deckcraft"
 REQ = ("id", "domain", "l1", "l2", "summary", "systems", "tags", "order")
 LIMITS = dict(heading=42, card=52, rows=5, cell=64, first_cell=30, swim=40, line=70)
 
@@ -122,7 +123,7 @@ def main():
     bad = 0
     for f, meta, body, probs in linted:
         st, fails, pct, fix = results.get(f, ("not built", [], "?", ""))
-        ok = not probs and (a.lint_only or not fails)
+        ok = not probs and (a.lint_only or (not fails and st in ("READY", "DRAFT (no renderer)")))
         bad += 0 if ok else 1
         print(f"{'OK ' if ok else 'FIX'} {f.stem}  [{st}, Standards Match {pct}%{', open: ' + fix if fix else ''}]")
         for p in probs:

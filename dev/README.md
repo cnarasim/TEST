@@ -1,6 +1,6 @@
-# ULTA PPT Studio - how the skill is built
+# Ulta DeckCraft - how the skill is built
 
-`ulta-ppt-studio` is one PowerPoint skill made from two Ulta sources, reproducibly, by the scripts in this folder.
+`ulta-deckcraft` is one PowerPoint skill made from two Ulta sources, reproducibly, by the scripts in this folder.
 Current as of 2026-11-03: python-pptx 1.0.2, LibreOffice and pdftoppm present for render checks, resvg not installed.
 
 | Source | Version | Taken |
@@ -10,12 +10,12 @@ Current as of 2026-11-03: python-pptx 1.0.2, LibreOffice and pdftoppm present fo
 
 ## Build, check, package
 ```bash
-python3 dev/build_skill.py --upc <ulta-presentation-central dir> --studio "<.../Contents/Resources/runtime-kit>" --out ulta-ppt-studio
-python3 -I ulta-ppt-studio/tools/bootstrap.py              # READY = templates, validators, fonts are the pinned ones
-python3 ulta-ppt-studio/tools/selftest.py                  # every PowerPoint feature + the process library
-python3 dev/verify_templates.py --skill ulta-ppt-studio ulta-ppt-studio/library    # lint + governed build per template
-python3 dev/make_showcase.py ulta-ppt-studio dev/overrides/assets/showcase.png     # the capabilities picture (then rebuild)
-python3 dev/package.py ulta-ppt-studio dist                # dist/ulta-ppt-studio.zip, upload-ready (folder at the top level)
+python3 dev/build_skill.py --upc <ulta-presentation-central dir> --studio "<.../Contents/Resources/runtime-kit>" --out ulta-deckcraft
+python3 -I ulta-deckcraft/tools/bootstrap.py              # READY = templates, validators, fonts are the pinned ones
+python3 ulta-deckcraft/tools/selftest.py                  # every PowerPoint feature + the process library
+python3 dev/verify_templates.py --skill ulta-deckcraft ulta-deckcraft/library    # lint + governed build per template
+python3 dev/make_showcase.py ulta-deckcraft dev/overrides/assets/showcase.png     # the capabilities picture (then rebuild)
+python3 dev/package.py ulta-deckcraft dist                # dist/ulta-deckcraft.zip, upload-ready (folder at the top level)
 ```
 
 ## What the build does (`build_skill.py`)

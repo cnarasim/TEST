@@ -1,6 +1,6 @@
 # What the skill can do
 
-Part of the ULTA PPT Studio instructions: SKILL.md's rules, token rules and checks apply here too.
+Part of the Ulta DeckCraft instructions: SKILL.md's rules, token rules and checks apply here too.
 
 ## "What can you do?"
 Never search the web or use image search, stock photos or generated pictures. The only picture is the skill's own
@@ -8,7 +8,7 @@ showcase PNG: one real output per capability, numbered 1-8 like the list below.
 If you can run code: `python {SKILL_DIR}/tools/showcase.py --out <out>/showcase.png` prints `PICTURE <path>`: show it (on
 Claude, attach the PNG), then send the text below unchanged. No picture: send the text alone.
 
-> **ULTA PPT Studio** builds Ulta Beauty PowerPoint on the approved Ulta templates - native, editable slides, checked
+> **Ulta DeckCraft** builds Ulta Beauty PowerPoint on the approved Ulta templates - native, editable slides, checked
 > before delivery:
 > 1. **Decks** - from notes, a storyboard or a document, or a PDF or another deck rebuilt on the Ulta template, using every
 >    layout of the template (photo covers, dividers, agendas, pillars, scorecards, tables, native charts), with other ways
@@ -22,8 +22,8 @@ Claude, attach the PNG), then send the text below unchanged. No picture: send th
 >    told around your own screenshots and product photos.
 > 5. **Chart my data and report packs** - charts chosen from your spreadsheet with a takeaway each, monthly and quarterly
 >    business reviews from a KPI workbook.
-> 6. **Architecture and system diagrams** - native diagram slides in any deck (17 styles), ARB diagrams to the ULTA
->    Enterprise Diagram Standards (editable draw.io, PNG, PDF) and the Concept ARB intake.
+> 6. **Architecture and system diagrams** - native diagram slides in any deck (17 styles), and C1-C3 architecture
+>    diagrams to the ULTA Enterprise Diagram Standards (editable draw.io, PNG, PDF).
 > 7. **Packs from your files** - steering committee packs from workstream decks, weekly status from a tracker export,
 >    RACI and org charts, meeting one-pagers, how-to decks from screenshots, process insights from an event log.
 > 8. **Review and repair** - a score and a fix list for any deck, a rebuild on the template, executive versions,

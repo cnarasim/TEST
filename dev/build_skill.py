@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the ULTA PPT Studio skill from its two sources (reproducible, no network).
+"""Build the Ulta DeckCraft skill from its two sources (reproducible, no network).
 
     python3 dev/build_skill.py --upc <ulta-presentation-central dir> --studio <Deliverable Studio runtime-kit dir> --out <dir>
 
@@ -24,7 +24,7 @@ from pathlib import Path
 
 DEV = Path(__file__).resolve().parent
 OVERRIDES = DEV / "overrides"
-NAME, PRODUCER, VERSION = "ulta-ppt-studio", "ULTA PPT Studio", "v1.0"
+NAME, PRODUCER, VERSION = "ulta-deckcraft", "Ulta DeckCraft", "v1.0"
 
 # ---------------------------------------------------------------------------------------------------------------- what ships
 UPC_DROP = [   # not PowerPoint (Word, Excel, HTML dashboards and sites, UI screens, BigQuery demo) or not needed at run time
@@ -42,6 +42,10 @@ UPC_DROP = [   # not PowerPoint (Word, Excel, HTML dashboards and sites, UI scre
     "modules/ultabranddeliverables/references/gallery/index.html",
     "modules/ultabranddeliverables/references/gallery/gallery.json",
     "modules/ultapowerpointvalidator/examples",                             # worked examples, read by no code, not in its manifest
+    # no ARB: the ARB template, its slide map and the Concept ARB intake module
+    "modules/ultabranddeliverables/scripts/kit/templates/ARB Template - v3.6 as of 9-1-26.pptx",
+    "modules/ultabranddeliverables/scripts/kit/template-map-ARB36.md",
+    "modules/pptintentdiscovery",
 ] + [f"tools/ooxml_schemas/ISO-IEC29500-4_2016/{x}.xsd" for x in (         # schemas no PowerPoint part needs (Word, VML, maths ...)
     "dml-wordprocessingDrawing", "shared-additionalCharacteristics", "shared-bibliography", "shared-customXmlDataProperties",
     "shared-customXmlSchemaProperties", "shared-documentPropertiesCustom", "shared-documentPropertiesExtended",
@@ -57,7 +61,7 @@ STUDIO_TOOLS = ["build_deck.py", "validate_deck.py", "chart_advisor.py", "modern
                 "controls.py", "walkthrough.py"]
 STUDIO_ENGINE = ["page_to_spec.py", "build_from_storyboard.py", "family_rules.py", "central_slides.py", "slide_svg.py",
                  "narration.py", "themes.py", "svgraster.py", "process_library.py",
-                 "template-map-STANDARD33.md", "template-map-ARB36.md",
+                 "template-map-STANDARD33.md",
                  "infographic/info.py", "infographic/templates.py", "infographic/ulta-logo.svg",   # not info-template.html: HTML pages (it calls the app's server)
                  "enterprise/steerco_pack.py", "enterprise/process_insights.py", "enterprise/common.py"]
 
@@ -161,7 +165,7 @@ def build(upc, rk, out):
     patch(eng / "page_to_spec.py",
           "    g12 = chunk_rows(data, n, kind)\n    if len(g12) <= 1 or kind != 'actions': return g12, None\n"
           "    g9 = chunk_rows(data, n, kind, pt=9)\n    return (g9, 9) if len(g9) < len(g12) else (g12, None)",
-          "    return chunk_rows(data, n, kind, pt=16 if kind == 'actions' else None), None   # ULTA PPT Studio: the template's 16 pt")
+          "    return chunk_rows(data, n, kind, pt=16 if kind == 'actions' else None), None   # Ulta DeckCraft: the template's 16 pt")
     # (1d) a rating grid repeats its scale words and a template its [placeholders]: not filler
     patch(out / "tools/validate_deck.py", "            seen = [v for v in vals if len(v) >= 3]",
           "            seen = [v for v in vals if len(v) >= 3 and not RATING.match(v)]   # a rating grid repeats its scale words")
@@ -171,6 +175,7 @@ def build(upc, rk, out):
           "|(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\\.? \\d{1,2},? \\d{4}|\\d{4}-\\d{2}-\\d{2}|q[1-4] \\d{4}"
           "|[$€£]?\\d[\\d,.]*\\s?(?:%|[kmb]|h|hrs?|hours?|days?|weeks?|pts?)?)\\s*$\")   # scale words, placeholders, dates and figures are data\n"
           "STATUS_COLOURS = {\"00B050\", \"0BA03E\", \"FFC000\", \"FF0000\"}   # the brand's status palette (brand.json)\n"
+          "STATUS_MARKS = set(\"●○■□▲▼◆◇★►◀▶◄•\")   # dot, square, arrow ... (brand_colours.MARKS)\n"
           "REPEAT_OK = ")
     # (1f) a template infographic may mark status in its text colour (the fidelity gate already allows status marks)
     patch(out / "tools/validate_deck.py", '                       or (st[3] not in rco and not (inherit_white and str(st[3]).upper() in ("FFFFFF", "BG1", "LT1"))))]',
@@ -198,7 +203,19 @@ def build(upc, rk, out):
           "            hl = max(1, _lines(head.text_frame.text, int(w * 0.94), int(hpt * 12700), BRAND.font(\"heading\"), _B.metrics_for(BRAND)))\n"
           "            text_end = head.top + Emu_(head.text_frame.margin_top) + int(hl * hpt * HEAD_LINE_EM / 72 * IN)\n"
           "            top = max(head.top + int(SUMMARY_TOP * IN), text_end + int(HEAD_GAP_IN * IN))\n",
-          "            top = head.top + int(SUMMARY_TOP * IN)   # ULTA PPT Studio: v141's place (see dev/build_skill.py, 1g)\n")
+          "            top = head.top + int(SUMMARY_TOP * IN)   # Ulta DeckCraft: v141's place (see dev/build_skill.py, 1g)\n")
+    # (1h) a status dot only for a status: the whole cell is the status word, or the word and then a note ("At risk - vendor",
+    #      "Done (Mar 3)", "Late by 2 days"); a label that starts with one ("Late changes", "Failed messages", "Live or drop")
+    #      is a label, and a red or green dot beside it misreads the table
+    patch(bfs, "        if low in words or any(low.startswith(w + ' ') for w in words):",
+          "        if low in words or any(re.match(re.escape(w) + r'(\\s*[-\\u2013:(,;]|\\s+\\d|\\s+(?:by|until|since)\\b)', low) for w in words):   # (1h)")
+    # (1i) a status mark is a mark, not text: the content gate skips a run that is only a dot, square or arrow in a status
+    #      colour, as the brand colours gate already does ("status colours on marks only"); the words beside it are checked
+    patch(vd, '                continue\n            rpr = r.find("a:rPr", NS)\n            lat = rpr.find("a:latin", NS) if rpr is not None else None\n',
+          '                continue\n            rpr = r.find("a:rPr", NS)\n'
+          '            if set(t.text.strip()) <= STATUS_MARKS and str(run_colour(rpr)).upper() in STATUS_COLOURS:\n'
+          '                continue                           # a status mark: the brand colours gate checks it (marks only)\n'
+          '            lat = rpr.find("a:latin", NS) if rpr is not None else None\n')
     # (2) the Studio's named overlays on a template slide (auto pictograms beside template text, the takeaway line under
     #     the headline) are additions like Presentation Central's own summary layer, not changed template shapes
     patch(out / "tools/template_infographics.py",
@@ -209,43 +226,67 @@ def build(upc, rk, out):
     patch(eng / "process_library.py",
           "    ('Infographics', 'bar-chart', 'Big numbers, scorecards, shares, rankings, funnels, maps and plans'),\n]",
           "    ('Infographics', 'bar-chart', 'Big numbers, scorecards, shares, rankings, funnels, maps and plans'),\n"
-          "    ('Technology Operations', 'server', 'Incidents, problems, monitoring, changes and releases, service requests, access and service levels'),   # ULTA PPT Studio\n"
+          "    ('Technology Operations', 'server', 'Incidents, problems, monitoring, changes and releases, service requests, access and service levels'),   # Ulta DeckCraft\n"
           "    ('Data and AI', 'database', 'Data governance, quality and master data, analytics products, AI use cases, responsible AI, agent reviews'),\n"
           "    ('People and Change', 'users', 'Organisation design, roles and skills, workforce plans, change impact, adoption and champions'),\n]")
 
     # ---- the process library (Markdown pages); previews are drawn on demand, not shipped
     shutil.copytree(rk / "library", out / "library", ignore=shutil.ignore_patterns("previews", "__pycache__"))
+    rm(out / "library/enterprise-architecture/review-and-decide/ea-rd-arb-submission.md")   # no ARB
 
     # ---- one icon set for both engines: the Studio's is a superset of the kit's
     kit_icons = out / KIT_REL / "icons"
     shutil.rmtree(kit_icons); shutil.copytree(rk / "icons", kit_icons)
 
-    # ---- the Word template leaves the kit's template manifest with its file
+    # ---- the Word and ARB templates leave the kit's template manifest with their files
     man_p = out / KIT_REL / "templates" / "manifest.json"
     man = json.loads(man_p.read_text(encoding="utf-8"))
     for tid, t in list(man["templates"].items()):
-        if str(t.get("file", "")).lower().endswith(".docx"):
+        if str(t.get("file", "")).lower().endswith(".docx") or tid.upper().startswith("ARB") or "ARB" in str(t.get("file", "")):
             del man["templates"][tid]
+
+    # ---- no ARB: bootstrap no longer requires the ARB template; the diagram standard's panel and hint name no board;
+    #      the storyboard and review modules lose their Concept ARB sections
+    bs = out / "tools/bootstrap.py"
+    patch(bs, 'ARB_SHA = "611a8d59ccd6aeff0f10b7a9b07e307579871ef2d195e680ec1c3f45d200311c"\n', "")
+    patch(bs, '    arb = KIT / "kit" / "templates" / "ARB Template - v3.6 as of 9-1-26.pptx"\n'
+              '    if arb.exists() and sha(arb) == ARB_SHA:\n'
+              '        print(f"PASS  ARB template v3.6 (22 slides): {arb}")\n'
+              '    else:\n'
+              '        print("FAIL  ARB Template v3.6 missing or changed"); hard_fail = True\n\n', "")
+    ed = out / "tools/enterprise_diagram.py"
+    patch(ed, "Key Design Decisions & ARB Review Evidence", "Key Design Decisions & Review Evidence", 2)
+    patch(ed, "Key Design Decisions &amp; ARB Review Evidence", "Key Design Decisions &amp; Review Evidence")
+    patch(ed, "ARB reviewers expect KDD-001", "reviewers expect KDD-001")
+    for mod, head in (("executivepresentationstoryboarder", "# Requested Concept ARB coverage"),
+                      ("executivepresentationreviewer", "# Requested Concept ARB acceptance")):
+        p_ = out / "modules" / mod / "MODULE.md"
+        s_ = p_.read_text(encoding="utf-8")
+        if head not in s_:
+            sys.exit(f"PATCH STOP {p_}: no '{head}' section")
+        p_.write_text(s_[:s_.index(head)].rstrip() + "\n", encoding="utf-8")
+    patch(out / "modules/executivepresentationstoryboarder/MODULE.md",
+          " Concept/Design ARB content requirements apply only to the requested review type.", "")
     man_p.write_text(json.dumps(man, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
     # ---- PowerPoint schemas only: a part whose schema is not shipped (a Word file) is skipped, never a crash
     oc = out / "tools/ooxml_check.py"
     patch(oc, "def _schema(name):\n    if name not in _CACHE:",
-          "def _schema(name):\n    if not (DIR / name).exists():                      # ULTA PPT Studio ships the PowerPoint schemas only\n"
+          "def _schema(name):\n    if not (DIR / name).exists():                      # Ulta DeckCraft ships the PowerPoint schemas only\n"
           "        return None\n    if name not in _CACHE:")
     patch(oc, "            else:\n                continue\n            try:\n                x = _resolve_mc(",
           "            else:\n                continue\n            if sc is None:\n                continue\n            try:\n                x = _resolve_mc(")
     kd = out / "modules/ultabranddeliverables"
     patch(kd / "MODULE.md", "one picture per style in `references/gallery/diagrams/`)",
-          "style pictures are not shipped in ULTA PPT Studio: draw a small sample to see one)")
+          "style pictures are not shipped in Ulta DeckCraft: draw a small sample to see one)")
     patch(kd / "references/diagram-styles.md", "`gallery/diagrams/` holds a picture of each one (01-bands.png ... 17-cloud.png).",
-          "(ULTA PPT Studio does not ship the style pictures: draw a small sample to see one.)")
+          "(Ulta DeckCraft does not ship the style pictures: draw a small sample to see one.)")
 
     # ---- PowerPoint only: the tools that offered a Word copy or checked the site publisher keep working without them
     patch(out / "tools/audience.py", "        import ulta_word; ulta_word.brand(p, made=True); made.append(p)",
-          "        made.append(p)   # ULTA PPT Studio: PowerPoint only - the Word copy is plain .docx (no Word letterhead tool shipped)")
+          "        made.append(p)   # Ulta DeckCraft: PowerPoint only - the Word copy is plain .docx (no Word letterhead tool shipped)")
     patch(out / "tools/brand_colours.py", "    import ulta_word\n    return set(ulta_word.WORD_PALETTE)",
-          "    try:\n        import ulta_word\n    except ImportError:   # ULTA PPT Studio ships no Word tools\n        return set()\n    return set(ulta_word.WORD_PALETTE)")
+          "    try:\n        import ulta_word\n    except ImportError:   # Ulta DeckCraft ships no Word tools\n        return set()\n    return set(ulta_word.WORD_PALETTE)")
 
     # ---- its own working folders: the 40-layout reference cache and the fontconfig live under the temp folder by
     # skill name, so this skill and Presentation Central installed side by side never read each other's cache
@@ -300,7 +341,7 @@ def build(upc, rk, out):
               '    if not deck.exists() or not book.exists():\n'
               '        return (name, False, "-", "BAD no deck or workbook: " + (r.stdout + r.stderr)[-150:], round(time.time() - t0, 1))\n'
               '    import data_slides, ooxml_check, ulta_excel\n',
-          '    deck, book, bad = None, None, []                     # ULTA PPT Studio: chart decks only (no dashboard, no workbook)\n'
+          '    deck, book, bad = None, None, []                     # Ulta DeckCraft: chart decks only (no dashboard, no workbook)\n'
           '    import data_slides, ooxml_check\n')
     patch(st, '    for f in (w / "kinds.pptx", deck):\n', '    for f in [w / "kinds.pptx"] + ([deck] if deck else []):\n')
     patch(st, '            f"deck: {len(kinds)} chart kinds and the dashboard deck\'s charts with axis ids PowerPoint reads, a v139 deck "\n'
@@ -313,7 +354,7 @@ def build(upc, rk, out):
     sr = out / "tools/safety_rules.py"
     patch(sr, '    skill = (ROOT / "SKILL.md").read_text(encoding="utf-8")\n    site = (TOOLS / "site.py").read_text(encoding="utf-8")\n',
           '    skill = (ROOT / "SKILL.md").read_text(encoding="utf-8")\n'
-          '    if not (TOOLS / "site.py").exists():                # ULTA PPT Studio publishes nothing: no page may say it publishes by default\n'
+          '    if not (TOOLS / "site.py").exists():                # Ulta DeckCraft publishes nothing: no page may say it publishes by default\n'
           '        for name, t in [("SKILL.md", skill)] + [(f"guides/{g.name}", g.read_text(encoding="utf-8")) for g in sorted((ROOT / "guides").glob("*.md"))]:\n'
           '            for m in DEFAULT_PUBLISH.finditer(t):\n'
           '                bad.append(f"{name}:{t.count(chr(10), 0, m.start()) + 1}: {m.group(0)!r}")\n'
@@ -323,7 +364,7 @@ def build(upc, rk, out):
               '                "dashboards": ("dashboard",), "diagrams": ("diagram",), "whiteboards": ("whiteboard",),\n'
               '                "UI and app screens": ("screen",), "Word documents": ("word",),\n'
               '                "Excel workbooks": ("excel",), "ChatGPT Sites": ("chatgpt site",)}',
-          'CAPABILITIES = {"decks": ("deck", "powerpoint"), "infographics and one-pagers": ("infographic", "one-pager"),   # ULTA PPT Studio\n'
+          'CAPABILITIES = {"decks": ("deck", "powerpoint"), "infographics and one-pagers": ("infographic", "one-pager"),   # Ulta DeckCraft\n'
           '                "diagrams": ("diagram",), "process flows": ("process flow", "swimlane"), "the process library": ("library",)}')
 
     # ---- identity: every file this skill makes names it (Producer, SkillVersion)

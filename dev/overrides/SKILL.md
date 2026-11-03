@@ -1,18 +1,19 @@
 ---
-name: ulta-ppt-studio
+name: ulta-deckcraft
 description: Ulta Beauty PowerPoint on the approved Ulta template - new decks and slide edits, process flows, swimlanes, retail and supply chain diagrams, timelines, charts, one-pager slides, architecture slides, steering and report packs, plus a library of about 300 ready-made process and project decks. Use it for every Ulta deck, slide or presentation request, even when not named. Runs only its bundled scripts on the user's files.
 ---
 
-# ULTA PPT Studio (v1.0)
+# Ulta DeckCraft (v1.0)
 
-One PowerPoint skill: Presentation Central's deck engine and delivery checks (v141) joined with Deliverable Studio's
-Eco engine and process library (6.37.1), on Ulta's approved templates. PowerPoint only: Word documents, Excel workbooks,
-HTML dashboards, sites and UI screens are not part of this skill (if asked, say so and offer the content as slides).
+A new PowerPoint skill for Ulta Beauty, built from Presentation Central's deck engine and delivery checks (v141) and
+Deliverable Studio's Eco engine and process library (6.37.1), on Ulta's approved template. PowerPoint only: Word
+documents, Excel workbooks, HTML dashboards, sites, UI screens and ARB templates are not part of this skill (if asked, say
+so and offer the content as slides).
 
 ## How this skill works, and what it does not do
 - Every .pptx is built by the Python scripts in this folder: `tools/` (deck builders, checks, packs, `playbook.py` for the
-  library), `studio/` (the Studio's Eco engine: a Markdown page becomes a deck by rules, no AI), `modules/` (templates,
-  validator, ARB intake). Standard library plus python-pptx, lxml, Pillow and numpy; LibreOffice and pdftoppm draw the
+  library), `studio/` (the Studio's Eco engine: a Markdown page becomes a deck by rules, no AI), `modules/` (templates
+  and the validator). Standard library plus python-pptx, lxml, Pillow and numpy; LibreOffice and pdftoppm draw the
   review pictures when present.
 - Scope: reads only the user's uploaded files and this folder; writes only to the output folder (and working copies in
   the temp folder). No network connections, downloads or installs. Nothing leaves the chat on the skill's initiative.
@@ -24,10 +25,10 @@ HTML dashboards, sites and UI screens are not part of this skill (if asked, say 
 ## Read the guide for the request, then build
 | The user wants | Read |
 |---|---|
-| A deck on a standard process or project artefact - retail, supply chain, finance, enterprise architecture, programs and projects, proposals, strategy, timelines and roadmaps, infographics, technology operations, data and AI, people and change ("a deck on cycle count", "a cutover plan", "an ARB submission", "an incident review") | `library` - search the library first, build, then adapt it with the user's facts |
+| A deck on a standard process or project artefact - retail, supply chain, finance, enterprise architecture, programs and projects, proposals, strategy, timelines and roadmaps, infographics, technology operations, data and AI, people and change ("a deck on cycle count", "a cutover plan", "a solution options review", "an incident review") | `library` - search the library first, build, then adapt it with the user's facts |
 | A new deck from notes, a document or a storyboard; a process flow; a retail diagram (supply chain with trucks and DCs, cross-dock, store replenishment, online orders, returns, procure to pay, month-end close); other ways to show a slide; a PDF or another deck rebuilt on the template | `decks`, then `deck-layouts` |
 | An infographic or one-pager slide, a status report, a visual summary, a story told around the user's screenshots or product photos | `infographics` |
-| An ARB or C1-C3 architecture diagram to the ULTA Enterprise Diagram Standards (editable draw.io, PNG, PDF); a diagram on a slide inside a deck is a diagram slide (`deck-layouts`) | `architecture` |
+| A C1-C3 architecture diagram to the ULTA Enterprise Diagram Standards (editable draw.io, PNG, PDF); a diagram on a slide inside a deck is a diagram slide (`deck-layouts`) | `architecture` |
 | Chart my data, an MBR/QBR report pack, a steering committee pack, RACI or org chart slides, a meeting one-pager, weekly status from a tracker export, a screenshot walkthrough deck, process insights from an event log | `packs` |
 | "What can you do?", "show examples", how it compares | `capabilities` |
 A request that fits a library template AND brings its own content: build the template, then adapt the page with the
@@ -81,7 +82,7 @@ GUIDES = []                                          # the guide(s) for this req
 ok = lambda d: bool(d) and all(os.path.isfile(os.path.join(d, 'tools', f)) for f in ('build_deck.py', 'playbook.py', 'brand.py'))
 places = [GIVEN] + sorted(glob.glob('/home/*/skills/*') + glob.glob('/mnt/*/skills/*') + glob.glob('/mnt/skills/*/*')
                           + glob.glob('/skills/*') + glob.glob('/opt/skills/*') + glob.glob(os.path.expanduser('~/.claude/skills/*')))
-SKILL_DIR = next((d for d in places if ok(d) and 'ppt-studio' in d), None) or next((d for d in places if ok(d)), None)
+SKILL_DIR = next((d for d in places if ok(d) and 'deckcraft' in d), None) or next((d for d in places if ok(d)), None)
 def show(path):                                      # a picture IN the chat where the platform can (else open it yourself)
     try:
         from IPython.display import Image, display; display(Image(filename=path)); return print(f'SHOWN {path}')
@@ -139,7 +140,7 @@ guides/decks.md. Another layout for one slide: "other ways to show a slide" in g
 ## More workflows
 `WORKFLOWS.md` (read only the part a request needs): PDF or another deck onto the template, a deck from a long document,
 executive version, speaker notes, PDF handout, translation, approved slide library, enterprise controls, a new brand.
-Concept ARB intake: `modules/pptintentdiscovery`. `CHANGELOG.md` says what this skill is made of - read it only when asked.
+`CHANGELOG.md` says what this skill is made of - read it only when asked.
 
 ## Self-test (when something misbehaves, or the user asks for a health check)
 `python {SKILL_DIR}/tools/selftest.py` runs every main feature, the process library included, on built-in samples

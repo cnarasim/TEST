@@ -27,7 +27,7 @@ order: 209
 |---|---|---|
 | Store and DC electricity | Scope 2 | Lighting, heating and cooling |
 | Gas and owned vehicles | Scope 1 | Heating and any owned fleet |
-| Freight to DCs, stores and guests | Scope 3 | Miles, load fill and mode |
+| Freight to DCs, stores, guests | Scope 3 | Miles, load fill and mode |
 | Products and packaging | Scope 3 | What we buy and how it is packed |
 > Notes: measure each scope with the same method every year before setting targets.
 

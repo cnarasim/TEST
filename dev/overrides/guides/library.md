@@ -1,6 +1,6 @@
 # The process library - ready-made Ulta decks
 
-Part of the ULTA PPT Studio instructions: SKILL.md's rules for every deck, token rules and checks apply here too.
+Part of the Ulta DeckCraft instructions: SKILL.md's rules for every deck, token rules and checks apply here too.
 
 ## What it is
 About 300 predefined decks, each one Markdown page in `library/<domain>/<l1>/<id>.md`, from the end-to-end process (L1)

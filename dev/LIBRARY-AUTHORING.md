@@ -1,4 +1,4 @@
-# Writing process library templates (ULTA PPT Studio)
+# Writing process library templates (Ulta DeckCraft)
 
 The process library is a set of ready-made Ulta decks. Each template is ONE Markdown page; the skill builds it on the
 approved Ulta PowerPoint template with rules (no AI) and checks it with Presentation Central's delivery gate. A person
@@ -6,11 +6,11 @@ picks a template, then adapts it with their own facts. So a template must be (1)
 enough to sit at the template's type sizes, (3) neutral about vendors, and (4) honest: no invented facts.
 
 ## Where things are
-- Frozen skill to build with (read-only, do not edit): `/tmp/claude-0/-home-user-TEST/12dcbf9d-aee8-5751-826b-81ab99be96ee/scratchpad/agent-skill/ulta-ppt-studio`
-- Existing 147 templates (read them, copy their style): `<frozen skill>/library/<domain>/<l1>/<id>.md`
+- Built skill to check with (read-only, do not edit; `python3 dev/build_skill.py ... --out <dir>` makes it): `<built skill>`
+- Existing templates (read them, copy their style): `<built skill>/library/<domain>/<l1>/<id>.md`
 - Write templates to: `/home/user/TEST/dev/overrides/library/<domain-folder>/<l1-folder>/<id>.md`
   (to tighten an EXISTING template, copy it to the same relative path there and edit the copy)
-- Check: `python3 /home/user/TEST/dev/verify_templates.py <files or folder>` (lint + a governed build of each page)
+- Check: `python3 dev/verify_templates.py --skill <built skill> <files or folder>` (lint + a governed build of each page)
 
 ## Front matter (all fields required)
 ```
@@ -58,7 +58,7 @@ Under a heading, choose ONE body:
     vendor-onboarding. Or `Layout: retail network | dc-flow | cross-dock | fulfilment | document-flow` over `- Title: text (Owner)` lines.
   - Numbers and strategy: `four numbers`, `kpi cards`, `scorecard`, `ranking`, `donut`, `rings`, `bubbles`, `treemap`,
     `sankey`, `slope`, `waffle`, `bullet`, `gantt`, `matrix`, `hexagons`, `pyramid`, `hub`, `cards`, `priorities house`,
-    `OGSM`, `template funnel`. Find an existing template that uses the layout (`grep -rl "Layout: matrix" <frozen>/library`)
+    `OGSM`, `template funnel`. Find an existing template that uses the layout (`grep -rl "Layout: matrix" <built skill>/library`)
     and copy its line format exactly.
 - `> Notes: ...` under a section goes to the speaker notes (detail, caveats, "example dates").
 
@@ -84,6 +84,7 @@ Under a heading, choose ONE body:
 - Short, concrete, active sentences. One message per slide. US spelling is fine; keep the existing templates' tone.
 
 ## Done
-Each of your files prints `OK` in `verify_templates.py` (no lint problem, no FAIL line). If a FAIL line remains that is
+Each of your files prints `OK` in `verify_templates.py` (no lint problem, no FAIL line, built READY, or DRAFT where no
+renderer is installed). If a FAIL line remains that is
 NOT about your text (an engine or check problem), leave it and list it in your final report with the template id.
 Report: the files you wrote (paths), the verify summary line, and any residual non-content FAILs.

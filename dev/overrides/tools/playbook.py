@@ -49,7 +49,10 @@ def record(deck, spec):
     drawn = [i for i, s in enumerate(slides, 1) if (s.get("central") and not kind(s).startswith(INFO_FAMILIES))
              or any(s.get(k) for k in ("diagram", "graphic", "modern", "_points", "bands"))]   # drawn: diagrams, point graphics, bands
     info = [i for i, s in enumerate(slides, 1) if s.get("central") and kind(s).startswith(INFO_FAMILIES)]
-    short = [i for i, s in enumerate(slides, 1) if (s.get("trim_empty_rows") or s.get("grow_rows")) and i not in drawn + info]
+    # shortened on purpose: empty rows dropped, rows grown, or a box removed and its neighbour widened ("hide": the
+    # two-box slide as one wide box); the gate checks these with its template-fidelity rule (own shapes, same design)
+    short = [i for i, s in enumerate(slides, 1) if (s.get("trim_empty_rows") or s.get("grow_rows") or s.get("hide"))
+             and i not in drawn + info]
     rec = {"diagram_slides": drawn, "flow_slides": [], "library_slides": [], "list_slides": short, "infographic_slides": info,
            "drawn_slides": drawn, "trimmed_slides": [], "schema_version": 2,
            "source_mapping": {str(i): s["source"] for i, s in enumerate(slides, 1)}, "ways": [], "gallery": False,
@@ -189,10 +192,11 @@ def build(md, out, title=None, owner=None, classification=None, ids=()):
         if probs:
             overall = "NEEDS CORRECTION - type scale"
         import checks, validate_deck as V, stamp as ST
-        lint = [f"{a}: {b}" for a, b in LIB.lint() if not ids or a in ids]
-        checks.add(deck, [("Library page rules (front matter, one slide per section)", "FAIL" if lint else "PASS", "; ".join(lint[:3])),
-                          ("Type scale on every run (typeset.py)", "FAIL" if probs else "PASS", "; ".join(probs[:3]))],
-                   requires="Template validation (validate_deck.py)")
+        rows = [("Type scale on every run (typeset.py)", "FAIL" if probs else "PASS", "; ".join(probs[:3]))]
+        if ids:                                       # a library build: its templates' own page rules (not for a user's page)
+            lint = [f"{a}: {b}" for a, b in LIB.lint() if a in ids]
+            rows.insert(0, ("Library page rules (front matter, one slide per section)", "FAIL" if lint else "PASS", "; ".join(lint[:3])))
+        checks.add(deck, rows, requires="Template validation (validate_deck.py)")
         held, where = V.hold_back(deck)
         if held:
             print(f"NOT WRITTEN | template placeholder text on {where}: edit the page so each section fills its layout, then rebuild")
@@ -213,6 +217,10 @@ def build(md, out, title=None, owner=None, classification=None, ids=()):
                   if "VERIFICATION INCOMPLETE" in overall else "NEEDS CORRECTION")
         said = [f"{status} | {out} v{ver} | {len(spec['slides'])} slides" + (f" from {', '.join(ids)}" if ids else "")]
         fails = [l.strip() for l in log.getvalue().splitlines() if l.strip().startswith("FAIL")]
+        for l in v.stdout.splitlines():               # the gate's table rows: | check | FAIL | detail |
+            cells = [c.strip() for c in l.strip().strip("|").split("|")] if l.lstrip().startswith("|") else []
+            if len(cells) >= 3 and cells[1] == "FAIL":
+                fails.append(f"FAIL  {cells[0]}: {cells[2][:200]}")
         said += [f"  {l}" for l in list(dict.fromkeys(fails))[:10]] + [f"  FAIL  {p}" for p in probs[:5]]
         pic = vd / "contact-sheet.png"
         if pic.exists():

@@ -3,7 +3,7 @@
 Part of the ULTA Presentation Central instructions: SKILL.md's rules for every deliverable, token rules and checks apply here too.
 
 ## Architecture diagrams - ULTA Enterprise Diagram Standards v0.7.0
-Only for a standalone architecture diagram (no deck asked for), or when the user asks for draw.io, the ULTA Enterprise Diagram Standard(s) or an ARB / C1-C3 submission diagram (even when it names a vendor platform). A diagram inside a PowerPoint deck is a guides/decks.md `diagram` slide in one of the native styles.
+Only for a standalone architecture diagram (no deck asked for), or when the user asks for draw.io, the ULTA Enterprise Diagram Standard(s) or a C1-C3 architecture diagram (even when it names a vendor platform). A diagram inside a PowerPoint deck is a guides/decks.md `diagram` slide in one of the native styles.
 The standard is in `brands/ulta/diagram_standard.json`; never draw these with the deck diagram or one-pager engines.
 1. Write arch.json (format at the top of `tools/enterprise_diagram.py`): `zones` (kind dmz | saas | core | downstream; a zone
    can sit `"above"` the zone it feeds), `systems` (zone, state existing | modified | new | retire | future, shape rect |

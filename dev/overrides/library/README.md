@@ -1,4 +1,4 @@
-# The process library (ULTA PPT Studio)
+# The process library (Ulta DeckCraft)
 
 Ready-made, editable Ulta decks: one Markdown page per template, built on the approved Ulta template by the Studio's Eco
 rules (no AI, the same deck every time) and checked by Presentation Central's delivery gate. The 147 templates of

@@ -19,7 +19,6 @@ from PIL import Image
 
 LONG_EDGE, JPEG_Q, JPEG_MIN = 2400, 85, 1_000_000
 TEMPLATES = ["modules/ultabranddeliverables/scripts/kit/templates/Ulta Beauty PPT Standard.pptx",
-             "modules/ultabranddeliverables/scripts/kit/templates/ARB Template - v3.6 as of 9-1-26.pptx",
              "assets/templates/Ulta Beauty PPT Standard_Curated.pptx"]
 TEXT_EXT = {".py", ".json", ".md", ".txt", ".yaml", ".yml"}
 
