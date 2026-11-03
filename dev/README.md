@@ -13,7 +13,7 @@ Current as of 2026-11-03: python-pptx 1.0.2, LibreOffice and pdftoppm present fo
 python3 dev/build_skill.py --upc <ulta-presentation-central dir> --studio "<.../Contents/Resources/runtime-kit>" --out ulta-slideglam
 python3 -I ulta-slideglam/tools/bootstrap.py              # READY = templates, validators, fonts are the pinned ones
 python3 ulta-slideglam/tools/selftest.py                  # every PowerPoint feature + the process library
-python3 dev/verify_templates.py --skill ulta-slideglam ulta-slideglam/library    # lint + governed build per template
+python3 dev/verify_templates.py --skill ulta-slideglam --render ulta-slideglam/library   # lint + governed build per template
 python3 dev/make_showcase.py ulta-slideglam dev/overrides/assets/showcase.png     # the capabilities picture (then rebuild)
 python3 dev/package.py ulta-slideglam dist                # dist/ulta-slideglam.zip, upload-ready (folder at the top level)
 ```
