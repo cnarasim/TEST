@@ -81,7 +81,8 @@ its drawn shapes, template run styles, fit, accessibility, type scale, plain pun
   - The template funnel reports a stage written without its detail (the four boxes beside the funnel stayed white),
     and the gate's empty-shape FAIL says what to write (`- Stage: detail`).
   - Closing asks written as bullets ("- Decision: ...", "- Ask: ...", "- Next step: ...") become three cards; the list
-    reader dropped every ask line and left one wide box of three bullets.
+    reader dropped every ask line and left one wide box of three bullets. Three lines that repeat a label ("Ask",
+    "Ask", "Next step") become two boxes, one per label (three cards would repeat a title, which the gate refuses).
   - A headline computed from the data states a fact (the last milestone and its date, the largest share), never a
     count: "What comes next: 2 teams, 3 tasks" and "8 steps, 4 teams" are gone.
   - A dated line's closing parenthesis is its team only when it is a name (1-3 words); a sentence there is the item's

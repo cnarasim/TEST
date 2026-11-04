@@ -492,6 +492,33 @@ def build(upc, rk, out):
           "        if d['title'].strip().lower() in ('output', 'outputs'): outs.append({'title': _short(d['text'], 4), 'text': ''}); continue\n",
           "        if d['title'].strip().lower() in ('input', 'inputs'): ins.append({'title': _short(d['text'], 6), 'text': ''}); continue   # (1ac)\n"
           "        if d['title'].strip().lower() in ('output', 'outputs'): outs.append({'title': _short(d['text'], 6), 'text': ''}); continue\n")
+    # (1ad) three labelled lines with a repeated label ("Ask", "Ask", "Next step") are two boxes, one per label, its lines
+    #      under its heading: as three cards the title row repeated a word, which the gate refuses (numbering does not
+    #      help: the duplicate check ignores figures); the closing-asks cards (1t) need three different labels
+    patch(eng / "page_to_spec.py",
+          "        if all(labs):\n            if len(labs) == 3 and 'cards3' in R and all(len(b) <= 220 for _, b in labs):\n",
+          "        if all(labs) and len(labs) == 3 and len({t.lower() for t, _ in labs}) == 2 and 'two_col' in R:   # (1ad) two boxes\n"
+          "            grp_ = {}\n"
+          "            for t_, b_ in labs: grp_.setdefault(t_, []).append(b_)\n"
+          "            (t1_, b1_), (t2_, b2_) = list(grp_.items())\n"
+          "            bl_ = lambda bs: ['• ' + x for x in bs] if len(bs) > 1 else bs\n"
+          "            return put({'source': R['two_col'], 'fills': {'title': head, 'text1': ['## ' + t1_] + bl_(b1_), 'text2': ['## ' + t2_] + bl_(b2_)}, 'notes': note2})\n"
+          "        if all(labs):\n            if len(labs) == 3 and 'cards3' in R and all(len(b) <= 220 for _, b in labs):\n")
+    patch(eng / "page_to_spec.py",
+          "            if infographics and len(pairs_) in (3, 4) and all(lab and body for lab, body in pairs_):   # (1t) the asks as cards\n",
+          "            if infographics and len(pairs_) in (3, 4) and all(lab and body for lab, body in pairs_) \\\n"
+          "                    and len({lab.lower() for lab, _ in pairs_}) == len(pairs_):   # (1t) the asks as cards; (1ad) labels differ\n")
+    patch(eng / "page_to_spec.py",
+          "            cs, _ = synth_cards([(None, items)], 'cards')\n"
+          "            return put({'source': R['cards3'], 'fills': {'title': head, 'table': card_rows([t for t, _ in cs], [ls for _, ls in cs])},",
+          "            cs, _ = synth_cards([(None, items)], 'cards')\n"
+          "            if len({str(t).lower() for t, _ in cs}) == 2 and 'two_col' in R:   # (1ad) a repeated label: two boxes\n"
+          "                grp_ = {}\n"
+          "                for t_, ls_ in cs: grp_.setdefault(t_, []).extend(ls_)\n"
+          "                (t1_, b1_), (t2_, b2_) = list(grp_.items())\n"
+          "                bl_ = lambda bs: ['• ' + x for x in bs] if len(bs) > 1 else bs\n"
+          "                return put({'source': R['two_col'], 'fills': {'title': head, 'text1': ['## ' + t1_] + bl_(b1_), 'text2': ['## ' + t2_] + bl_(b2_)}, 'notes': note2})\n"
+          "            return put({'source': R['cards3'], 'fills': {'title': head, 'table': card_rows([t for t, _ in cs], [ls for _, ls in cs])},")
     # (1i) a status mark is a mark, not text: the content gate skips a run that is only a dot, square or arrow in a status
     #      colour, as the brand colours gate already does ("status colours on marks only"); the words beside it are checked
     patch(vd, '                continue\n            rpr = r.find("a:rPr", NS)\n            lat = rpr.find("a:latin", NS) if rpr is not None else None\n',
