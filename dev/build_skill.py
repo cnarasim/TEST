@@ -519,6 +519,145 @@ def build(upc, rk, out):
           "                bl_ = lambda bs: ['• ' + x for x in bs] if len(bs) > 1 else bs\n"
           "                return put({'source': R['two_col'], 'fills': {'title': head, 'text1': ['## ' + t1_] + bl_(b1_), 'text2': ['## ' + t2_] + bl_(b2_)}, 'notes': note2})\n"
           "            return put({'source': R['cards3'], 'fills': {'title': head, 'table': card_rows([t for t, _ in cs], [ls for _, ls in cs])},")
+    # (1ae) variety: two slides in a row never look the same when the content can be told another way, with nothing lost.
+    #      A table straight after a label table is drawn as hexagons (or a hub, alternating), each row a shape with its
+    #      first cell as the name and the other cells as its line, later columns under their header ("Control: Legal
+    #      review"); three cards straight after three cards become a hub. "Layout: table" or "Layout: cards" keeps the
+    #      author's form. The Studio drew every Markdown table as the same label table, so a deck written by another
+    #      assistant read as one table after another.
+    patch(eng / "page_to_spec.py",
+          "            t_hint = hints.get(headline.strip()) or hints.get(section.strip())\n",
+          "            t_hint = hints.get(headline.strip()) or hints.get(section.strip())\n"
+          "            prev_ = next((s_ for s_ in reversed(slides) if s_.get('kind') != 'divider'), None)   # (1ae) variety\n"
+          "            if not t_hint and infographics and 2 <= ncol <= 4 and 3 <= len(data) <= 6 and prev_ is not None \\\n"
+          "                    and prev_.get('source') in (R.get('actions'), R.get('grid6')) and 'two_col' in R and all(len(' '.join(r)) <= 150 for r in data):\n"
+          "                t_hint = 'fam:process list'\n"
+          "                warnings.append(f'variety: the table \"{head_title}\" follows a label table - drawn as icon rows (\"Layout: table\" keeps a table)')\n")
+    patch(eng / "page_to_spec.py",
+          "[' · '.join(f'{header[j]}: {c}' if j < len(header) and header[j] and len(data) <= 4 else c for j, c in enumerate(r[1:], 1) if c and c.strip())]",
+          "[' · '.join(f'{header[j]}: {c}' if 2 <= j < len(header) and header[j] else c for j, c in enumerate(r[1:], 1) if c and c.strip())]")
+    patch(eng / "page_to_spec.py",
+          "        if 'cards3' in R and len(titled) == 3 and (hint == 'cards' or",
+          "        prev_c = next((s_ for s_ in reversed(slides) if s_.get('kind') != 'divider'), None)   # (1ae) cards after cards: a hub\n"
+          "        if hint != 'cards' and 'cards3' in R and 'two_col' in R and len(titled) == 3 and prev_c is not None \\\n"
+          "                and prev_c.get('source') == R['cards3'] and family_slide('fam:process list', ['\\u2022 ' + h_ + ': ' + re.sub(r'^[\\u2022\\u2013]\\s*', '', ls_[0]) + (' (' + '; '.join(re.sub(r'^[\\u2022\\u2013]\\s*', '', l_) for l_ in ls_[1:]) + ')' if len(ls_) > 1 else '') for h_, ls_ in titled if ls_], None, head, head, note, takeaway, []):\n"
+          "            warnings.append(f'variety: \"{head}\" follows three cards - drawn as icon rows (\"Layout: cards\" keeps the cards)')\n"
+          "            return True\n"
+          "        if 'cards3' in R and len(titled) == 3 and (hint == 'cards' or")
+    patch(eng / "page_to_spec.py",
+          "                if t_hint == 'text' or not infographic(row_cards, head_title, note_t, t_hint):\n",
+          "                if t_hint == 'hub' and header and header[0].strip() and len(header[0].strip()) <= 22 and infographic(row_cards, head_title, note_t, t_hint):\n"
+          "                    slides[-1]['graphic']['hub'] = header[0].strip()   # (1ae) the hub's centre names its rows\n"
+          "                    continue\n"
+          "                if t_hint == 'text' or not infographic(row_cards, head_title, note_t, t_hint):\n")
+    # (1af) a step named "Source", "Result", "Outcome", "Centre", "Input" or "Output" stays a step unless the style uses that
+    #      role (diverge: source, converge: result, cycle: centre, io: inputs and outputs): a seven-step snake lost its
+    #      "Source" step to the diverge style's source box, which the snake never draws
+    patch(eng / "family_rules.py",
+          "        k = ROLE_KEYS.get(d['title'].strip().lower())\n        if k and d.get('text'):\n",
+          "        k = ROLE_KEYS.get(d['title'].strip().lower())\n"
+          "        if k and style not in (None, '', 'auto') and style != {'result': 'converge', 'source': 'diverge', 'center': 'cycle'}.get(k):\n"
+          "            k = None                                   # (1af) a step of this style, not a role it never draws\n"
+          "        io_ = style in (None, '', 'auto', 'io')\n"
+          "        if k and d.get('text'):\n")
+    patch(eng / "family_rules.py",
+          "        if d['title'].strip().lower() in ('input', 'inputs'): ins.append(",
+          "        if io_ and d['title'].strip().lower() in ('input', 'inputs'): ins.append(")
+    patch(eng / "family_rules.py",
+          "        if d['title'].strip().lower() in ('output', 'outputs'): outs.append(",
+          "        if io_ and d['title'].strip().lower() in ('output', 'outputs'): outs.append(")
+    # (1ag) the drawn hub, hexagons and cycle in the brand's calm infographic look: one accent, light fills, dark words.
+    #      The Studio cycled the four saturated step colours over every shape (white words on magenta, pink, red and
+    #      orange), put a black disc in the hub's centre and coloured each legend name differently - loud next to the
+    #      template's own slides. Now: hexagons in the light peach tint with dark names; hub and cycle nodes white with an
+    #      accent ring and an accent number; the hub's centre the one strong accent; legend names dark, one size larger
+    bfs_ = eng / "build_from_storyboard.py"
+    patch(bfs_, "            sh = seg(MSO_SHAPE.OVAL, px - d / 2, py - d / 2, d, d, FLOW_COLORS[k % 4]); label(sh, str(k + 1), 15); sh.name = f'ULTA graphic {k + 1}'\n"
+                "        hub = seg(MSO_SHAPE.OVAL, cx - hr, cy - hr, 2 * hr, 2 * hr, '000000'); label(hub, str(graphic.get('hub') or '')[:40], 12); hub.name = 'ULTA graphic hub'\n",
+                "            sh = seg(MSO_SHAPE.OVAL, px - d / 2, py - d / 2, d, d, 'FFFFFF'); sh.line.color.rgb = RGBColor.from_string(FLOW_COLORS[0]); sh.line.width = Pt(2.25)   # (1ag)\n"
+                "            label(sh, str(k + 1), 15, color=FLOW_COLORS[0]); sh.name = f'ULTA graphic {k + 1}'\n"
+                "        hub = seg(MSO_SHAPE.OVAL, cx - hr, cy - hr, 2 * hr, 2 * hr, FLOW_COLORS[0]); label(hub, str(graphic.get('hub') or '')[:40], 13); hub.name = 'ULTA graphic hub'\n")
+    patch(bfs_, "                sh = seg(MSO_SHAPE.HEXAGON, x0 + j * hw * 0.92, y0 + ri * (hh * 0.88), hw, hh, FLOW_COLORS[k % 4]); sh.name = f'ULTA graphic {k + 1}'\n"
+                "                label(sh, str(it.get('title', '')) if names_fit else str(k + 1), hex_pt if names_fit else 18); k += 1\n",
+                "                sh = seg(MSO_SHAPE.HEXAGON, x0 + j * hw * 0.92, y0 + ri * (hh * 0.88), hw, hh, 'FDE1D2'); sh.name = f'ULTA graphic {k + 1}'   # (1ag)\n"
+                "                sh.line.color.rgb = RGBColor.from_string('FFFFFF'); sh.line.width = Pt(2)\n"
+                "                label(sh, str(it.get('title', '')) if names_fit else str(k + 1), hex_pt if names_fit else 18, color='000000' if names_fit else FLOW_COLORS[0]); k += 1\n")
+    patch(bfs_, "            sh = seg(MSO_SHAPE.OVAL, x, y, d, d, FLOW_COLORS[k % 4]); label(sh, str(k + 1), 16); sh.name = f'ULTA graphic {k + 1}'\n",
+                "            sh = seg(MSO_SHAPE.OVAL, x, y, d, d, 'FFFFFF'); sh.line.color.rgb = RGBColor.from_string(FLOW_COLORS[0]); sh.line.width = Pt(2.25)   # (1ag)\n"
+                "            label(sh, str(k + 1), 16, color=FLOW_COLORS[0]); sh.name = f'ULTA graphic {k + 1}'\n")
+    patch(bfs_, "            cells.append([[[((f'{k_ + 1}. ' if num else '') + t_, True, FLOW_COLORS[k_ % 4], size)]], [[(body, False, '404040', size - 1)]]])\n",
+                "            cells.append([[[((f'{k_ + 1}. ' if num else '') + t_, True, '000000', size)]], [[(body, False, '404040', size - 1)]]])   # (1ag) one ink\n")
+    for old_, new_ in (("        legend(lx, y0, lw, [lh] * n, items, 12 if n <= 4 else 11, num=True)\n    elif kind == 'roadmap':",
+                        "        legend(lx, y0, lw, [lh] * n, items, 13 if n <= 4 else 12, num=True)\n    elif kind == 'roadmap':"),
+                       ("        legend(lx, ly0, lw, [lh] * n, items, 12 if n <= 4 else 11, num=not names_fit)\n",
+                        "        legend(lx, ly0, lw, [lh] * n, items, 13 if n <= 4 else 12, num=not names_fit)\n")):
+        patch(bfs_, old_, new_)
+    # (1ah) a takeaway line under a one-line headline sits in the headline box's lower half only when there is content
+    #      below to make room for; on a drawn slide (nothing below yet) it goes under the box - the two-column slide's
+    #      headline is not top-anchored, so "How we rank" sat on "Must-haves first"
+    patch(bfs_, "    if headline_lines(ttxt, title.width or 0, tsize, glyph=0.64) <= 1:\n        y = title.top + Inches(0.56)",
+                "    if headline_lines(ttxt, title.width or 0, tsize, glyph=0.64) <= 1 and body:   # (1ah)\n        y = title.top + Inches(0.56)")
+    # (1ai) icon rows for a set that is not a sequence: "Layout: process list" draws the vertical style's white rows (an
+    #      icon, the name, its line, a caption) without numbers or the connecting spine, every row in the one accent.
+    #      The variety rule (1ae) and the expert review use it: hexagons and a hub keep the meaning in a legend away from
+    #      the shapes. A table under any "Layout: process ..." line becomes the steps, a row each (first cell the name,
+    #      the second its line, the third its caption under its header).
+    patch(eng / "family_rules.py",
+          "    st = rest.strip().replace(' ', '-')\n    its = retail_items(lines)\n",
+          "    st = rest.strip().replace(' ', '-')\n"
+          "    unordered = word == 'process' and st in ('list', 'rows', 'icon-rows')   # (1ai) icon rows: a set, not steps\n"
+          "    if unordered: st = 'vertical'\n"
+          "    its = retail_items(lines)\n")
+    patch(eng / "family_rules.py",
+          "        P = process_data(st, its)\n        if not P['steps'] or (len(P['steps']) < 2 and st != 'io'): return None",
+          "        P = process_data(st, its)\n        if unordered: P['unordered'] = True\n"
+          "        if not P['steps'] or (len(P['steps']) < 2 and st != 'io'): return None")
+    fl_ = out / "tools/flows.py"
+    patch(fl_, '    C.line(sx, by + h / 2, sx, by + bh - h / 2, colour=ND.ROSE_TINT, width=4.0, name="process spine")\n',
+          '    unordered = bool(D.get("unordered"))                 # (1ai) a set, not steps: no spine, no numbers, one accent\n'
+          '    if not unordered:\n'
+          '        C.line(sx, by + h / 2, sx, by + bh - h / 2, colour=ND.ROSE_TINT, width=4.0, name="process spine")\n')
+    patch(fl_, '        _badge(C, sx, y + h / 2, d, i, i + 1, name=f"Step {i + 1} number", icon=s["icon"])\n'
+               '        C.rect(x, y, bx + bw - x, h, ND.WHITE, r=0.08, name=f"Step {i + 1} card")\n'
+               '        C.rect(x, y, _in(0.08), h, _colour(i), r=None, name=f"Step {i + 1} colour")\n',
+          '        if not unordered:\n'
+          '            _badge(C, sx, y + h / 2, d, i, i + 1, name=f"Step {i + 1} number", icon=s["icon"])\n'
+          '        elif s["icon"]:\n'
+          '            C.dot(sx, y + h / 2, d, _colour(0), name=f"Item {i + 1} icon")\n'
+          '            PG.icon(C, s["icon"], sx, y + h / 2, d * 0.56, colour=ND.WHITE, bg=_colour(0))\n'
+          '        C.rect(x, y, bx + bw - x, h, ND.WHITE, r=0.08, name=f"Step {i + 1} card")\n'
+          '        C.rect(x, y, _in(0.08), h, _colour(0) if unordered else _colour(i), r=None, name=f"Step {i + 1} colour")\n')
+    # a table under a process Layout line: its rows are the steps
+    patch(eng / "page_to_spec.py",
+          "            if t_hint in ('cards', 'steps', 'bands', 'text') + GRAPHIC_KINDS and 3 <= len(data) <= 8 and ncol >= 2:\n",
+          "            if str(t_hint or '').startswith('fam:process') and 3 <= len(data) <= 8 and ncol >= 2:   # (1ai) rows as steps\n"
+          "                def cap_(r):   # the later columns under their headers, one caption (one column when two run long)\n"
+          "                    xs = [(f'{header[j].strip()}: ' if j < len(header) and header[j].strip() else '') + r[j].strip() for j in range(2, len(r)) if r[j].strip()]\n"
+          "                    c = ' \u00b7 '.join(xs) if len(' \u00b7 '.join(xs)) <= 60 else (xs[0] if xs else '')\n"
+          "                    return f' ({c})' if c else ''\n"
+          "                raw_ = ['\\u2022 ' + f\"{r[0].strip()}: {r[1].strip()}\" + cap_(r) for r in data if r and r[0].strip()]\n"
+          "                note_t = note + ' — table: ' + ' | '.join(' / '.join(r) for r in rows)\n"
+          "                if family_slide(t_hint, raw_, [(None, raw_)], head_title, headline, note_t, None, []):\n"
+          "                    continue\n"
+          "            if t_hint in ('cards', 'steps', 'bands', 'text') + GRAPHIC_KINDS and 3 <= len(data) <= 8 and ncol >= 2:\n")
+    #      ... and a caption in brackets may run to 60 characters ("(Safeguard: Human approval for commitments)" stayed
+    #      in the line, brackets and all, and the longest line set every row's text smaller)
+    patch(eng / "family_rules.py", "OWNER = re.compile(r'^(.*?\\S)\\s*\\(([^()]{2,40})\\)\\s*$')",
+          "OWNER = re.compile(r'^(.*?\\S)\\s*\\(([^()]{2,60})\\)\\s*$')   # (1ai) a caption up to 60 characters")
+    # (1aj) the variety rule on labelled lists too: three "Label: text" lines after three cards, or 3-6 after a label
+    #      table, become icon rows instead of the same cards or table again
+    patch(eng / "page_to_spec.py",
+          "        if all(labs):\n            if len(labs) == 3 and 'cards3' in R and all(len(b) <= 220 for _, b in labs):\n",
+          "        prev_l = next((s_ for s_ in reversed(slides) if s_.get('kind') != 'divider'), None)   # (1aj) variety\n"
+          "        if all(labs) and 3 <= len(labs) <= 6 and prev_l is not None and 'two_col' in R and all(len(b) <= 150 for _, b in labs) \\\n"
+          "                and prev_l.get('source') == (R.get('cards3') if len(labs) == 3 else R.get('actions')) \\\n"
+          "                and family_slide('fam:process list', ['• ' + f'{t}: {b}' for t, b in labs], None, head, head, note2, tk, []):\n"
+          "            warnings.append(f'variety: \"{head}\" follows the same layout - drawn as icon rows')\n"
+          "            return True\n"
+          "        if all(labs):\n            if len(labs) == 3 and 'cards3' in R and all(len(b) <= 220 for _, b in labs):\n")
+    #      ... and the page reader knows the name: "Layout: process list" (or rows) is a family line like the other styles
+    patch(eng / "page_to_spec.py", "process (chevrons|arrow|numbered|cycle|snake|vertical|phases|pipeline|io|converge|diverge))$'",
+          "process (chevrons|arrow|numbered|cycle|snake|vertical|phases|pipeline|io|converge|diverge|list|rows))$'")
     # (1i) a status mark is a mark, not text: the content gate skips a run that is only a dot, square or arrow in a status
     #      colour, as the brand colours gate already does ("status colours on marks only"); the words beside it are checked
     patch(vd, '                continue\n            rpr = r.find("a:rPr", NS)\n            lat = rpr.find("a:latin", NS) if rpr is not None else None\n',

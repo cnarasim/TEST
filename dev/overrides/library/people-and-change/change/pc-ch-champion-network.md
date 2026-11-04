@@ -30,7 +30,7 @@ Layout: process chevrons
 - Sustain: tips and refreshers after launch
 
 ## Who makes a good champion
-Layout: hexagons
+Layout: process list
 - Respected: peers ask them first
 - Curious: likes to try new things
 - Clear: explains simply

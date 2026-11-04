@@ -39,7 +39,7 @@ Layout: retail network
 | Efficiency or resilience | Two sources for key items | No single point of failure |
 
 ## Six capabilities we must build
-Layout: hexagons
+Layout: process list
 - Demand sensing: forecasts by store and day
 - Inventory visibility: one view of every unit
 - Automation: DC picking and sortation

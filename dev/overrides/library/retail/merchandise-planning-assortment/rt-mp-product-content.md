@@ -40,7 +40,7 @@ Layout: swimlane handoffs
 | Measure | Content scores and reviews tracked by item | Content score, ratings |
 
 ## Six things make a complete product page
-Layout: hexagons
+Layout: process list
 - Images: front, back, swatch and texture
 - Copy: benefits and how to use
 - Ingredients: the full list, checked

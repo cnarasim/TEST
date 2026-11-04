@@ -31,7 +31,7 @@ order: 205
 | Use rewards | Points hard to see | Rewards shown at every step |
 
 ## Six capabilities make digital work
-Layout: hexagons
+Layout: process list
 - Guest data: one profile across channels
 - Personalization: the right offer and content
 - Commerce platform: fast and easy to change

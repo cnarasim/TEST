@@ -34,10 +34,18 @@ A build turns the page into a deck by rules (no AI): cover, the slides, closing;
 5. **Content prepared elsewhere** (another assistant, a document, the user's notes): write it as a page in this format
    (`# Title`, one `## takeaway` per slide, a `Layout:` line where a picture tells it better; "How a page is written"
    below) and build it with `page` - the same rules and checks as a library deck. Mix in library slides with `pick`.
+   Give each section the picture its content asks for, and vary them - never two tables or two sets of cards in a row:
+   steps in order -> `Layout: process chevrons` (3-6) or `snake` (7-10); dates -> `Layout: timeline quarters`; who does
+   what -> `Layout: swimlane handoffs`; 3-6 parallel items (paths, controls, safeguards) -> `Layout: process list`
+   (icon rows: `- Name: detail (caption)` lines, or the line above a table); two options or today and target -> `### Today` / `### Target`; choices on two axes -> `Layout:
+   matrix`; figures -> `Layout: four numbers` or `kpi cards`; a comparison across several attributes -> a table (one,
+   not three in a row); the ask -> `- Decision:` / `- Ask:` / `- Next step:` lines.
 6. **Act on the expert review.** Every build prints `EXPERT REVIEW` and its `EXPERT` lines (Presentation Central's
-   presentation expert, run by the scripts): the answer first, the ask last, the better picture for a section (its
-   `Layout:` line), a takeaway instead of a topic heading, two sections packed on one slide, placeholders left. Change
-   the page and rebuild, or tell the user why a line does not apply. `playbook.py review page.md` reads a page in
+   presentation expert, run by the scripts): slides in a row that look the same (`variety:`) and too few pictures
+   (`pictures:`), each with the Layout: line to use; the answer first, the ask last, the better picture for a section
+   (its `Layout:` line), a takeaway instead of a topic heading, two sections packed on one slide, placeholders left.
+   Change the page and rebuild, or tell the user why a line does not apply - a `variety:` or `pictures:` line is never
+   left: the deck is not finished until it is gone. `playbook.py review page.md` reads a page in
    seconds, before the build.
 7. **Review and deliver** like every deck: the status line, FAIL lines, `PICTURE` (look at the contact sheet), `FILES`,
    and the `RESULT` line copied exactly. Library pages carry placeholders and illustrative sample figures: tell the user

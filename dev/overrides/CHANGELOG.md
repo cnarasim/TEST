@@ -91,6 +91,28 @@ its drawn shapes, template run styles, fit, accessibility, type scale, plain pun
     columns; they were drawn empty.
   - KPI cards keep the words around the number ("5 against a target of 0", "9 days per claim") as a caption and are
     sized to their content; big-number cards accept months and years ("14 months").
+- Slide variety and a calmer look (a deck written by another assistant read as one table after another: two identical
+  card slides, then four table slides in a row; and the drawn hexagons and hub looked loud):
+  - Icon rows, `Layout: process list`: a set that is not a sequence (paths, controls, safeguards, tests) as white rows -
+    an icon, the name, its line and a caption - in one accent, without numbers or the connecting spine. Over a table
+    it takes a row each (first cell the name, the second its line, later columns as the caption under their headers).
+  - The engine never draws two label tables, two grid tables or two sets of three cards in a row when the content can
+    be told another way with nothing lost: the second becomes icon rows (a table of 3-6 rows, a list of 3-6 "Label:
+    text" lines, three cards). `Layout: table` / `Layout: cards` keeps the author's form.
+  - The expert review names slides in a row that look the same (`EXPERT variety:`) and decks with fewer than a third of
+    their content slides drawn (`EXPERT pictures:`), each with the Layout: line to use, never the look the run already
+    has; steps in order written as a list get `Layout: process chevrons|snake`; a current and future state pair and the
+    closing asks are left as they are. SKILL.md: a variety or pictures line means the deck is not finished.
+  - The drawn hub, hexagons and cycle in the brand's calm infographic look: light peach fills with dark names, white
+    nodes with an accent ring, one accent in the hub's centre (not black), legend names in one ink and a size larger;
+    the Studio cycled four saturated colours over every shape. The library's 44 hexagon and hub sections of 3-6 items
+    are icon rows now (the infographics shapes showcase keeps its shapes).
+  - A takeaway line on a drawn slide sits under the headline box, not in it ("How we rank" overlapped "Must-haves
+    first"); a caption in brackets may run to 60 characters.
+  - A step named Source, Result, Outcome, Centre, Input or Output stays a step unless the style draws that role (a
+    seven-step snake lost its "Source" step to the diverge style's source box).
+  - Library: all 294 decks pass the variety and pictures checks (45 flagged before): sections told as icon rows, cards
+    and tables alternated, two lanes timelines in a row split (a vertical timeline, icon rows).
 - Library content: 52 headings over 42 characters shortened (they printed smaller than the deck's other titles; the
   verifier now fails a longer one), 50 swimlane steps and decisions shortened to fit their boxes (about 24 characters,
   no word over 10 letters), and 30 pages fixed for their layout's rules: explicit Now / Next / Later columns (the

@@ -38,7 +38,7 @@ Layout: swimlane handoffs
 - Guest: Collects the order in store
 
 ## The systems behind the process
-Layout: hub
+Layout: process list
 - OMS: the order hub
 - Store app: picking and staging
 - Store stock: what is on the shelf

@@ -21,7 +21,7 @@ Layout: gantt
 > Notes: example dates; each DC goes live before the stores it serves, and nothing moves in the holiday freeze.
 
 ## How sites are grouped into waves
-Layout: hexagons
+Layout: process list
 - Region: districts together, one support team
 - DC: stores follow the DC that serves them
 - Size: smaller, simpler stores first

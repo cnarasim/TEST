@@ -22,6 +22,7 @@ order: 301
 - By when, and who decides
 
 ## Options considered
+Layout: process list
 | Option | What it is | Benefits | Risks | Cost |
 |---|---|---|---|---|
 | Do nothing | Keep today's solution | No spend | Problem grows | Low |

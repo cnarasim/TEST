@@ -20,7 +20,7 @@ order: 103
 - We stop after eight weeks with little cost
 
 ## The smallest test that proves it
-Layout: cards
+Layout: process list
 - In scope: 20 stores, booking in the app, one service
 - Out of scope: paid services, new hires, store changes
 - Duration: eight weeks

@@ -11,7 +11,7 @@ order: 206
 # Omnichannel strategy
 
 ## One guest, one promise, every channel
-Layout: hub
+Layout: process list
 - Guest: one profile, one promise
 - Stores: advice, services and pickup
 - Site: the full range, any time
@@ -39,7 +39,7 @@ Layout: hub
 Layout: retail omnichannel-fulfilment
 
 ## Six enablers make one experience real
-Layout: hexagons
+Layout: process list
 - Inventory: store and DC stock visible online
 - Order management: one brain for every order
 - Guest profile: one view in every channel

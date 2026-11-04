@@ -27,10 +27,12 @@ Layout: matrix
 | R-11 | Change freeze moves earlier | Low | High | Agree the window with operations | Project manager |
 
 ## Open issues
-| ID | Issue | Impact | Action | Owner | Due |
-|---|---|---|---|---|---|
-| I-02 | Two interfaces late | High | Extra developer, daily check | Technology lead | Next Friday |
-| I-05 | Test environment unstable | Medium | Fix plan with infrastructure | Technology lead | This week |
+### I-02 Two interfaces late (high)
+- Extra developer, daily check
+- Technology lead, by next Friday
+### I-05 Test environment unstable (medium)
+- Fix plan with infrastructure
+- Technology lead, this week
 
 ## Dependencies
 | ID | We need | From | By | Status |

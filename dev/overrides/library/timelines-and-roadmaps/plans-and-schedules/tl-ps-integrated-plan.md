@@ -21,7 +21,7 @@ Layout: timeline lanes
 > Notes: example dates; one line per workstream with its owning team in brackets.
 
 ## Milestones that tie the lanes together
-Layout: timeline template-milestones
+Layout: timeline vertical
 - Design signed off: Apr 30, 2027 (Business)
 - Build complete: Aug 31, 2027 (Technology)
 - Final data load rehearsed: Oct 15, 2027 (Data)

@@ -25,7 +25,7 @@ Layout: four numbers
 > Notes: illustrative figures - replace them with your own.
 
 ## One team, five capabilities
-Layout: hub
+Layout: process list
 - Team: the centre of the work
 - Planning: priorities and roadmap
 - Delivery: projects and changes
@@ -49,7 +49,7 @@ Layout: donut
 > Notes: illustrative shares; they must add up to 100%.
 
 ## Six habits of the way we work
-Layout: hexagons
+Layout: process list
 - One queue: every request in one place
 - Clear owners: a name on every task
 - Show progress: a weekly update

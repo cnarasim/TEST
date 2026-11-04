@@ -22,7 +22,7 @@ order: 205
 - Teams and the business plan the same dates
 
 ## How we slice the scope
-Layout: hexagons
+Layout: process list
 - Value first: the scope that pays back soonest
 - End to end: a whole process, not half of one
 - Risk early: the hardest integration first

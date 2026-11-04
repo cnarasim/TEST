@@ -21,6 +21,7 @@ Layout: process arrow
 - Launch: on shelf and online
 
 ## Where the time goes in the stream
+Layout: process list
 | Step | Work time | Wait time | Right first time |
 |---|---|---|---|
 | Agree range | [n] hours | [n] days | [n]% |

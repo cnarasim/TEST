@@ -11,7 +11,7 @@ order: 208
 # Technology strategy
 
 ## Six principles guide every tech choice
-Layout: hexagons
+Layout: process list
 - Guest first: start from the guest journey
 - Reuse, buy, then build: build only to differ
 - Cloud first: new workloads in the cloud

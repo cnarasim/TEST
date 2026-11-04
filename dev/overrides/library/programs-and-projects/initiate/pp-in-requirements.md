@@ -30,7 +30,7 @@ Layout: process chevrons
 - Baseline: sign-off, then change control
 
 ## A good requirement passes six tests
-Layout: hexagons
+Layout: process list
 - Clear: one need, in plain words
 - Testable: an acceptance criterion
 - Traced: to a process step and an objective

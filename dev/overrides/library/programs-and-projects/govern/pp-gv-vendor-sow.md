@@ -22,7 +22,7 @@ order: 307
 - Issues raised early, through the contract
 
 ## What a good statement of work holds
-Layout: hexagons
+Layout: process list
 - Scope: what is in and what is out
 - Deliverables: each with acceptance criteria
 - Milestones: dates and payments linked

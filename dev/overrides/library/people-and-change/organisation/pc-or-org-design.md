@@ -30,7 +30,7 @@ Layout: process chevrons
 - Move: consult, appoint, launch
 
 ## What a good design must do
-Layout: hexagons
+Layout: process list
 - Guest first: closer to stores and guests
 - Clear: one owner for each decision
 - Lean: fewer layers to the front line

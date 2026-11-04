@@ -22,7 +22,7 @@ order: 409
 - Evidence for the go / no-go decision
 
 ## Six areas we assess
-Layout: hexagons
+Layout: process list
 - People: trained, roles mapped, rotas set
 - Process: procedures and controls updated
 - Technology: devices and access tested

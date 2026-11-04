@@ -53,9 +53,12 @@ user's content (guides/library.md, "Adapt"). Edit an existing deck: Edit mode be
 8. **The presentation standard.** The deck states its answer and its ask, and its slides follow one storyline; every
    message on the picture its content asks for (figures as big numbers or a chart, dates as a timeline, steps as a flow,
    systems as a diagram, risks and actions in tables); retail first: a supply chain, DC, online order, return or finance
-   process goes on a retail diagram or flow with its pictograms; pictures on at least half the content slides; never two
-   slides in a row that tell their story the same way. Every build prints an EXPERT REVIEW - the skill's own
-   presentation expert, run by its scripts: act on each EXPERT line (rebuild) or say why it does not apply.
+   process goes on a retail diagram or flow with its pictograms; pictures (a flow, a timeline, a diagram, hexagons, a
+   matrix, big numbers, a chart) on at least a third of the content slides; never two slides in a row that look the
+   same (two tables, two sets of cards, two text boxes). Every build prints an EXPERT REVIEW - the skill's own
+   presentation expert, run by its scripts: act on each EXPERT line (rebuild) or say why it does not apply. A
+   `variety:` or `pictures:` line means the deck is not finished: change the sections it names (it gives the Layout:
+   line for each) and rebuild before you deliver.
 9. **Fix by rebuilding, never by hand.** To fix a FAIL change the storyboard (or the library page) and rebuild. Never edit
    a built .pptx with python-pptx or XML: it loses the template's formatting and checks. Every .pptx you deliver comes
    from `build_deck.py`, `playbook.py`, `onepager.py`, `fix_deck.py` or a pack tool; a .pptx from anywhere else goes

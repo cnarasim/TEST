@@ -22,7 +22,7 @@ order: 601
 - Exceptions made openly, with an end date
 
 ## Six principles every design must meet
-Layout: hexagons
+Layout: process list
 - Guest first: design from the guest and associate journey
 - Reuse first: reuse, then buy, then build
 - Data as an asset: one owner, one system of record

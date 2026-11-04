@@ -11,7 +11,7 @@ order: 405
 # Industry forces analysis
 
 ## Five forces shape the beauty market
-Layout: hub
+Layout: process list
 - Rivalry: specialists, mass and online chase one guest
 - New entrants: brand-direct and social commerce
 - Substitutes: salons, clinics and at-home devices

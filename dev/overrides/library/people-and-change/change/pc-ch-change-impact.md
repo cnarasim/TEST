@@ -22,7 +22,7 @@ order: 201
 - Leaders who know what their teams face
 
 ## Six dimensions of impact
-Layout: hexagons
+Layout: process list
 - Process: steps, timing, hand-offs
 - Systems: screens, devices, reports
 - Roles: responsibilities and decisions

@@ -19,12 +19,11 @@ Layout: pyramid
 - Workstreams: deliver, test and report
 
 ## Our forums
-| Forum | Chair | Members | How often | Decides |
-|---|---|---|---|---|
-| Steering committee | Sponsor | Business and technology leaders | Monthly | Scope, budget, go-live |
-| Project board | Project manager | Workstream leads | Weekly | Plan, risks, changes in tolerance |
-| Design authority | Solution architect | Leads, architects | Weekly | Design and standards |
-| Workstream meeting | Workstream lead | Team | Daily or weekly | Tasks and blockers |
+Layout: process list
+- Steering committee: decides scope, budget and go-live (Sponsor chairs · monthly)
+- Project board: decides the plan, risks and changes in tolerance (Project manager chairs · weekly)
+- Design authority: decides design and standards (Solution architect chairs · weekly)
+- Workstream meeting: clears tasks and blockers (Workstream lead chairs · daily or weekly)
 
 ## Who does what
 | Activity | Sponsor | Steering committee | Project manager | Workstream lead | Business owner |

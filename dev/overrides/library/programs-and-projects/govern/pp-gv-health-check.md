@@ -22,7 +22,7 @@ order: 308
 - A recovery plan the sponsor approves
 
 ## Six areas we rate
-Layout: hexagons
+Layout: process list
 - Scope: stable, agreed, controlled
 - Schedule: realistic, critical path known
 - Cost: forecast within tolerance

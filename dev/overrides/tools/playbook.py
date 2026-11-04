@@ -255,6 +255,109 @@ def _page_sections(md):
     return out
 
 
+SEQ_HEAD = r"(?i)\bfrom\b.+\bto\b|\bsteps?\b|\bprocess\b|\bflow\b|\blifecycle\b|\bjourney\b|\bhow (?:we|it|to)\b|\bstages?\b"
+CONTRAST = r"(?i)^(today|current|as[- ]is|before|now|old|sap|erp)$|^(target|future|to[- ]be|after|next|new)$"
+
+
+def _look(s):
+    """What a built slide looks like to the audience (None: cover, agenda, divider, closing)."""
+    src, f = s.get("source"), s.get("fills") or {}
+    if src in (1, 2, 5, 32):
+        return None
+    c = s.get("central") if isinstance(s.get("central"), dict) else None
+    if c:
+        return f"{c.get('family')} {c.get('style') or ''}".strip()
+    if isinstance(s.get("graphic"), dict):
+        return f"drawn {s['graphic'].get('kind')}"
+    named = {12: "label table", 7: "three cards", 14: "grid table", 9: "three numbers", 20: "process steps"}
+    if src in named:
+        return named[src]
+    if src == 6:
+        full = [k for k in ("text1", "text2") if any(str(x).strip() for x in (f.get(k) or []))
+                and k not in (s.get("hide") or [])]
+        return "two boxes" if len(full) == 2 else "one box"
+    return f"template slide {src}"
+
+
+def _variety_hint(sec, alt=0, avoid=""):
+    """The page line that tells a section another way (its content decides), or None. Icon rows (`process list`) for a
+    set of items, a flow for steps in order, big numbers for figures, bands for a contrast."""
+    import re
+    h, layout, kind_, items = sec
+    n = len(items)
+    if avoid.startswith("process vertical"):            # the run is icon rows already: a table or three cards instead
+        if kind_ in ("list", "cards") and n == 3:
+            return f"'{h}' as three `### Name` cards (a point or two under each)"
+        if kind_ == "list" and 4 <= n <= 8:
+            return f"'{h}' without its Layout: line (its `- Name: detail` lines become a label table)"
+        return None
+    if kind_ == "table" and 3 <= n <= 6:
+        return (f"'{h}' as `Layout: process list` above its table (icon rows: the first cell the name, the second its "
+                "line, the third its caption)")
+    if kind_ == "list" and 3 <= n <= 10:
+        if re.search(SEQ_HEAD, h):
+            return (f"'{h}' as `Layout: process {'chevrons' if n <= 6 else 'snake'}` - {n} steps in order, `- Name: detail` "
+                    "lines (a 1-3 word name each)")
+        if all(re.search(r"\b(19|20)\d\d\b|\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|Q[1-4])\b", i) for i in items):
+            return f"'{h}' as `Layout: timeline vertical` (4-7 dated lines) or `timeline storyline` (5-8)"
+        if n <= 4 and all(re.search(r"\d", i) for i in items):
+            return f"'{h}' as `Layout: kpi cards` (each line a label, its figure and what it means)"
+        if n <= 6:
+            return f"'{h}' as `Layout: process list` with `- Name: detail` lines (icon rows)"
+    if kind_ == "cards":
+        return (f"'{h}' as `Layout: process list` with `- Name: first point (second point)` lines (icon rows), or two "
+                "`### Today` / `### Target` bands if it contrasts")
+    return None
+
+
+def variety_review(spec, secs):
+    """Runs of slides that look the same, and decks with few pictures: [EXPERT line text]."""
+    import re
+    out, rows = [], []
+    for n, s in enumerate(spec.get("slides") or [], 1):
+        lk = _look(s)
+        if lk is None:
+            continue
+        t = (s.get("fills") or {}).get("title")
+        t = " ".join(t) if isinstance(t, list) else str(t or "")
+        if t.endswith(" (cont.)") and rows and rows[-1][2] == t[:-8]:
+            continue                                     # a continuation is the same slide, not a repeat
+        rows.append((n, lk, t))
+    by_head = {h: sec for sec in secs for h in [sec[0]]}
+    runs, cur = [], []
+    for r in rows:
+        if cur and r[1] == cur[-1][1]:
+            cur.append(r)
+        else:
+            if len(cur) >= 2:
+                runs.append(cur)
+            cur = [r]
+    if len(cur) >= 2:
+        runs.append(cur)
+    pair = re.compile(r"(?i)\b(current|today|as[- ]is|before|now)\b.*|\b(future|target|to[- ]be|after|next)\b")
+    asks = re.compile(r"(?i)^(decision|ask|asks|next steps?|recommendation)\s*:")
+    for run in list(runs):
+        heads = [t for _, _, t in run]
+        if len(run) == 2 and sum(bool(pair.search(t)) for t in heads) == 2:
+            runs.remove(run)                             # current and future state: the same picture on purpose
+            continue
+        later = [t for t in heads[1::2]]
+        if t_ := next((t for t in later if t in by_head and by_head[t][3] and all(asks.match(i) for i in by_head[t][3])), None):
+            later = [heads[0]]                           # the closing asks stay cards: change the slide before them
+        hints = [x for x in (_variety_hint(by_head[t], avoid=run[0][1]) for t in later if t in by_head) if x]
+        nums = f"{run[0][0]}-{run[-1][0]}" if len(run) > 2 else f"{run[0][0]} and {run[-1][0]}"
+        out.append(f"variety: slides {nums} look the same ({run[0][1]}) - the audience stops reading a repeated layout: "
+                   + ("tell " + "; ".join(hints[:2]) if hints else "give each a different Layout: line"))
+    drawn = [r for r in rows if not r[1].startswith(("label table", "three cards", "grid table", "one box", "two boxes",
+                                                      "template slide"))]
+    if len(rows) >= 5 and len(drawn) * 3 < len(rows):
+        said = {t for run in runs for _, _, t in run[1:]}
+        hints = [x for x in (_variety_hint(sec, k) for k, sec in enumerate(s_ for s_ in secs if s_[0] not in said and not s_[1])) if x]
+        out.append(f"pictures: {len(drawn)} of {len(rows)} content slides are drawn (aim for a third or more) - "
+                   + ("tell " + "; ".join(hints[:2]) if hints else "give the sections that list steps, dates or parts a Layout: line"))
+    return out
+
+
 def expert_review(spec, title, md=None):
     """Presentation Central's expert review (tools/deck_expert.py: the answer first, the ask last, the right picture for
     each message, takeaway lines, no run of text slides) on a library page, its advice in page terms, plus two checks a
@@ -289,6 +392,10 @@ def expert_review(spec, title, md=None):
                                 f"(the figure, the drop) for the box beside it ('{bad[0]}')")
             if layout or kind_ in ("bands", "table") or len(items) < 2 or h in drawn:
                 continue                               # (a Layout line or a table is the author's choice; the engine drew some itself)
+            if kind_ == "list" and 3 <= len(items) <= 10 and re.search(SEQ_HEAD, h):   # steps in order told as a list
+                page.append(f"section '{h}': {len(items)} steps in order as a list - draw them: `Layout: process "
+                            f"{'chevrons' if len(items) <= 6 else 'snake'}` with `- Name: detail` lines (a 1-3 word name each)")
+                continue
             x = {"headline": h, "table": [["", ""]] + [[i, ""] for i in items]} if kind_ == "table" else {"headline": h, "text": items}
             try:
                 sg = DX.suggest(x, k, K)
@@ -348,6 +455,7 @@ def expert_review(spec, title, md=None):
         where = sorted({n for v in held.values() for n in v})
         page.append(f"placeholders on slide{'s' if len(where) > 1 else ''} {', '.join(map(str, where[:8]))}: "
                     f"{', '.join(sorted(held)[:5])} - fill them with the user's facts, or tell the user they are placeholders")
+    page = variety_review(spec, secs) + page           # a repeated layout first: it is what the audience notices
     more = len(page) - 8
     return [head] + [f"EXPERT {l}" for l in page[:8]] + ([f"EXPERT ... {more} more: python tools/playbook.py review <page.md>"]
                                                        if more > 0 else [])

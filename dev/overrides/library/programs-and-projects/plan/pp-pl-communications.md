@@ -39,7 +39,7 @@ Layout: timeline countdown
 > Notes: example dates; leaders hear each message a few days before their teams; a how-it-is-going note follows two weeks after go-live.
 
 ## One message, many channels
-Layout: hub
+Layout: process list
 - Core message: why, what, when, where to get help
 - Leader calls: managers hear it first
 - Huddles: stores and DCs, every shift
@@ -57,7 +57,7 @@ Layout: swimlane handoffs
 - Change lead: Collects questions and feedback
 
 ## Six rules for every message
-Layout: hexagons
+Layout: process list
 - Leaders first: managers before their teams
 - Why first: the reason before the change
 - Plain words: no project jargon

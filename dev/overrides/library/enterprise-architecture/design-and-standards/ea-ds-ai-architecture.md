@@ -22,7 +22,7 @@ order: 612
 - Quality, cost and risk visible per use case
 
 ## Six building blocks of every AI solution
-Layout: hexagons
+Layout: process list
 - Data: governed sources, answers that cite them
 - Models: behind one gateway, swappable
 - Tools: least-privilege access to our systems

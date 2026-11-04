@@ -11,15 +11,10 @@ order: 304
 # Change request
 
 ## What changes and why
-### The request
-- What we are asked to add, remove or change
-- Who asks for it
-### Why
-- The business reason
-- What happens if we do not
-### Urgency
-- When the decision is needed
-- What waiting costs
+Layout: process list
+- The request: what we are asked to add, remove or change (who asks for it)
+- Why: the business reason (what happens if we do not)
+- Urgency: when the decision is needed (what waiting costs)
 
 ## Impact on scope, time, cost and risk
 | Dimension | Baseline | With the change | Difference |
@@ -30,6 +25,7 @@ order: 304
 | Risk | Medium | Medium | Testing window shorter |
 
 ## Options
+Layout: process list
 | Option | What it means | Cost | Time | Risk |
 |---|---|---|---|---|
 | Approve now | Build in this release | +$150K | None | Shorter testing |

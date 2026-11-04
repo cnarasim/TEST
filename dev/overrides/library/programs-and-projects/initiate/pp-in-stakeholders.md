@@ -39,6 +39,7 @@ Layout: matrix
 > Notes: illustrative register - keep names in the workbook, not on slides shared widely.
 
 ## How we engage each group
+Layout: process list
 | Audience | What they need to hear | Channel | How often | Owner |
 |---|---|---|---|---|
 | Executives | Progress, risks, decisions needed | Steering committee | Monthly | Sponsor |

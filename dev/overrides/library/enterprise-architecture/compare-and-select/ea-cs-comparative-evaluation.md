@@ -20,6 +20,7 @@ Layout: process numbered
 - Decide: totals and risks together
 
 ## Criteria and weights
+Layout: process list
 | Criterion | Weight | What good looks like |
 |---|---|---|
 | Functional fit | 30% | Most needs met as standard |

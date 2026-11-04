@@ -46,7 +46,7 @@ Layout: kpi cards
 > Notes: example stories - the product owner accepts against each story's criteria.
 
 ## Done means done
-Layout: hexagons
+Layout: process list
 - Built: code peer reviewed
 - Tested: automated tests pass
 - Accepted: criteria met, product owner agrees

@@ -32,7 +32,7 @@ order: 407
 > Notes: illustrative states; fill each row from the application inventory.
 
 ## Every application has one record
-Layout: hub
+Layout: process list
 - Application record: one per application
 - Owner: business and technical
 - Capability: what it supports

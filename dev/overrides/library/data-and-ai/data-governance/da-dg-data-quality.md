@@ -22,7 +22,7 @@ order: 102
 - Trust in the numbers leaders use
 
 ## Six ways data can be wrong
-Layout: hexagons
+Layout: process list
 - Complete: every required field is filled
 - Accurate: matches the real world
 - Valid: in the right format and range

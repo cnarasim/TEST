@@ -22,7 +22,7 @@ order: 201
 - One definition used by every report
 
 ## Six parts of every data product
-Layout: hexagons
+Layout: process list
 - Users: who relies on it, for which decisions
 - Questions: what it must answer
 - Sources: systems of record it draws from

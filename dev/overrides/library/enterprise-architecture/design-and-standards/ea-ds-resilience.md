@@ -11,15 +11,10 @@ order: 609
 # Resilience and disaster recovery
 
 ## What resilience covers
-### Purpose
-- Selling and fulfilling continue when parts fail
-- Recovery in a time the business agreed
-### In scope
-- Recovery tiers and targets
-- Design rules, backups and recovery tests
-### Outcome
-- Shorter outages, no lost orders
-- Proof that recovery works before we need it
+Layout: process list
+- Purpose: selling and fulfilling continue when parts fail (recovery in a time the business agreed)
+- In scope: recovery tiers and targets (design rules, backups and recovery tests)
+- Outcome: shorter outages, no lost orders (proof that recovery works before we need it)
 
 ## Tiers set the recovery targets
 | Tier | Recovery time | Data loss allowed | Examples |
@@ -29,7 +24,7 @@ order: 609
 | 3 Analysis and support | Within [n] days | Last daily backup | Reporting, collaboration |
 
 ## Six rules for resilient design
-Layout: hexagons
+Layout: process list
 - Redundant: no single point of failure
 - Isolated: one failure does not spread
 - Degrade gracefully: stores keep selling offline

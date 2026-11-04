@@ -12,7 +12,7 @@ order: 504
 # Vendor scorecard and compliance
 
 ## What we measure
-Layout: hexagons
+Layout: process list
 - Fill rate: what we ordered, delivered
 - On time: inside the delivery window
 - ASN accuracy: the notice matches the cartons

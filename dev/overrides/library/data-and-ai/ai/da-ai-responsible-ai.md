@@ -22,7 +22,7 @@ order: 302
 - A record of each decision and test
 
 ## Six principles for every AI solution
-Layout: hexagons
+Layout: process list
 - Fair: tested for unequal outcomes
 - Transparent: people know when AI is involved
 - Private: personal data used only with approval

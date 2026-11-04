@@ -50,6 +50,9 @@ Under a heading, choose ONE body:
     `- Inputs: ...`, `- Process: step, step, step` (3-7 steps), `- Outputs: ...`, `- Customers: ...`.
   - `Layout: process chevrons | numbered | arrow | cycle | snake | vertical | phases | pipeline | io | converge | diverge` -
     steps in order, `- Title: short detail` (chevrons 3-6, numbered 3-7, cycle 3-6, snake 5-10, phases 2-5, io/converge/diverge 2-5).
+    `Layout: process list` - a set that is not a sequence (paths, controls, safeguards, tests), 3-6 icon rows:
+    `- Name: detail (caption)`; it also goes above a table (a row each). Prefer it to `hexagons` and `hub`, which keep
+    the meaning in a legend away from the shapes. Never two tables or two sets of cards in a row.
     Phases: `- Prepare: rehearsals; sign-offs (T-4 weeks)`.
   - `Layout: timeline quarters | lanes | status-roadmap | phases | sprints | now-next-later | countdown | storyline | vertical | calendar`
     and `timeline template-milestones | template-callouts | template-gantt | template-roadmap` - dated lines:

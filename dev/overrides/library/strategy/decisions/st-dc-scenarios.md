@@ -13,6 +13,7 @@ order: 305
 Plan for the futures that could happen, not only the one we hope for.
 
 ## Two uncertainties matter most
+Layout: process list
 | Driver | What could happen | Certainty | Impact |
 |---|---|---|---|
 | Guest spending | Strong or cautious | Low | High |
@@ -30,6 +31,7 @@ Layout: matrix
 - Steady squeeze: cautious spending, stores stay central
 
 ## What each future means for us
+Layout: process list
 | Scenario | What it means | Our best move |
 |---|---|---|
 | Digital boom | Online wins most growth | Scale the app and same-day |

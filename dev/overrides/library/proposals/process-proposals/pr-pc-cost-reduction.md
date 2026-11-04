@@ -12,6 +12,7 @@ order: 207
 # Cost reduction proposal
 
 ## Where the money goes today
+Layout: process list
 | Cost area | Cost a year | Main driver | Owner |
 |---|---|---|---|
 | Freight and fulfilment | [amount] | Orders, miles and carton size | Supply chain |

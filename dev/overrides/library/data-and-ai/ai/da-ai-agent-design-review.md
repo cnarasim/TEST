@@ -22,7 +22,7 @@ order: 304
 - Every action traceable to a request
 
 ## Six questions for every agent
-Layout: hexagons
+Layout: process list
 - Goal: the task and when it is done
 - Tools: few, named, least-privilege access
 - Approvals: people confirm irreversible actions

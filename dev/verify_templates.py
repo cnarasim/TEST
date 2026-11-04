@@ -110,6 +110,7 @@ def build(skill, path, meta, body, render=False, keep=None):
              if "VERIFICATION INCOMPLETE" in o else "NEEDS CORRECTION"
         fails = list(dict.fromkeys(l.strip() for l in o.splitlines() if l.strip().startswith("FAIL")))
         checks = list(dict.fromkeys(l.strip()[6:] for l in o.splitlines() if l.strip().startswith("CHECK ")))
+        checks += [l.strip()[7:] for l in o.splitlines() if l.strip().startswith(("EXPERT variety:", "EXPERT pictures:"))]
         sheet = Path(d) / f"{path.stem}_validation" / "contact-sheet.png"
         if keep and sheet.exists():
             import shutil as _sh

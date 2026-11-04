@@ -38,14 +38,14 @@ Layout: process chevrons
 - Accept: sign-off, project released
 
 ## Knowledge moves in four steps
-Layout: process phases
+Layout: process numbered
 - Learn: walk-throughs; documents (Weeks 1-2)
 - Shadow: watch the project team (Weeks 3-4)
 - Reverse shadow: lead, with backup (Weeks 5-6)
 - Own: support alone; project on call (Week 7)
 
 ## What changes hands
-Layout: hub
+Layout: process list
 - Service: the solution and its users
 - Runbooks: daily, weekly and month-end tasks
 - Known errors: issues and workarounds

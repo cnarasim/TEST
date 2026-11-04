@@ -19,6 +19,7 @@ order: 106
 - Reordering for other people
 
 ## Who uses it
+Layout: process list
 | User | Need | Success looks like |
 |---|---|---|
 | Member | Reorder favourites fast | Two taps from home screen |
@@ -35,7 +36,7 @@ order: 106
 | Share a reorder list | Won't (this release) | Later |
 
 ## Non-functional needs
-Layout: hexagons
+Layout: process list
 - Fast: screen in under one second
 - Available: same as checkout
 - Secure: saved payment rules apply
