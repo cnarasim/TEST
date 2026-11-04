@@ -658,6 +658,52 @@ def build(upc, rk, out):
     #      ... and the page reader knows the name: "Layout: process list" (or rows) is a family line like the other styles
     patch(eng / "page_to_spec.py", "process (chevrons|arrow|numbered|cycle|snake|vertical|phases|pipeline|io|converge|diverge))$'",
           "process (chevrons|arrow|numbered|cycle|snake|vertical|phases|pipeline|io|converge|diverge|list|rows))$'")
+    # (1ak) no text dumps: a list of steps or points is drawn, not boxed.
+    #      - Sentences with no names (3-6, no "Label:"): icon rows, the sentence on the row - numbered down a spine under a
+    #        heading that names a sequence (journey, steps, process, from ... to ...), unnumbered otherwise. The Studio set
+    #        "Employee submits a guided purchasing request" and five more as one box of bullets or a numbered table.
+    #      - "Label: text" lines whose labels are phase words (Discover, Design, Pilot, Measure, Decide ...) or under a
+    #        sequence heading: chevrons, the label in the arrow.
+    #      - A process whose text is too long for the style asked for (chevrons, numbered: a sentence each) falls back to the
+    #        vertical rows, which hold a sentence a step, before chevrons or snake - and never to a box of bullets.
+    patch(out / "tools/flows.py",
+          "    missing = [s for s in st if not s[\"title\"]]\n",
+          "    missing = [s for s in st if not s[\"title\"]]\n"
+          "    if style == \"vertical\" and len(missing) == len(st):   # (1ak) rows with no names: the sentence is the row\n"
+          "        missing = []\n")
+    patch(out / "tools/flows.py",
+          "    tw = _in(2.7)\n    x2 = x + _in(0.2) + tw\n",
+          "    tw = _in(2.7) if any(s[\"title\"] for s in st) else 0   # (1ak) no names: the sentence takes the whole row\n"
+          "    x2 = x + _in(0.2) + tw\n")
+    patch(eng / "family_rules.py",
+          "    if unordered: st = 'vertical'\n    its = retail_items(lines)\n",
+          "    if unordered: st = 'vertical'\n    its = retail_items(lines)\n"
+          "    if word == 'process' and st == 'vertical' and its and not any(split_label(plain(l))[0] for l in lines if plain(l)):\n"
+          "        its = [{'title': '', 'text': plain(l)} for l in lines if plain(l)]   # (1ak) sentences with no names: rows of the sentence\n")
+    patch(eng / "family_rules.py",
+          "            style = 'chevrons' if len(P['steps']) <= 6 else 'snake'\n            if FL.lint({'process': P, 'style': style}): return None\n",
+          "            style = 'chevrons' if len(P['steps']) <= 6 else 'snake'\n"
+          "            if FL.lint({'process': P, 'style': style}):\n"
+          "                if len(P['steps']) <= 6 and not FL.lint({'process': dict(P, unordered=unordered), 'style': 'vertical'}):\n"
+          "                    P['unordered'] = unordered; style = 'vertical'   # (1ak) a sentence a step: the rows hold it\n"
+          "                else: return None\n")
+    # the list router: sentences -> icon rows; phase-word labels -> chevrons
+    patch(eng / "page_to_spec.py",
+          "        prev_l = next((s_ for s_ in reversed(slides) if s_.get('kind') != 'divider'), None)   # (1aj) variety\n",
+          "        seq_h = bool(re.search(r'(?i)\\bfrom\\b.+\\bto\\b|\\bsteps?\\b|\\bprocess\\b|\\bflow\\b|\\blifecycle\\b|\\bjourney\\b|\\bhow (?:we|it|to)\\b|\\bstages?\\b|\\bphases?\\b', head))\n"
+          "        prev_v = next((s_ for s_ in reversed(slides) if s_.get('kind') != 'divider'), None)\n"
+          "        rows_before = isinstance((prev_v or {}).get('central'), dict) and prev_v['central'].get('style') == 'vertical'   # never rows after rows\n"
+          "        if 3 <= len(items) <= 6 and not any(labs) and not rows_before and 'two_col' in R and all(len(x) <= 120 for x in items) \\\n"
+          "                and family_slide('fam:process vertical' if (seq_h or numbered) else 'fam:process list', ['\\u2022 ' + x for x in items], None, head, head, note2, tk, []):\n"
+          "            return True                                        # (1ak) sentences: icon rows, never a box of bullets\n"
+          "        PHASE_W = {'discover', 'define', 'design', 'build', 'test', 'pilot', 'deploy', 'launch', 'measure', 'decide', 'scale', 'plan', 'assess',\n"
+          "                   'prepare', 'adopt', 'sustain', 'analyse', 'analyze', 'implement', 'validate', 'train', 'operate', 'improve', 'learn', 'gather',\n"
+          "                   'write', 'rank', 'approve', 'order', 'receive', 'pay', 'request', 'route', 'source', 'review', 'run', 'go-live', 'hypercare'}\n"
+          "        if all(labs) and 3 <= len(labs) <= 6 and 'two_col' in R and (seq_h or all(t.strip().lower() in PHASE_W for t, _ in labs)) \\\n"
+          "                and all(len(b) <= 120 for _, b in labs) \\\n"
+          "                and family_slide('fam:process chevrons', ['\\u2022 ' + f'{t}: {b}' for t, b in labs], None, head, head, note2, tk, []):\n"
+          "            return True                                        # (1ak) named steps in order: chevrons\n"
+          "        prev_l = next((s_ for s_ in reversed(slides) if s_.get('kind') != 'divider'), None)   # (1aj) variety\n")
     # (1i) a status mark is a mark, not text: the content gate skips a run that is only a dot, square or arrow in a status
     #      colour, as the brand colours gate already does ("status colours on marks only"); the words beside it are checked
     patch(vd, '                continue\n            rpr = r.find("a:rPr", NS)\n            lat = rpr.find("a:latin", NS) if rpr is not None else None\n',

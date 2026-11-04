@@ -34,10 +34,15 @@ Layout: process diverge
 - Build: our own software
 
 ## Our sourcing principles
-Layout: process list
-- Reuse first: look in the portfolio before the market (extend before adding a new tool)
-- Buy the standard: commodity processes on standard products (change the process, not the product)
-- Build to differentiate: only where we win customers (owned by a product team)
+### Reuse first
+- Look in the portfolio before the market
+- Extend before adding a new tool
+### Buy the standard
+- Commodity processes on standard products
+- Change the process, not the product
+### Build to differentiate
+- Only where we win customers
+- Owned by a product team
 
 ## The decision
 - Decision: Buy a standard product for this capability

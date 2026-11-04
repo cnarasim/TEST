@@ -33,10 +33,15 @@ Layout: process phases
 - Decide: results; go or no-go (Week 6)
 
 ## What we learned
-Layout: process list
-- Went well: standard process fitted most scenarios (users adopted it quickly)
-- Needs work: peak volume needed tuning (one interface needs a new pattern)
-- Actions: volume test again before contract (design the interface in the build)
+### Went well
+- Standard process fitted most scenarios
+- Users adopted it quickly
+### Needs work
+- Peak volume needed tuning
+- One interface needs a new pattern
+### Actions
+- Volume test again before contract
+- Design the interface in the build
 
 ## Recommendation
 - Decision: Go - proceed to contract and implementation

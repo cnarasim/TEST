@@ -39,7 +39,7 @@ Layout: four numbers
 > Notes: illustrative figures.
 
 ## If we say no
-Layout: process list
+Layout: cards
 - Repairs: costs rise 40% a year
 - Peak: device failures in holiday weeks
 - Pickup: slower orders as volume grows

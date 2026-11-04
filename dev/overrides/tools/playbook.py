@@ -348,6 +348,12 @@ def variety_review(spec, secs):
         nums = f"{run[0][0]}-{run[-1][0]}" if len(run) > 2 else f"{run[0][0]} and {run[-1][0]}"
         out.append(f"variety: slides {nums} look the same ({run[0][1]}) - the audience stops reading a repeated layout: "
                    + ("tell " + "; ".join(hints[:2]) if hints else "give each a different Layout: line"))
+    for n, lk, t in rows:                               # a box of bullets is a text dump: say what picture it is
+        sec = by_head.get(t)
+        if lk == "one box" and sec and sec[2] == "list" and len(sec[3]) >= 3:
+            h_ = _variety_hint(sec)
+            out.append(f"text: slide {n} ('{t}') is a box of {len(sec[3])} bullets - "
+                       + (f"tell {h_}" if h_ else "split it, or give it a Layout: line (a process, icon rows, a table)"))
     drawn = [r for r in rows if not r[1].startswith(("label table", "three cards", "grid table", "one box", "two boxes",
                                                       "template slide"))]
     if len(rows) >= 5 and len(drawn) * 3 < len(rows):

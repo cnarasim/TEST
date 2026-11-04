@@ -57,8 +57,8 @@ user's content (guides/library.md, "Adapt"). Edit an existing deck: Edit mode be
    matrix, big numbers, a chart) on at least a third of the content slides; never two slides in a row that look the
    same (two tables, two sets of cards, two text boxes). Every build prints an EXPERT REVIEW - the skill's own
    presentation expert, run by its scripts: act on each EXPERT line (rebuild) or say why it does not apply. A
-   `variety:` or `pictures:` line means the deck is not finished: change the sections it names (it gives the Layout:
-   line for each) and rebuild before you deliver.
+   `variety:`, `pictures:` or `text:` line means the deck is not finished: change the sections it names (it gives the
+   Layout: line for each) and rebuild before you deliver. Never deliver a box of bullets as a slide.
 9. **Fix by rebuilding, never by hand.** To fix a FAIL change the storyboard (or the library page) and rebuild. Never edit
    a built .pptx with python-pptx or XML: it loses the template's formatting and checks. Every .pptx you deliver comes
    from `build_deck.py`, `playbook.py`, `onepager.py`, `fix_deck.py` or a pack tool; a .pptx from anywhere else goes

@@ -107,6 +107,12 @@ its drawn shapes, template run styles, fit, accessibility, type scale, plain pun
     nodes with an accent ring, one accent in the hub's centre (not black), legend names in one ink and a size larger;
     the Studio cycled four saturated colours over every shape. The library's 44 hexagon and hub sections of 3-6 items
     are icon rows now (the infographics shapes showcase keeps its shapes).
+  - No text dumps: a list of 3-6 sentences with no names becomes icon rows with the sentence on the row - numbered down
+    a spine under a heading that names a sequence (journey, steps, process, from ... to ...), unnumbered otherwise;
+    "Label: text" lines whose labels are phase words (Discover, Design, Pilot, Measure, Decide ...) become chevrons; a
+    process whose text is too long for the style asked for falls back to chevrons, then to rows (a sentence a step),
+    never to a box of bullets; never rows after rows. The review names any box of bullets left (`EXPERT text:`), and
+    SKILL.md says never to deliver one.
   - A takeaway line on a drawn slide sits under the headline box, not in it ("How we rank" overlapped "Must-haves
     first"); a caption in brackets may run to 60 characters.
   - A step named Source, Result, Outcome, Centre, Input or Output stays a step unless the style draws that role (a

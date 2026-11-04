@@ -27,10 +27,15 @@ Layout: process cycle
 - Report: to the investment board
 
 ## What we learned
-Layout: process list
-- Went well: standard process adopted quickly (integration platform reused)
-- To improve: data cleansing started too late (testing needed more business time)
-- Actions: data quality checks earlier next time (key users backfilled from the start)
+### Went well
+- Standard process adopted quickly
+- Integration platform reused
+### To improve
+- Data cleansing started too late
+- Testing needed more business time
+### Actions
+- Data quality checks earlier next time
+- Key users backfilled from the start
 
 ## The decision
 - Decision: Close the programme and hand benefits tracking to the business owner
