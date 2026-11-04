@@ -485,6 +485,13 @@ def build(upc, rk, out):
     patch(out / "tools/swimlanes.py",
           "        if two:                                         # owner team as a second, smaller line\n",
           "        if two and len(m[\"lanes\"]) > 1:                # owner team as a second, smaller line; (1ab) one lane: none\n")
+    # (1ac) an input or output of the "process io" picture keeps up to 6 words: it was cut at 4 mid-phrase ("Cost per user
+    #      per" for "Cost per user per year"); the drawing's own fit check reports one that does not fit its box
+    patch(eng / "family_rules.py",
+          "        if d['title'].strip().lower() in ('input', 'inputs'): ins.append({'title': _short(d['text'], 4), 'text': ''}); continue\n"
+          "        if d['title'].strip().lower() in ('output', 'outputs'): outs.append({'title': _short(d['text'], 4), 'text': ''}); continue\n",
+          "        if d['title'].strip().lower() in ('input', 'inputs'): ins.append({'title': _short(d['text'], 6), 'text': ''}); continue   # (1ac)\n"
+          "        if d['title'].strip().lower() in ('output', 'outputs'): outs.append({'title': _short(d['text'], 6), 'text': ''}); continue\n")
     # (1i) a status mark is a mark, not text: the content gate skips a run that is only a dot, square or arrow in a status
     #      colour, as the brand colours gate already does ("status colours on marks only"); the words beside it are checked
     patch(vd, '                continue\n            rpr = r.find("a:rPr", NS)\n            lat = rpr.find("a:latin", NS) if rpr is not None else None\n',
