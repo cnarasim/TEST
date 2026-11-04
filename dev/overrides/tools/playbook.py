@@ -721,7 +721,12 @@ def build(md, out, title=None, owner=None, classification=None, ids=()):
         why = "no renderer here" if "LibreOffice not available" in v.stdout else "to review: " + ", ".join(review[:3])
         status = ("READY" if overall.startswith("READY") else f"DRAFT - VERIFICATION INCOMPLETE ({why})"
                   if "VERIFICATION INCOMPLETE" in overall else "NEEDS CORRECTION")
-        said = [f"{status} | {out} v{ver} | {len(spec['slides'])} slides" + (f" from {', '.join(ids)}" if ids else "")]
+        try:                                           # the skill's release beside the deck's own version
+            import stamp as _ST
+            skill_v = f" | made with ULTA SlideGlam {_ST.SKILL_VERSION}"
+        except Exception:                              # noqa: BLE001
+            skill_v = ""
+        said = [f"{status} | {out} deck v{ver} | {len(spec['slides'])} slides" + (f" from {', '.join(ids)}" if ids else "") + skill_v]
         fails = [l.strip() for l in log.getvalue().splitlines() if l.strip().startswith("FAIL")]
         import re as _re                               # the engine's own warnings ("check - ..."): the assistant acts on them
         engine = list(dict.fromkeys(_re.sub(r'^"|",?$', "", l.strip()).replace("\\u2014", "-").replace("\u2014", "-")

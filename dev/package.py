@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Package the built skill as an upload-ready ZIP (the skill folder is the archive's top level) and check it.
 
-    python3 dev/package.py <built skill dir> <out dir>
+    python3 dev/package.py <built skill dir> <out dir>      -> <out dir>/<name>-<version>.zip
 
 Checks (stops on any): the folder name equals the SKILL.md `name`; exactly one SKILL.md; the description is 1-500
 characters with no angle brackets (the upload limit the skill's own self-test enforces); integrity.json pins every
@@ -38,7 +38,8 @@ def main(src, out_dir):
     if missing or wrong:
         sys.exit(f"STOP: integrity.json out of date - unpinned {missing[:3]}, changed or missing {wrong[:3]}")
     out_dir.mkdir(parents=True, exist_ok=True)
-    zp = out_dir / f"{name}.zip"
+    ver = re.search(r"^# .*\((v\d+\.\d+)", text, re.M)          # the release in the SKILL.md heading
+    zp = out_dir / (f"{name}-{ver.group(1)}.zip" if ver else f"{name}.zip")
     with zipfile.ZipFile(zp, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as z:
         for k, p in rel.items():
             already = p.suffix.lower() in (".pptx", ".png", ".jpg", ".jpeg", ".otf", ".ttf", ".zip")

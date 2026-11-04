@@ -3,12 +3,14 @@ name: ulta-slideglam
 description: Ulta Beauty PowerPoint on the approved Ulta template - new decks and slide edits, process flows, swimlanes, retail and supply chain diagrams, timelines, charts, one-pager slides, architecture slides, steering and report packs, plus a library of nearly 300 ready-made process and project decks. Use it for every Ulta deck, slide or presentation request, even when not named. Runs only its bundled scripts on the user's files.
 ---
 
-# ULTA SlideGlam (v1.0)
+# ULTA SlideGlam (v1.4 "Clear Slides")
 
 A new PowerPoint skill for Ulta Beauty, built from Presentation Central's deck engine and delivery checks (v141) and
 Deliverable Studio's Eco engine and process library (6.37.1), on Ulta's approved template. PowerPoint only: Word
 documents, Excel workbooks, HTML dashboards, sites, UI screens and ARB templates are not part of this skill (if asked, say
-so and offer the content as slides).
+so and offer the content as slides). Release v1.4 "Clear Slides": every status line ends "made with ULTA SlideGlam
+v1.4" and every deck carries it as its Producer; CHANGELOG.md lists each release and what it changed. When the user
+asks which version is installed, give that release name.
 
 ## How this skill works, and what it does not do
 - Every .pptx is built by the Python scripts in this folder: `tools/` (deck builders, checks, packs, `playbook.py` for the

@@ -24,7 +24,7 @@ from pathlib import Path
 
 DEV = Path(__file__).resolve().parent
 OVERRIDES = DEV / "overrides"
-NAME, PRODUCER, VERSION = "ulta-slideglam", "ULTA SlideGlam", "v1.0"
+NAME, PRODUCER, VERSION = "ulta-slideglam", "ULTA SlideGlam", "v1.4"   # release name: "Clear Slides" (CHANGELOG.md)
 
 # ---------------------------------------------------------------------------------------------------------------- what ships
 UPC_DROP = [   # not PowerPoint (Word, Excel, HTML dashboards and sites, UI screens, BigQuery demo) or not needed at run time
