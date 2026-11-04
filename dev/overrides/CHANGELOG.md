@@ -63,6 +63,13 @@ its drawn shapes, template run styles, fit, accessibility, type scale, plain pun
   the strong colour and the others in the light tint, larger type (the Studio drew four equal saturated blocks).
 - Swimlane steps hold 5 words: the engine shows the first 5 and drops the rest, so 150 library steps that ran longer
   ("Funds and sets the success") were rewritten; the verifier and the expert review now flag a longer step.
+- A template timeline (Gantt, roadmap, milestones, call-outs) is used only when its filler takes the data, tried first
+  on a scratch copy of the template slide; otherwise the section is drawn as the lanes timeline (any span). The Studio
+  kept the template slide with its labels emptied - a roadmap of blank bars - and the gate now fails a template
+  infographic that keeps three or more of its text shapes empty.
+- A headline computed from the data is added after the author's heading or not at all, never in its place, and a
+  timeline grouped by periods (Year 1, Q3, Wave 2) is not counted as "teams".
+- Library builds print the engine's own warnings as CHECK lines (they were only in the build log).
 - Scorecards fill both lists: "Lowlight:" / "Highlight:" lines in the page, else the page's own KPIs by status (off
   target under Lowlights). The Studio left both empty, so every scorecard kept the template's empty rows.
 - A template infographic (scorecard, OGSM, vision house, quad, funnel, donut, map) is filled on the template's own

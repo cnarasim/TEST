@@ -33,7 +33,7 @@ sys.path.insert(1, str(STUDIO))
 import process_library as LIB   # noqa: E402
 
 PY = sys.executable
-INFO_FAMILIES = ("infographic-", "template-")   # template styles filled in place (quad, funnel, donut, map, ogsm, scorecard ...)
+INFO_FAMILIES = ("infographic-", "template-", "timeline-template-")   # template styles filled in place (quad, funnel, ..., template timelines)
 
 
 def _opt(args, name, default=None):
@@ -604,11 +604,15 @@ def build(md, out, title=None, owner=None, classification=None, ids=()):
                   if "VERIFICATION INCOMPLETE" in overall else "NEEDS CORRECTION")
         said = [f"{status} | {out} v{ver} | {len(spec['slides'])} slides" + (f" from {', '.join(ids)}" if ids else "")]
         fails = [l.strip() for l in log.getvalue().splitlines() if l.strip().startswith("FAIL")]
+        import re as _re                               # the engine's own warnings ("check - ..."): the assistant acts on them
+        engine = list(dict.fromkeys(_re.sub(r'^"|",?$', "", l.strip()).replace("\\u2014", "-").replace("\u2014", "-")
+                                    for l in log.getvalue().splitlines() if "check \\u2014" in l or "check \u2014" in l))
         for l in v.stdout.splitlines():               # the gate's table rows: | check | FAIL | detail |
             cells = [c.strip() for c in l.strip().strip("|").split("|")] if l.lstrip().startswith("|") else []
             if len(cells) >= 3 and cells[1] == "FAIL":
                 fails.append(f"FAIL  {cells[0]}: {cells[2][:200]}")
         said += [f"  {l}" for l in list(dict.fromkeys(fails))[:10]] + [f"  FAIL  {p}" for p in probs[:5]]
+        said += [f"  CHECK {l}" for l in engine[:5]]
         said += expert_review(spec, title or "", md)   # Presentation Central's expert review: act on its lines, then rebuild
         pic = vd / "contact-sheet.png"
         if pic.exists():

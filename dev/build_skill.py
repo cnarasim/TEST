@@ -308,6 +308,50 @@ def build(upc, rk, out):
           '                glued = [c.get("id") for c in y.iter(f"{{{A}}}stCxn", f"{{{A}}}endCxn") if c.get("id") not in ids]\n'
           '                if glued:                        # (2c)\n'
           '                    out.append((n, 0, f"a connector is glued to shape {glued[0]}, which is not on the slide"))\n')
+    # (1r) a template timeline (Gantt, roadmap, milestones, call-outs) only when its filler takes the data: tried first on a
+    #      scratch copy of the template slide; refused (a roadmap holds 7 months or quarters, a Gantt 3 workstreams ...),
+    #      the section is drawn as the 'lanes' timeline (any span) - the Studio kept the template slide with its sample
+    #      shapes emptied, a roadmap of blank bars
+    patch(eng / "central_slides.py", "    c = {'family': fam, 'style': style, 'data': data, 'headline': head}\n",
+          "    if fam == 'timeline' and (fam, style) in TI.TEMPLATE_STYLES and not _template_takes(TI, style, data, head):   # (1r)\n"
+          "        notes = (notes + ' - ' if notes else '') + f'drawn as lanes: the plan does not fit the {style.replace(\"-\", \" \")} slide'\n"
+          "        style = 'lanes'\n"
+          "    c = {'family': fam, 'style': style, 'data': data, 'headline': head}\n")
+    patch(eng / "central_slides.py", "\ndef to_spec_slide(cs, roles=None):",
+          "\ndef _template_takes(TI, style, data, head):\n"
+          "    \"\"\"(1r) True when the template timeline's filler takes the data (tried on a scratch copy of its template slide).\"\"\"\n"
+          "    try:\n"
+          "        import brand as _B\n"
+          "        from pptx import Presentation\n"
+          "        sl = Presentation(str(_B.current().template)).slides[TI.TEMPLATE_STYLES[('timeline', style)] - 1]\n"
+          "        probs = TI.fill(sl, 'timeline', style, {'timeline': data, 'style': style, 'headline': head}) or []\n"
+          "    except Exception:                                  # noqa: BLE001  unknown: the filler decides at build time\n"
+          "        return True\n"
+          "    return not any(\"'lanes'\" in p_ or \" takes \" in p_ or \" holds \" in p_ for p_ in probs)\n"
+          "\n\ndef to_spec_slide(cs, roles=None):")
+    # (1s) a takeaway computed from the data goes after the author's heading or not at all (never in its place), and a
+    #      timeline grouped by periods (Year 1, Q3, Wave 2) does not count "teams": "3 teams, 3 tasks, milestone Dec 31"
+    #      replaced "Transition in three stages"
+    patch(eng / "family_rules.py",
+          "    return out if len(out) <= 42 else (say[:1].upper() + say[1:] if len(say) <= 42 else None)   # (1o) one line at 36 pt",
+          "    return out if len(out) <= 42 else None   # (1o) one line at 36 pt; (1s) never the count in place of the heading")
+    patch(eng / "family_rules.py",
+          "            parts = ([f'{len(groups)} teams'] if len(groups) > 1 else []) + ([f'{len(tasks)} tasks'] if tasks else [])",
+          "            periods = all(re.match(r'(?i)(year|wave|phase|stage|sprint|release|q[1-4]|h[12]|fy)\\b', str(g)) for g in groups)   # (1s)\n"
+          "            parts = ([f'{len(groups)} teams'] if len(groups) > 1 and not periods else []) + ([f'{len(tasks)} tasks'] if tasks else [])")
+    # (2d) a template infographic keeps its labels: three or more of its template slide's text shapes left with no text
+    #      fail the content gate (a filler that refused the data leaves the template's shapes empty)
+    patch(vd, '        ref = shape_facts(etree.fromstring(rz.read(rparts[src - 1]))) if src else {}\n',
+          '        ref = shape_facts(etree.fromstring(rz.read(rparts[src - 1]))) if src else {}\n'
+          '        if i in INFO and src:                          # (2d) the template infographic kept its labels\n'
+          '            had = {nv_.get("name") for sp_ in etree.fromstring(rz.read(rparts[src - 1])).iter("{%s}sp" % NS["p"])\n'
+          '                   for nv_ in [sp_.find(".//p:cNvPr", NS)] if nv_ is not None and text_of(sp_).strip()}\n'
+          '            empty = [nv_.get("name") for sp_ in x.iter("{%s}sp" % NS["p"]) for nv_ in [sp_.find(".//p:cNvPr", NS)]\n'
+          '                     if nv_ is not None and nv_.get("name") in had and sp_.find(".//p:txBody", NS) is not None\n'
+          '                     and not text_of(sp_).strip()]\n'
+          '            if len(empty) >= 3:\n'
+          '                fails.append(f"slide {i}: the template infographic kept {len(empty)} of its shapes with no text "\n'
+          '                             f"(\'{empty[0]}\' ...) - the data did not fit this layout: use a drawn style (a timeline: lanes)")\n')
     # (1i) a status mark is a mark, not text: the content gate skips a run that is only a dot, square or arrow in a status
     #      colour, as the brand colours gate already does ("status colours on marks only"); the words beside it are checked
     patch(vd, '                continue\n            rpr = r.find("a:rPr", NS)\n            lat = rpr.find("a:latin", NS) if rpr is not None else None\n',

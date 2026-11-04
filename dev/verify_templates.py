@@ -91,7 +91,7 @@ def lint(path, LIB):
     return meta, body, probs, warns
 
 
-def build(skill, path, meta, body, render=False):
+def build(skill, path, meta, body, render=False, keep=None):
     with tempfile.TemporaryDirectory(prefix="ulta-verify-") as d:
         page = Path(d) / "page.md"
         page.write_text(body, encoding="utf-8")
@@ -104,10 +104,15 @@ def build(skill, path, meta, body, render=False):
              "CRASH" if "Traceback" in o else ("DRAFT (no renderer)" if "no renderer here" in o else "DRAFT (review)") \
              if "VERIFICATION INCOMPLETE" in o else "NEEDS CORRECTION"
         fails = list(dict.fromkeys(l.strip() for l in o.splitlines() if l.strip().startswith("FAIL")))
+        checks = list(dict.fromkeys(l.strip()[6:] for l in o.splitlines() if l.strip().startswith("CHECK ")))
+        sheet = Path(d) / f"{path.stem}_validation" / "contact-sheet.png"
+        if keep and sheet.exists():
+            import shutil as _sh
+            Path(keep).mkdir(parents=True, exist_ok=True); _sh.copy2(sheet, Path(keep) / f"{path.stem}.png")
         if st in ("NOT BUILT", "CRASH"):
             fails.append(o.strip().splitlines()[-1][:300] if o.strip() else "no output")
         m = re.search(r"Standards Match (\d+)%[^-·]*(?:- fix: ([^·]+))?", o)
-        return st, fails, (m.group(1) if m else "?"), (m.group(2).strip() if m and m.group(2) else "")
+        return st, fails, (m.group(1) if m else "?"), (m.group(2).strip() if m and m.group(2) else ""), checks
 
 
 def main():
@@ -116,6 +121,7 @@ def main():
     ap.add_argument("--jobs", type=int, default=3); ap.add_argument("--lint-only", action="store_true")
     ap.add_argument("--strict", action="store_true", help="size and dash warnings fail too (for new pages)")
     ap.add_argument("--render", action="store_true", help="render each deck (LibreOffice): READY instead of DRAFT")
+    ap.add_argument("--keep", help="folder to keep each deck's contact sheet in (<id>.png), for the visual review")
     a = ap.parse_args()
     sys.path.insert(0, f"{a.skill}/studio")
     import process_library as LIB
@@ -127,12 +133,12 @@ def main():
     results = {}
     if not a.lint_only:
         with cf.ThreadPoolExecutor(a.jobs) as ex:
-            futs = {ex.submit(build, a.skill, f, meta, body, a.render): f for f, meta, body, _, _w in linted if meta}
+            futs = {ex.submit(build, a.skill, f, meta, body, a.render, a.keep): f for f, meta, body, _, _w in linted if meta}
             for fu in cf.as_completed(futs):
                 results[futs[fu]] = fu.result()
     bad = 0
     for f, meta, body, probs, warns in linted:
-        st, fails, pct, fix = results.get(f, ("not built", [], "?", ""))
+        st, fails, pct, fix, checks = results.get(f, ("not built", [], "?", "", []))
         ok = not probs and (a.lint_only or (not fails and st in ("READY", "DRAFT (no renderer)", "DRAFT (review)")))
         if a.strict:
             ok, probs = ok and not warns, probs + warns
@@ -145,6 +151,8 @@ def main():
             print(f"    warn: {w}")
         for l in fails[:12]:
             print(f"    {l[:240]}")
+        for l in checks[:6]:
+            print(f"    check: {l[:240]}")
     print(f"{len(files)} template(s), {bad} to fix")
     return 1 if bad else 0
 
