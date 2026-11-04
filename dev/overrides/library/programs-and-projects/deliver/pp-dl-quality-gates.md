@@ -56,12 +56,12 @@ Layout: timeline template-milestones
 
 ## How a gate review runs
 Layout: swimlane handoffs
-- Workstream lead: Sends evidence a week ahead
+- Workstream lead: Sends evidence early
 - Quality lead: Checks it against the criteria
 - Gate board: Criteria met?
 - Gate board: If yes, passes, conditions dated
 - Sponsor: If no, decides waiver or hold
-- Quality lead: Logs the decision and conditions
+- Quality lead: Logs the decision
 
 ## Quality we measure at every gate
 | Measure | Target | Source |

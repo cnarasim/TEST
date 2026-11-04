@@ -23,13 +23,13 @@ order: 101
 
 ## Finance sets the frame, merchants fill it
 Layout: swimlane handoffs
-- Finance: Sets top-down sales, margin targets
-- Merch planner: Builds monthly category plans
+- Finance: Sets top-down targets
+- Merch planner: Builds category plans
 - Merch planner: Plan meets the target?
 - Merch planner: If yes, submit for sign-off
 - Merch planner: If no, rebalance categories
 - Merchant: Buys within open-to-buy
-- Merch planner: Re-forecasts in season
+- Merch planner: Updates the forecast
 
 ## The systems and data it runs on
 | Step | What the system does | Records it keeps |
@@ -40,7 +40,7 @@ Layout: swimlane handoffs
 | Purchases | Buyers commit the plan on purchase orders | Purchase orders |
 | Re-forecast | In-season versions with the latest trend | Plan vs actual |
 
-## Six planning steps turn targets into product on the shelf
+## Six steps take targets to the shelf
 Layout: retail merchandise-planning
 
 ## Controls and exceptions

@@ -26,10 +26,10 @@ order: 503
 Layout: swimlane handoffs
 - Merchant: Selects brand, agrees terms
 - Vendor set-up: Creates vendor and items
-- Planning: Allocates opening inventory
-- Space planning: Adds the brand to planograms
+- Planning: Allocates first stock
+- Planning: Adds the brand to planograms
 - Marketing: Plans the launch campaign
-- Merchant: Ready for the launch date?
+- Merchant: Ready for launch?
 - Stores: If yes, sets fixtures, opens sales
 - Merchant: If no, moves launch, tells the brand
 

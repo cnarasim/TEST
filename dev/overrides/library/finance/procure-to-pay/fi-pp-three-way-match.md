@@ -40,7 +40,7 @@ Layout: swimlane handoffs
 | Release blocks | Resolved invoices released for payment | Payment block status |
 | Received-not-invoiced | Uninvoiced receipts cleared or accrued | Accrual account |
 
-## Three documents must agree before a vendor is paid
+## Three documents must agree before payment
 Layout: retail three-way-match
 
 ## Controls and exceptions

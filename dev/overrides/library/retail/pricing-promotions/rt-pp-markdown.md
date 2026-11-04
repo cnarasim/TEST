@@ -21,7 +21,7 @@ order: 203
 - Stores clear before the next season arrives
 - Markdown spend inside the budget
 
-## Merchants decide markdowns, stores re-ticket
+## Merchants set markdowns, stores re-ticket
 Layout: swimlane handoffs
 - Analyst: Flags slow sellers
 - Merchant: Proposes the markdown
@@ -40,7 +40,7 @@ Layout: swimlane handoffs
 | Valuation | Stock value adjusted where the policy says so | Revaluation posting |
 | Disposition | What is left returns to the vendor or is donated | Return or disposal |
 
-## Five steps take a markdown from decision to shelf
+## Five steps take a markdown to the shelf
 Layout: retail markdown
 
 ## Controls and exceptions

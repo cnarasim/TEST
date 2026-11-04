@@ -21,7 +21,7 @@ order: 501
 - Loads tendered and accepted before cut-off
 - Freight invoices paid as calculated
 
-## Planners build loads, carriers accept and deliver
+## Planners build loads, carriers deliver
 Layout: swimlane handoffs
 - Transport planner: Builds loads from deliveries
 - Transport planner: Tenders to the carrier

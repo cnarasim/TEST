@@ -19,13 +19,13 @@ Layout: cards
 
 ## Now, next, later
 Layout: timeline now-next-later
-- Smarter search: Jan 2027 – Mar 2027 (Find)
-- Saved lists: Feb 2027 – Apr 2027 (Find)
-- One-tap reorder: Apr 2027 – Jun 2027 (Buy)
-- Pickup slots: May 2027 – Jul 2027 (Buy)
-- Member challenges: Aug 2027 – Oct 2027 (Return)
-- Personal routines: Oct 2027 – Dec 2027 (Return)
-> Notes: the horizons follow today's date; items move left as they are funded and staffed.
+- Smarter search: Jan 2027 – Mar 2027 (Now)
+- Saved lists: Feb 2027 – Apr 2027 (Now)
+- One-tap reorder: Apr 2027 – Jun 2027 (Next)
+- Pickup slots: May 2027 – Jul 2027 (Next)
+- Member challenges: Aug 2027 – Oct 2027 (Later)
+- Personal routines: Oct 2027 – Dec 2027 (Later)
+> Notes: Now is funded and staffed, Next is planned, Later is the idea list; items move left as they are funded and staffed.
 
 ## Quarter by quarter
 Layout: timeline quarters

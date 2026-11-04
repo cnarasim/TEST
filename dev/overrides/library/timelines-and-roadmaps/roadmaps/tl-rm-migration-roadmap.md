@@ -12,9 +12,9 @@ order: 106
 
 ## Waves on the timeline
 Layout: timeline quarters
-- Wave 1 finance and procurement: Jan 2027 to Jun 2027 (Finance)
-- Wave 2 inventory and DCs: Apr 2027 to Oct 2027 (Supply chain)
-- Wave 3 stores and channels: Sep 2027 to Mar 2028 (Retail)
+- Wave 1 finance, procurement: Jan 2027 to Jun 2027 (Finance)
+- Wave 2 inventory, DCs: Apr 2027 to Oct 2027 (Supply chain)
+- Wave 3 stores, channels: Sep 2027 to Mar 2028 (Retail)
 - Old system switched off: Jun 30, 2028 (Technology)
 > Notes: example dates; nothing cuts over in the holiday freeze.
 

@@ -47,7 +47,7 @@ Layout: timeline quarters
 - Integration platform live: Jan 2027 to Jun 2027 (Integration)
 - Data platform, phase 1: Mar 2027 to Sep 2027 (Data)
 - Product teams for commerce: Apr 2027 to Jun 2027 (Delivery)
-- Data center exit, wave 1: Jul 2027 to Dec 2027 (Infrastructure)
+- First data center exit: Jul 2027 to Dec 2027 (Infrastructure)
 - Zero trust access: Sep 2027 to Mar 2028 (Security)
 > Notes: example dates; keep one line per deliverable with its team in brackets.
 

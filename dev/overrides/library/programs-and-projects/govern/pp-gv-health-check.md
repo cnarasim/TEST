@@ -78,4 +78,4 @@ Layout: swimlane handoffs
 - Sponsor: Business case still sound?
 - Sponsor: If yes, approves the new baseline
 - Steering committee: If no, decides to pause or stop
-- Project manager: Reports weekly against the plan
+- Project manager: Reports weekly on plan

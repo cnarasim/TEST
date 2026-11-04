@@ -33,12 +33,13 @@ Layout: hexagons
 
 ## How compliance works
 Layout: swimlane handoffs
-- DC: Records receipts against the ASN
-- Supply chain: Measures each vendor monthly
+- DC: Records ASN receipts
+- Supply chain: Scores vendors monthly
 - Supply chain: Below target?
-- Merchant: If yes, shares scorecard, agrees a fix
-- Vendor compliance: Charges repeat breaches per guide
-- Brand partner: Accepts or disputes with evidence
+- Merchant: If yes, agrees a fix plan
+- Supply chain: If no, files the scorecard
+- Vendor compliance: Charges repeat breaches
+- Brand partner: Accepts or disputes
 
 ## Compliance rules and charges
 | Rule | What it means | Charge |

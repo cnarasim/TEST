@@ -28,7 +28,7 @@ Layout: swimlane handoffs
 - Care agent: Past the delivery promise?
 - Care agent: If yes, reship or refund
 - Care agent: If no, share tracking and ETA
-- Care agent: Adds an appeasement by rule
+- Care agent: Offers a goodwill credit
 - Logistics: Files the carrier claim
 
 ## Systems and data for order care

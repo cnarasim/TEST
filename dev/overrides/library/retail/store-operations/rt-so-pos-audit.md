@@ -21,7 +21,7 @@ order: 303
 - Sales and stock posted every night
 - Cash and card tenders reconciled per store
 
-## POS posts overnight, sales audit fixes the morning exceptions
+## POS posts at night, audit fixes exceptions
 Layout: swimlane handoffs
 - POS: Closes the day and uploads
 - Interface: Posts sales and tenders
@@ -40,7 +40,7 @@ Layout: swimlane handoffs
 | Monitor | Stores posted and messages in error | Interface monitor |
 | Reprocess | Corrected transactions posted again | Error queue |
 
-## Three sources must agree before the day is closed
+## Three sources agree before the day closes
 Layout: process converge
 - Sales: register transactions
 - Stock: goods movements

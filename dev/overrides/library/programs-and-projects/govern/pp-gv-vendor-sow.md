@@ -50,12 +50,12 @@ Layout: process chevrons
 
 ## How a deliverable is accepted
 Layout: swimlane handoffs
-- Partner: Submits the deliverable with evidence
+- Partner: Submits the deliverable
 - Reviewer: Checks it against the criteria
 - Business owner: Criteria met?
 - Business owner: If yes, signs the acceptance
 - Partner: If no, fixes it by the date
-- Vendor manager: Releases the milestone payment
+- Vendor manager: Releases the payment
 
 ## Partner performance
 | Measure | Target | Last month |

@@ -21,7 +21,7 @@ order: 302
 - Store book stock that replenishment can trust
 - Shrink by cause, store and department
 
-## Stores count, loss prevention reads the result
+## Stores count, loss prevention reviews
 Layout: swimlane handoffs
 - Inventory control: Schedules the store count
 - Store team: Counts with handhelds
@@ -40,7 +40,7 @@ Layout: swimlane handoffs
 | Value of shrink | Shrink by store, department and cause | Shrink report |
 | Follow-up | Action plans for high-shrink stores | Loss prevention case |
 
-## Five steps turn a physical count into accurate stock
+## Five steps turn counts into accurate stock
 Layout: retail inventory-count
 
 ## Controls and exceptions

@@ -36,8 +36,7 @@ Layout: timeline countdown
 - What changes: Aug 23, 2027 (All teams)
 - Get ready: Oct 4, 2027 (Stores and DCs)
 - We are live: Nov 8, 2027 (Everyone)
-- How it is going: Nov 22, 2027 (Everyone)
-> Notes: example dates; leaders hear each message a few days before their teams.
+> Notes: example dates; leaders hear each message a few days before their teams; a how-it-is-going note follows two weeks after go-live.
 
 ## One message, many channels
 Layout: hub

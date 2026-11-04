@@ -21,7 +21,7 @@ order: 301
 - A clean order ready for delivery and billing
 - One connected history from quote to cash
 
-## Customer service owns the order from PO to release
+## Customer service owns orders to release
 Layout: swimlane handoffs
 - Customer: Sends the order (EDI 850)
 - Customer service: Creates the sales order

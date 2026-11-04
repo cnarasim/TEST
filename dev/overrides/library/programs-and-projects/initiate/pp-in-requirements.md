@@ -67,10 +67,10 @@ Layout: hexagons
 
 ## How scope is controlled
 Layout: swimlane handoffs
-- Requester: Raises a need and reason
-- Business analyst: Writes it, checks for duplicates
-- Process owner: Ranks it against the baseline
-- Project board: Inside the agreed scope?
+- Requester: Raises a need
+- Business analyst: Writes the requirement
+- Process owner: Ranks it on the backlog
+- Project board: In agreed scope?
 - Project board: If yes, adds it to the backlog
 - Steering committee: If no, decides it as a change
 

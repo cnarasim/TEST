@@ -68,7 +68,7 @@ Layout: swimlane handoffs
 - Process owner: Can we change the process?
 - Process owner: If yes, adopts the standard way
 - Design authority: If no, reviews options and effort
-- Steering committee: Approves extensions over tolerance
+- Steering committee: Approves big extensions
 - Workshop lead: Updates backlog and design
 
 ## Signed off when

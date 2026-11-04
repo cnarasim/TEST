@@ -21,7 +21,7 @@ order: 401
 - More orders filled complete and on time
 - Lower split shipments and cancellations
 
-## The order routes itself, stores pick the rest
+## Orders route automatically, stores pick
 Layout: swimlane handoffs
 - Guest: Places the order online
 - Order management: Picks the best source
@@ -40,7 +40,7 @@ Layout: swimlane handoffs
 | Ship from DC | The WMS picks and ships the parcel | Shipment, tracking number |
 | Settle | Payment captured when the order ships or is collected | Invoice, payment capture |
 
-## One online order can reach the guest four ways
+## An online order reaches guests four ways
 Layout: retail omnichannel-fulfilment
 
 ## Controls and exceptions

@@ -21,7 +21,7 @@ order: 402
 - A monthly P&L for every store
 - Actions on the stores and categories that lag
 
-## Finance builds the P&L, operations acts on it
+## Finance builds the P&L, stores act on it
 Layout: swimlane handoffs
 - Subledgers: Post sales, costs and expenses
 - Cost accounting: Allocates shared costs

@@ -21,7 +21,7 @@ order: 103
 - Accruals that match what will be collected
 - Settlements issued on schedule
 
-## Merchants agree, finance accrues and collects
+## Merchants agree, finance accrues and bills
 Layout: swimlane handoffs
 - Merchant: Agrees funding with the vendor
 - Vendor funds team: Creates the rebate agreement

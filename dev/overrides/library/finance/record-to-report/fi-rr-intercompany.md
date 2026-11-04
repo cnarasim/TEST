@@ -21,7 +21,7 @@ order: 303
 - Intercompany balances that agree every month
 - No late surprises at consolidation
 
-## Both entities post, finance matches and eliminates
+## Both entities post, finance eliminates
 Layout: swimlane handoffs
 - Selling entity: Bills the intercompany sale
 - Buying entity: Posts the intercompany invoice
@@ -40,7 +40,7 @@ Layout: swimlane handoffs
 | Reconcile | Differences resolved before the close | Reconciliation by partner |
 | Eliminate | Balances eliminated at consolidation | Elimination entries |
 
-## Three documents must agree before eliminating
+## Three documents agree before elimination
 Layout: process converge
 - Seller invoice: revenue and receivable
 - Buyer invoice: cost and payable

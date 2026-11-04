@@ -21,7 +21,7 @@ order: 402
 - Refunds in days, not weeks
 - Every returned unit has a decision
 
-## Stores refund, the returns centre decides what happens next
+## Stores refund, the returns centre decides
 Layout: swimlane handoffs
 - Guest: Starts a return
 - Store team: Receives the item and refunds
@@ -40,7 +40,7 @@ Layout: swimlane handoffs
 | Return to vendor | Vendor returns shipped against the agreement | Vendor return, claim |
 | Disposal | Unsellable items written off with a reason | Write-off posting |
 
-## A return takes seven steps to restock or vendor credit
+## Seven steps to restock or credit a return
 Layout: retail returns
 
 ## Controls and exceptions

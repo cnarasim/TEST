@@ -12,12 +12,12 @@ order: 105
 
 ## Capabilities by horizon
 Layout: timeline now-next-later
-- Unified guest profile: Jan 2027 to Mar 2027 (Data)
-- Store pickup scheduling: Feb 2027 to May 2027 (Stores)
-- Automated store replenishment: Apr 2027 to Sep 2027 (Supply chain)
-- Services booking in the app: Jun 2027 to Oct 2027 (Services)
-- DC automation phase 1: Jan 2028 to Jun 2028 (Supply chain)
-> Notes: example items and dates; horizons follow today's date and items move left as they are funded and staffed.
+- Unified guest profile: Jan 2027 to Mar 2027 (Now)
+- Store pickup scheduling: Feb 2027 to May 2027 (Now)
+- Automated store replenishment: Apr 2027 to Sep 2027 (Next)
+- Services booking in the app: Jun 2027 to Oct 2027 (Next)
+- DC automation phase 1: Jan 2028 to Jun 2028 (Later)
+> Notes: example items and dates; Now is funded and staffed, Next is planned, Later is the idea list - items move left as they are funded.
 
 ## Each capability has an outcome and owner
 | Capability | Outcome | Owner |

@@ -44,30 +44,41 @@ Under a heading, choose ONE body:
 - **A Layout line** (exact spelling) over bullet lines:
   - `Layout: swimlane handoffs` - who does what. Lines `- Role: step`, a step 1-5 words (verb and object: the engine shows
     only the first 5), roles reused (2-4 roles, 5-8 lines). A decision is
-    a line ending with `?`, followed by `- Role: If yes, ...` and `- Role: If no, ...`. Other swimlane styles:
-    `swimlane sipoc`, `swimlane lanes`, `swimlane columns`, `swimlane phased`, `swimlane blueprint`, `swimlane timed`, `swimlane systems`.
+    a line ending with `?`, followed by `- Role: If yes, ...` and `- Role: If no, ...` (both). 2-5 roles: merge teams that
+    work together into one lane. Other swimlane styles: `swimlane lanes`, `swimlane columns`, `swimlane phased`,
+    `swimlane blueprint`, `swimlane timed`, `swimlane systems`, and `swimlane sipoc` over five lines: `- Suppliers: a, b`,
+    `- Inputs: ...`, `- Process: step, step, step` (3-7 steps), `- Outputs: ...`, `- Customers: ...`.
   - `Layout: process chevrons | numbered | arrow | cycle | snake | vertical | phases | pipeline | io | converge | diverge` -
     steps in order, `- Title: short detail` (chevrons 3-6, numbered 3-7, cycle 3-6, snake 5-10, phases 2-5, io/converge/diverge 2-5).
     Phases: `- Prepare: rehearsals; sign-offs (T-4 weeks)`.
   - `Layout: timeline quarters | lanes | status-roadmap | phases | sprints | now-next-later | countdown | storyline | vertical | calendar`
     and `timeline template-milestones | template-callouts | template-gantt | template-roadmap` - dated lines:
     `- Pilot in 40 stores: Apr 2027 to Jun 2027 (Stores)`, `- Go-live: Sep 6, 2027`, `- Q2 2027: Pilot`. Write a date range
-    with "to" (the engine reads it), never with a dash.
+    with "to" (the engine reads it), never with a dash. The closing `(...)` is the team or lane (1-3 words); a longer
+    one is the item's detail. `now-next-later`: put `(Now)`, `(Next)` or `(Later)` on each line (the columns do not
+    follow today's date). `countdown`: the gates come before the go-live, which is the last line. `phases`: 3-6 ranges.
+    `storyline` 5-8 events, `vertical` 4-7. `template-milestones`: 2-9 events within 7 quarters, names of 1-3 short
+    words; a plan the template slide cannot hold is drawn as `lanes` (best over 2-24 months).
   - `Layout: retail <starter>` with NO lines below (a ready-drawn retail diagram): cross-dock, dc-operations, import-flow,
     inbound-to-dc, inventory-count, markdown, merchandise-planning, month-end-close, omnichannel-fulfilment, order-to-cash,
     procure-to-pay, record-to-report, returns, store-replenishment, supply-chain, supply-chain-cross-dock, three-way-match,
     vendor-onboarding. Or `Layout: retail network | dc-flow | cross-dock | fulfilment | document-flow` over `- Title: text (Owner)` lines.
   - Numbers and strategy: `four numbers`, `kpi cards`, `scorecard`, `ranking`, `donut`, `rings`, `bubbles`, `treemap`,
     `sankey`, `slope`, `waffle`, `bullet`, `gantt`, `matrix`, `hexagons`, `pyramid`, `hub`, `cards`, `priorities house`,
-    `OGSM`, `template funnel`. Find an existing template that uses the layout (`grep -rl "Layout: matrix" <built skill>/library`)
+    `OGSM`, `template funnel` (four lines `- Stage: detail`, a 1-3 word stage and its detail for the box beside it).
+    Find an existing template that uses the layout (`grep -rl "Layout: matrix" <built skill>/library`)
     and copy its line format exactly.
 - `> Notes: ...` under a section goes to the speaker notes (detail, caveats, "example dates").
 
 ## Size rules (the gate holds the template's type sizes: 36 pt headlines, 14-24 pt cards, 16 pt tables)
-- `## Heading` at most 42 characters (aim for 30-38). `# Title` at most 40.
+- `## Heading` at most 42 characters (aim for 30-38; a longer one prints smaller than the deck's others and fails the
+  lint). `# Title` at most 40. A `priorities house` heading at most 20 (it sits beside the slide's artwork).
 - Card bullet (under `###`) at most 52 characters; 2 bullets per card; 2-3 cards.
-- Tables: at most 5 data rows; first column at most 30 characters, other cells at most 64 (aim for 30-50).
-- Swimlane step at most 5 words (and 40 characters); process / timeline line at most 70 (title part 1-3 words).
+- Tables: 4 data rows of up to two lines, or 5-6 rows of one line (about 30 characters a cell); more continues on a
+  "(cont.)" slide. First column at most 30 characters, other cells at most 64.
+- Swimlane step at most 5 words and about 24 characters, no word over 10 letters ("statistical", "appointment" break
+  in the box); a decision about 20 characters. Process / timeline line at most 70 (title part 1-3 words; a single
+  title word over 10 letters does not fit a chevron). Scorecard KPI names at most 18 characters.
 - Matrix (2 x 2): `- Name: <row words>, <column words> - action`, the first line the quadrant to act on (it stands out).
   The same row words on lines 1-2 and 3-4 and the same column words on lines 1 and 3, 2 and 4 become the axis labels.
 - Never repeat the same value across one table row unless it is a rating word (High/Medium/Low, Strong/Weak, Yes/No ...).

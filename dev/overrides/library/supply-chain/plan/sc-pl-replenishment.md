@@ -21,7 +21,7 @@ order: 103
 - Store orders created without a person
 - Stock in line with sales and shelf capacity
 
-## The system orders, people manage exceptions
+## The system orders, people work exceptions
 Layout: swimlane handoffs
 - POS: Posts yesterday's sales
 - Replenishment run: Calculates the order quantity

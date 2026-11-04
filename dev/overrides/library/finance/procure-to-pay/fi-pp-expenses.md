@@ -24,7 +24,7 @@ order: 106
 ## Employees claim, managers approve, AP pays
 Layout: swimlane handoffs
 - Employee: Submits receipts for expenses
-- Manager: Expenses within policy?
+- Manager: Within policy?
 - Manager: If yes, approve the report
 - Employee: If no, fix or explain the item
 - Expense auditor: Audits a risk-based sample

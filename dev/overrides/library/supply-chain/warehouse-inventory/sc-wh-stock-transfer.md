@@ -21,7 +21,7 @@ order: 405
 - Stock in transit visible and valued
 - Receipt closes the transfer every time
 
-## The sending site ships, the receiving site closes the loop
+## One site ships, the other closes the loop
 Layout: swimlane handoffs
 - Planner: Creates the transfer order
 - Sending site: Creates the delivery

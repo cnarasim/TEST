@@ -52,8 +52,7 @@ Layout: timeline countdown
 - Early access: Aug 23, 2027 (Champions)
 - Champions certified: Sep 24, 2027 (Trainers)
 - Go-live support: Nov 8, 2027 (Champions)
-- Network review: Jan 14, 2028 (Change lead)
-> Notes: example dates; recruit champions at least three months before go-live.
+> Notes: example dates; recruit champions at least three months before go-live and review the network in January.
 
 ## How feedback flows
 Layout: swimlane handoffs
@@ -62,7 +61,7 @@ Layout: swimlane handoffs
 - Champion: If yes, answers and shares the tip
 - Change lead: If no, routes it to the project
 - Project team: Answers or fixes it
-- Change lead: Shares answers with all champions
+- Change lead: Shares answers widely
 
 ## Is the network working
 | Measure | Target | Source |

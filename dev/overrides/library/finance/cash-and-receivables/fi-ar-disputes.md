@@ -40,7 +40,7 @@ Layout: swimlane handoffs
 | Write-off | Small balances written off within limits | Write-off posting |
 | Root cause | Reason codes reported every month | Case reasons |
 
-## Five steps from short payment to closed case
+## Five steps from short pay to closed case
 Layout: process vertical
 - Log: case from the payment
 - Route: to the owning team

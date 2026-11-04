@@ -21,7 +21,7 @@ order: 401
 - An approved budget loaded for reporting
 - A forecast leaders trust
 
-## FP&A runs the cycle, the business owns the numbers
+## Owners set numbers, FP&A runs the cycle
 Layout: swimlane handoffs
 - FP&A: Sets the targets and drivers
 - Store and category leads: Submit their plans

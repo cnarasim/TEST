@@ -40,7 +40,7 @@ Layout: swimlane handoffs
 | Bank file | Approved payments sent as a bank file | Payment file |
 | Checks | Issued checks recorded for positive pay | Check register |
 
-## Five steps from open item to cleared payment
+## Five steps from open item to payment
 Layout: process chevrons
 - Select: due open items
 - Propose: payment run

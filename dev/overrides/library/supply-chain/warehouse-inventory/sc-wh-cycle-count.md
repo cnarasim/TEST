@@ -43,7 +43,7 @@ Layout: swimlane handoffs
 | Post differences | Approved differences adjust stock and the ledger | Inventory adjustment, ledger posting |
 | Root cause | Each large difference gets a cause code | Difference reason |
 
-## Five steps turn a physical count into accurate stock
+## Five steps turn counts into accurate stock
 Layout: retail inventory-count
 
 ## Controls and exceptions

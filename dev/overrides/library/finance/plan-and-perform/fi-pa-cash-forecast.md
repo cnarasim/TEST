@@ -23,7 +23,7 @@ order: 405
 
 ## Teams supply the flows, treasury decides
 Layout: swimlane handoffs
-- Business teams: Submit expected receipts and payments
+- Business teams: Submit expected cash
 - Treasury analyst: Builds the 13-week forecast
 - Treasury analyst: Cash above the minimum?
 - Treasury analyst: If yes, invest or pay down debt

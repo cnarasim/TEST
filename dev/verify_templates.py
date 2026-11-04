@@ -67,8 +67,8 @@ def lint(path, LIB):
         flush_table()
         if s.startswith("## "):
             section, layout, in_card = s[3:].strip(), None, False
-            if len(section) > LIMITS["heading"]:
-                warns.append(f"slide heading over {LIMITS['heading']} chars: '{section}' ({len(section)})")
+            if len(section) > LIMITS["heading"]:            # a longer headline prints smaller than the deck's others
+                probs.append(f"slide heading over {LIMITS['heading']} chars: '{section}' ({len(section)})")
         elif s.startswith("### "):
             in_card = True
         elif s.lower().startswith("layout:"):
@@ -82,6 +82,11 @@ def lint(path, LIB):
                     probs.append(f"'{section}': swimlane step over 5 words (the slide would show only the first 5): '{step}'")
                 if len(step) > LIMITS["swim"]:
                     warns.append(f"'{section}': swimlane step over {LIMITS['swim']} chars: '{step[:45]}...'")
+            elif layout == "template funnel":                # the template's funnel: the stage in the layer, its detail
+                stage, _, det = item.partition(":")          # in the box beside it (an empty box is a FAIL)
+                if not det.strip() or len(stage.split()) > 3:
+                    probs.append(f"'{section}': template funnel line not 'Stage: detail' (a 1-3 word stage, the detail "
+                                 f"beside it): '{item}'")
             elif layout:
                 if len(item) > LIMITS["line"]:
                     warns.append(f"'{section}': line over {LIMITS['line']} chars: '{item[:45]}...'")

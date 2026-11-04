@@ -21,7 +21,7 @@ order: 301
 - Store stock correct after every delivery
 - Claims raised while the evidence is fresh
 
-## Stores check in, the DC answers discrepancies
+## Stores check in, the DC fixes differences
 Layout: swimlane handoffs
 - DC: Ships with an ASN
 - Store team: Scans cartons at the door

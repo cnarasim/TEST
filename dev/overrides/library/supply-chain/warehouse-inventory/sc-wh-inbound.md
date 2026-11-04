@@ -21,7 +21,7 @@ order: 401
 - Stock available within hours of arrival
 - Differences found at the door, not in the aisle
 
-## Receiving turns trailers into available stock
+## Receiving turns trailers into stock
 Layout: swimlane handoffs
 - Vendor: Sends ASN, books a dock
 - Yard: Checks the trailer in

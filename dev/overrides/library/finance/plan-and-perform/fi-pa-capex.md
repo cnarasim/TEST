@@ -23,7 +23,7 @@ order: 403
 
 ## Sponsors propose, the committee decides
 Layout: swimlane handoffs
-- Project sponsor: Submits request and business case
+- Project sponsor: Submits a business case
 - FP&A: Reviews returns and plan fit
 - Capital committee: Return clears the hurdle rate?
 - Capital committee: If yes, approve the budget

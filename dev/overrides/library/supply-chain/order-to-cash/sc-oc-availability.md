@@ -21,7 +21,7 @@ order: 303
 - Confirmed dates the DC can keep
 - Scarce stock goes to the most important orders
 
-## Supply planners decide who gets scarce stock
+## Planners decide who gets scarce stock
 Layout: swimlane handoffs
 - Sales order: Requests quantity and date
 - ATP check: Checks stock and receipts

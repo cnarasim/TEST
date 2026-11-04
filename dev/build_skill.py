@@ -327,18 +327,21 @@ def build(upc, rk, out):
           "        probs = TI.fill(sl, 'timeline', style, {'timeline': data, 'style': style, 'headline': head}) or []\n"
           "    except Exception:                                  # noqa: BLE001  unknown: the filler decides at build time\n"
           "        return True\n"
-          "    return not any(\"'lanes'\" in p_ or \" takes \" in p_ or \" holds \" in p_ for p_ in probs)\n"
+          "    return not probs                                  # any problem (over capacity, a label too long): not taken\n"
           "\n\ndef to_spec_slide(cs, roles=None):")
-    # (1s) a takeaway computed from the data goes after the author's heading or not at all (never in its place), and a
-    #      timeline grouped by periods (Year 1, Q3, Wave 2) does not count "teams": "3 teams, 3 tasks, milestone Dec 31"
-    #      replaced "Transition in three stages"
+    # (1s) a takeaway computed from the data goes after the author's heading or not at all (never in its place), and it
+    #      states a fact from the data (the last milestone and its date, the largest share, the leader), never a count:
+    #      "3 teams, 3 tasks, milestone Dec 31" replaced "Transition in three stages", and "What comes next: 2 teams,
+    #      3 tasks" or "Order to cash: 8 steps, 4 teams" tell the audience nothing the slide does not show
     patch(eng / "family_rules.py",
           "    return out if len(out) <= 42 else (say[:1].upper() + say[1:] if len(say) <= 42 else None)   # (1o) one line at 36 pt",
           "    return out if len(out) <= 42 else None   # (1o) one line at 36 pt; (1s) never the count in place of the heading")
     patch(eng / "family_rules.py",
           "            parts = ([f'{len(groups)} teams'] if len(groups) > 1 else []) + ([f'{len(tasks)} tasks'] if tasks else [])",
-          "            periods = all(re.match(r'(?i)(year|wave|phase|stage|sprint|release|q[1-4]|h[12]|fy)\\b', str(g)) for g in groups)   # (1s)\n"
-          "            parts = ([f'{len(groups)} teams'] if len(groups) > 1 and not periods else []) + ([f'{len(tasks)} tasks'] if tasks else [])")
+          "            parts = []   # (1s) the last milestone and its date; never a count of teams or tasks")
+    patch(eng / "family_rules.py",
+          "            say = f'{len(st)} steps, {len(data.get(\"lanes\") or [])} teams' + (f', {dec} decision' + ('s' if dec > 1 else '') if dec else '')",
+          "            say = None   # (1s) a count of steps and teams is not a takeaway")
     # (2d) a template infographic keeps its labels: three or more of its template slide's text shapes left with no text
     #      fail the content gate (a filler that refused the data leaves the template's shapes empty)
     patch(vd, '        ref = shape_facts(etree.fromstring(rz.read(rparts[src - 1]))) if src else {}\n',
@@ -351,7 +354,137 @@ def build(upc, rk, out):
           '                     and not text_of(sp_).strip()]\n'
           '            if len(empty) >= 3:\n'
           '                fails.append(f"slide {i}: the template infographic kept {len(empty)} of its shapes with no text "\n'
-          '                             f"(\'{empty[0]}\' ...) - the data did not fit this layout: use a drawn style (a timeline: lanes)")\n')
+          '                             f"(\'{empty[0]}\' ...) - the data did not fit this layout: give each item the detail its box shows "\n'
+          '                             f"(a funnel: \'Stage: detail\'), or use a drawn style (a timeline: lanes)")\n')
+    # (1t) a section that is only asks (Decision / Ask / Next step, 3 or 4 lines) becomes the template's three cards (or the
+    #      label table for 4), each ask a card titled by its label: the Studio set them as three bullets in one wide box, a
+    #      mostly empty slide that closed 56 library decks
+    patch(eng / "page_to_spec.py",
+          "            # a section that is only asks (two strips would overwrite each other in one box): all of them as the body, in order; they also reach the asks slide\n",
+          "            # a section that is only asks (two strips would overwrite each other in one box): all of them as the body, in order; they also reach the asks slide\n"
+          "            pairs_ = [(lab, body) for lab, body in callouts] + [split_label(l.replace(H, '', 1) if l.startswith(H) else l) for l in rest]\n"
+          "            if infographics and len(pairs_) in (3, 4) and all(lab and body for lab, body in pairs_):   # (1t) the asks as cards\n"
+          "                cards_ = [(lab[:1].upper() + lab[1:], [body]) for lab, body in pairs_]\n"
+          "                if infographic(cards_, head, note, 'cards' if len(cards_) == 3 else 'table', takeaway):\n"
+          "                    if overflow and appendix and appendix[-1][0] == headline: appendix.pop()\n"
+          "                    return\n")
+    # (1u) the template funnel shows each stage's detail in the box beside it: a stage written without one (no "Stage:
+    #      detail") is reported, as a name over 3 words already is - the Studio left the four boxes white
+    patch(out / "tools/template_infographics.py",
+          '        if _words(det) > 14:\n            P_.append(f"funnel detail',
+          '        if not det.strip():                                             # (1u)\n'
+          '            P_.append(f"funnel stage \'{lead[:24]}\' has no detail for the box beside it - write \'Stage: detail\'")\n'
+          '        if _words(det) > 14:\n            P_.append(f"funnel detail')
+    #      ... and the same asks written as bullets ("- Decision: ...", a named list the engine keeps as a list): the list
+    #      router dropped every Decision / Ask / Next step line, found no list and left one wide box of three bullets
+    patch(eng / "page_to_spec.py",
+          "        lines = [l for l in raw if l.strip() and split_label(l)[0] not in TAKEAWAY_LABELS + CALLOUT_LABELS]\n",
+          "        lines = [l for l in raw if l.strip() and split_label(l)[0] not in TAKEAWAY_LABELS\n"
+          "                 and (split_label(l)[0] not in CALLOUT_LABELS or l.startswith('\u2022 '))]   # (1t) a bulleted ask is a list item\n")
+    # (1v) every hand-off keeps its number: when no stretch of its line is free (short flows between close steps), the
+    #      number sits on the receiving step's top corner (left, else right), then the sending step's - the panel lists
+    #      every hand-off, so a number missing from the drawing left the reader unable to match one (66 library slides)
+    sw = out / "tools/swimlanes.py"
+    patch(sw, "\ndef _p_handoffs(plan, m, box):",
+          "\ndef _corner_spot(rb, ra, d, avoid, taken):\n"
+          "    \"\"\"(1v) A number badge centred on a step's top corner: the receiving step's left, then right, then the sending\n"
+          "    step's; None when every corner touches another step or badge.\"\"\"\n"
+          "    pad = int(0.03 * IN)\n"
+          "    for own in (rb, ra):\n"
+          "        if not own:\n"
+          "            continue\n"
+          "        for cx in (own[0], own[2]):\n"
+          "            r = (cx - d // 2, own[1] - d // 2, cx + d // 2, own[1] + d // 2)\n"
+          "            if any(q_ != own and r[0] < q_[2] + pad and r[2] > q_[0] - pad and r[1] < q_[3] + pad and r[3] > q_[1] - pad\n"
+          "                   for q_ in list(avoid) + list(taken)):\n"
+          "                continue\n"
+          "            return r\n"
+          "    return None\n"
+          "\n\ndef _p_handoffs(plan, m, box):")
+    patch(sw, "        r = _badge_spot(pts, bd, avoid, taken)\n        if r is None:\n"
+              "            plan.problems.append(f\"no room for hand-off number {n}",
+          "        r = _badge_spot(pts, bd, avoid, taken)\n"
+          "        if r is None:                                   # (1v) on a step's corner\n"
+          "            r = _corner_spot(rects.get(b), rects.get(a), bd, avoid, taken)\n"
+          "        if r is None:\n"
+          "            plan.problems.append(f\"no room for hand-off number {n}")
+    # (1w) a dated line's closing parenthesis names its team only when it is a name (1-3 words, the timeline's workstream
+    #      limit); a longer one is the item's detail: "(two features moved to phase 2)" became a lane of that name, and on
+    #      a story line a short detail vanished as an unused team while a long one stayed in brackets
+    patch(eng / "family_rules.py",
+          "        g = re.search(r'\\(([^()]{2,30})\\)\\s*$', rest) or re.search(r'\\[([^\\[\\]]{2,30})\\]', rest)\n"
+          "        if g:\n"
+          "            word = g.group(1).strip()\n"
+          "            if word.lower() in STATUS: it['status'] = STATUS[word.lower()]\n",
+          "        g = re.search(r'\\(([^()]{2,90})\\)\\s*$', rest) or re.search(r'\\[([^\\[\\]]{2,30})\\]', rest)   # (1w)\n"
+          "        if g:\n"
+          "            word = g.group(1).strip()\n"
+          "            if word.lower() in STATUS: it['status'] = STATUS[word.lower()]\n"
+          "            elif len(word.split()) > 3 or len(word) > 30: it['text'] = word   # (1w) a sentence: the detail, not a team\n")
+    # (1y) a page's SIPOC: "Layout: swimlane sipoc" over "Suppliers: ...", "Inputs: ...", "Process: step, step, step",
+    #      "Outputs: ...", "Customers: ..." lines fills the five columns (the page reader made lanes of the five labels
+    #      and the drawing showed four empty columns); and a big number may carry months or years ("14 months")
+    patch(eng / "family_rules.py",
+          "        data = timeline(lines, groups) if fam == 'timeline' else swimlane(lines, explicit=True)\n",
+          "        data = timeline(lines, groups) if fam == 'timeline' else (sipoc(lines) if style == 'sipoc' else swimlane(lines, explicit=True))   # (1y)\n")
+    patch(eng / "family_rules.py", "\n# ---------------------------------------------------------------- template infographics\n",
+          "\nSIPOC_KEYS = {'supplier': 'suppliers', 'suppliers': 'suppliers', 'input': 'inputs', 'inputs': 'inputs', 'process': 'process',\n"
+          "              'steps': 'process', 'output': 'outputs', 'outputs': 'outputs', 'customer': 'customers', 'customers': 'customers'}\n"
+          "\n\ndef sipoc(lines):\n"
+          "    \"\"\"(1y) \\\"Suppliers: a, b\\\" ... \\\"Process: step, step, step\\\" ... \\\"Customers: ...\\\" -> {'lanes', 'steps', 'sipoc'}; None\n"
+          "    unless the process has 3-7 steps and the suppliers and customers are named.\"\"\"\n"
+          "    got = {}\n"
+          "    for raw in lines:\n"
+          "        lab, body = split_label(plain(raw))\n"
+          "        k = SIPOC_KEYS.get(str(lab or '').strip().lower())\n"
+          "        if k and body:\n"
+          "            got[k] = [x.strip(' .')[:1].upper() + x.strip(' .')[1:] for x in re.split(r',\\s*|\\s+and\\s+', body) if x.strip(' .')]\n"
+          "    proc = got.pop('process', [])\n"
+          "    if not 3 <= len(proc) <= 7 or not got.get('suppliers') or not got.get('customers'): return None\n"
+          "    steps = [{'id': f's{k + 1}', 'lane': 'Process', 'text': _short(t, 5)} for k, t in enumerate(proc)]\n"
+          "    steps[0]['kind'] = 'start'; steps[-1]['kind'] = 'end'\n"
+          "    return {'lanes': ['Process'], 'steps': steps, 'sipoc': got}\n"
+          "\n# ---------------------------------------------------------------- template infographics\n")
+    patch(out / "tools/template_infographics.py",
+          r'BIG = re.compile(r"^[~<>≈]?[-+]?[$€£]?\d[\d,.]*\s?(%|x|k|m|bn|b|pts?|min|h|hrs|days?|wks?|weeks?|M|K|B)?$',
+          r'BIG = re.compile(r"^[~<>≈]?[-+]?[$€£]?\d[\d,.]*\s?(%|x|k|m|bn|b|pts?|min|h|hrs|days?|wks?|weeks?|months?|mos?|years?|yrs?|M|K|B)?$')
+    # (1z) the milestones slide finds its event circles and year labels by shape, not by their sample text: the page
+    #      engine clears a template timeline's sample text before the filler runs, so the filler found no circle ("9
+    #      events at most") and left the slide's 11 shapes empty - every library milestone slide failed the gate
+    patch(out / "tools/template_infographics.py",
+          '    circles = [s for s in shapes if s.width > 0.8 * IN and s.has_text_frame and s.text_frame.text.strip() == "Event"]\n'
+          '    years = sorted((s for s in shapes if s.has_text_frame and s.text_frame.text.strip() == "YEAR"), key=lambda s: s.left)\n',
+          '    circles = [s for s in shapes if 0.8 * IN < s.width < 1.3 * IN and abs(s.width - s.height) < 0.05 * IN   # (1z) by shape\n'
+          '               and s.has_text_frame and s.text_frame.text.strip() in ("Event", "")]\n'
+          '    years = sorted((s for s in shapes if s.has_text_frame and s.text_frame.text.strip() in ("YEAR", "")\n'
+          '                    and 0.8 * IN < s.width < 1.0 * IN and s.height < 0.35 * IN), key=lambda s: s.left)\n')
+    # (1aa) a KPI card keeps the words around its number: "5 against a target of 0", "9 days per claim", "4.6 of 5
+    #      (from 4.2)" lost everything but the number and a signed change; the rest is now the card's caption (shown
+    #      beside the change, or under the number when there is none), and a card without a trend line is sized to its
+    #      content (2.6 in, not 3.6 in of mostly empty card)
+    patch(eng / "family_rules.py",
+          "            v = (NUM.search(body) or [body])[0]; d = re.search(r'\\(([-+▲▼][^()]+)\\)', body)\n"
+          "            its.append({'label': lab, 'value': v.strip(), **({'delta': d.group(1)} if d else {})})\n",
+          "            m_ = NUM.search(body); v = m_.group(0) if m_ else body; d = re.search(r'\\(([-+▲▼][^()]+)\\)', body)\n"
+          "            before = body[:m_.start()].strip(' ,:') if m_ else ''   # (1aa) the words around the number\n"
+          "            after = (body[m_.end():] if m_ else '').replace(d.group(0), ' ') if d else (body[m_.end():] if m_ else '')\n"
+          "            after = re.sub(r'\\s+', ' ', re.sub(r'[()]', ' ', after)).strip(' ,;:')\n"
+          "            if before and len(before + ' ' + v.strip()) <= 9: v = before + ' ' + v.strip(); before = ''\n"
+          "            vs = ', '.join(x for x in ((before + ' ' + v.strip()) if before else '', after) if x)\n"
+          "            its.append({'label': lab, 'value': v.strip(), **({'delta': d.group(1)} if d else {}), **({'vs': vs} if vs else {})})\n")
+    mc = out / "tools/modern_charts.py"
+    patch(mc, "    gap = int(0.25 * IN); cw = (w - gap * (n - 1)) / n; ch = min(h, int(3.6 * IN)); y0 = y + (h - ch) / 2\n",
+          "    gap = int(0.25 * IN); cw = (w - gap * (n - 1)) / n\n"
+          "    ch = min(h, int((3.6 if any(len(it.get('trend') or []) >= 2 for it in items[:n]) else 2.6) * IN))   # (1aa)\n"
+          "    y0 = y + (h - ch) / 2\n")
+    patch(mc, "        if it.get(\"vs\"):\n            text(sl, x + pad + bw + 0.1 * IN, by, w - 2 * pad - bw, bh, it[\"vs\"], 10, MUTED, BODY, \"l\", \"m\")\n",
+          "        if it.get(\"vs\"):\n            text(sl, x + pad + bw + 0.1 * IN, by, w - 2 * pad - bw, bh, it[\"vs\"], 10, MUTED, BODY, \"l\", \"m\")\n"
+          "    elif it.get(\"vs\"):                                  # (1aa) the words around the number, under it\n"
+          "        text(sl, x + pad, by, w - 2 * pad, 0.6 * IN, it[\"vs\"], 12, MUTED, BODY, \"l\", \"t\")\n")
+    # (1ab) a one-lane process (a page's SIPOC) does not print its lane name under every step ("Route / Process")
+    patch(out / "tools/swimlanes.py",
+          "        if two:                                         # owner team as a second, smaller line\n",
+          "        if two and len(m[\"lanes\"]) > 1:                # owner team as a second, smaller line; (1ab) one lane: none\n")
     # (1i) a status mark is a mark, not text: the content gate skips a run that is only a dot, square or arrow in a status
     #      colour, as the brand colours gate already does ("status colours on marks only"); the words beside it are checked
     patch(vd, '                continue\n            rpr = r.find("a:rPr", NS)\n            lat = rpr.find("a:latin", NS) if rpr is not None else None\n',

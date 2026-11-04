@@ -282,6 +282,11 @@ def expert_review(spec, title, md=None):
                 if long_:
                     page.append(f"section '{h}': {len(long_)} swimlane step{'s' if len(long_) > 1 else ''} over 5 words - the "
                                 f"slide shows only the first 5 ('{long_[0]}'): say each in 5 words, verb and object")
+            if layout.lower() == "template funnel":    # the stage in the funnel layer, its detail in the box beside it
+                bad = [i for i in items if not i.partition(":")[2].strip() or len(i.partition(":")[0].split()) > 3]
+                if bad:
+                    page.append(f"section '{h}': write each funnel line 'Stage: detail' - a 1-3 word stage and its detail "
+                                f"(the figure, the drop) for the box beside it ('{bad[0]}')")
             if layout or kind_ in ("bands", "table") or len(items) < 2 or h in drawn:
                 continue                               # (a Layout line or a table is the author's choice; the engine drew some itself)
             x = {"headline": h, "table": [["", ""]] + [[i, ""] for i in items]} if kind_ == "table" else {"headline": h, "text": items}

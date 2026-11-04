@@ -21,7 +21,7 @@ order: 201
 - The same price at the shelf, the register and online
 - A margin that matches the plan
 
-## Pricing proposes, merchants approve, stores re-ticket
+## Pricing proposes, merchants approve
 Layout: swimlane handoffs
 - Pricing analyst: Proposes the new retail price
 - Pricing analyst: Checks margin and competition
@@ -40,7 +40,7 @@ Layout: swimlane handoffs
 | Send to POS | New prices on every register in time | POS price file |
 | Labels | Shelf labels printed by store | Label batch |
 
-## Five steps take a price from proposal to shelf
+## Five steps take a price to the shelf
 Layout: process chevrons
 - Propose: cost and margin rules
 - Compare: competitor prices

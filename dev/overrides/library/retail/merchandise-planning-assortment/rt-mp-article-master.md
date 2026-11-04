@@ -21,7 +21,7 @@ order: 103
 - An article ready to buy, ship and sell
 - Fewer POS and receiving errors from bad data
 
-## Data is requested, enriched, approved, then active
+## Items are enriched and approved before use
 Layout: swimlane handoffs
 - Merchant: Requests the new article
 - Vendor: Supplies attributes and images

@@ -48,11 +48,16 @@ A build turns the page into a deck by rules (no AI): cover, the slides, closing;
 - "had to shrink ... shorten it": shorten the bullets or table cells of that slide, or split the table (at most 5 rows).
 - "repeats ... in several cells": give each cell its own words (rating words and dates may repeat).
 - "cells empty ... emptied template structure": add the missing rows or columns, or use fewer columns.
+- "the template infographic kept N of its shapes with no text": give every item the detail its box shows (a funnel:
+  `- Stage: detail`), or pick a drawn layout (a timeline: `lanes`).
+- A `CHECK` line names a shape the text did not fit (a swimlane step, a chevron title, an event circle): shorten that
+  line - about 24 characters a swimlane step, no word over 10 letters.
 - Anything else: the FAIL line names the fix; rebuild after each change.
 
 ## How a page is written (to adapt or add one)
 - Front matter: `id`, `domain`, `l1`, `l2`, `summary`, `systems` (kinds of system), `tags`, `order`. `# Title`, then one
-  `## Heading` per slide; the heading is the slide's takeaway (at most 42 characters).
+  `## Heading` per slide; the heading is the slide's takeaway (at most 42 characters). A table holds 4 rows of up to
+  two lines, or 5-6 one-line rows; more continues on a "(cont.)" slide.
 - A body per slide: `### Name` cards (2-3, two short bullets each); a Markdown table (3-5 rows); `### Today` and
   `### Target` bands; or a `Layout:` line over its lines - `swimlane handoffs` (`- Role: step`, 1-5 words a step, a question line then
   `- Role: If yes, ...` and `- Role: If no, ...`), `process chevrons | numbered | arrow | cycle | snake | vertical | phases |
@@ -61,7 +66,9 @@ A build turns the page into a deck by rules (no AI): cover, the slides, closing;
   dc-operations, import-flow, inbound-to-dc, inventory-count, markdown, merchandise-planning, month-end-close,
   omnichannel-fulfilment, order-to-cash, procure-to-pay, record-to-report, returns, store-replenishment, supply-chain,
   supply-chain-cross-dock, three-way-match, vendor-onboarding), and `four numbers`, `kpi cards`, `scorecard`, `matrix`,
-  `hexagons`, `pyramid`, `hub`, `ranking`, `donut`, `gantt`, `OGSM`, `priorities house`, `template funnel` ...
+  `hexagons`, `pyramid`, `hub`, `ranking`, `donut`, `gantt`, `OGSM`, `priorities house`, `template funnel` (`- Stage:
+  detail`, four lines) ... A `swimlane sipoc` takes `- Suppliers: ...`, `- Inputs: ...`, `- Process: step, step, step`,
+  `- Outputs: ...`, `- Customers: ...`; a `timeline now-next-later` takes `(Now)`, `(Next)` or `(Later)` on each line.
   Copy the line format from a library page that uses the layout. A `matrix` reads as a 2 x 2 with labelled axes when
   its lines say `- Name: <row words>, <column words> - action` (the first line: the quadrant to act on).
 - `> Notes: ...` under a section goes to the speaker notes.

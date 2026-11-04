@@ -21,7 +21,7 @@ order: 201
 - Customer balances that are right every morning
 - Overdue worked by value and risk
 
-## Cash is applied automatically, collectors work the rest
+## Collectors only work unmatched cash
 Layout: swimlane handoffs
 - Bank: Sends statement and lockbox file
 - Cash application: Imports and auto-matches
@@ -40,7 +40,7 @@ Layout: swimlane handoffs
 | Collections | Worklists ranked by value and risk | Collection worklist |
 | Dunning | Reminder letters by overdue stage | Dunning notices |
 
-## Five steps from bank file to collected cash
+## Five steps from bank file to applied cash
 Layout: process chevrons
 - Import: bank statement
 - Match: rules and references

@@ -63,7 +63,7 @@ Layout: rings
 
 ## From survey to sign-off
 Layout: swimlane handoffs
-- Site leader: Completes the readiness checklist
+- Site leader: Completes the checklist
 - Change lead: Scores the results by area
 - Change lead: Any area not ready?
 - Workstream lead: If yes, agrees actions and dates

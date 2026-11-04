@@ -21,7 +21,7 @@ order: 102
 - Every store listed for what it should sell
 - No orders for articles that left the range
 
-## Merchants decide the range, space makes it fit
+## Merchants set the range, space fits it
 Layout: swimlane handoffs
 - Merchant: Reviews category performance
 - Assortment planner: Builds the range by cluster
@@ -40,7 +40,7 @@ Layout: swimlane handoffs
 | Items | Listed items complete in the master | Item master |
 | Space | Planograms published from the range | Planograms, fixtures |
 
-## Five steps from range review to reset shelf
+## Five steps from range review to the shelf
 Layout: process numbered
 - Review: category performance
 - Cluster: stores that sell alike

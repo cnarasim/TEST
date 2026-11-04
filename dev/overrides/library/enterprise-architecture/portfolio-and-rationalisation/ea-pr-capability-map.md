@@ -17,7 +17,7 @@ Layout: pyramid
 - Supporting: what keeps the lights on
 - Foundation: data, integration, security
 
-## Capabilities and the applications behind them
+## Applications behind each capability
 | Capability | Applications | Health | Investment |
 |---|---|---|---|
 | Merchandise planning | Planning tool | Good | Invest |

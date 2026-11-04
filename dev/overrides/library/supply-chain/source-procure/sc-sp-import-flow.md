@@ -40,7 +40,7 @@ Layout: swimlane handoffs
 | Customs | The broker files the entry; duties are recorded | Customs entry, duty |
 | Landed cost | Freight and duty are added to the product cost | Landed cost, vendor and carrier invoices |
 
-## Imported product crosses four lanes to reach a store
+## Imports pass four teams to reach a store
 Layout: retail import-flow
 
 ## Controls and exceptions

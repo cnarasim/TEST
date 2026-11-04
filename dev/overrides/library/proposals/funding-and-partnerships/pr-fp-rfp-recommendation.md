@@ -24,12 +24,12 @@ order: 303
 
 ## Six steps from long list to finalist
 Layout: process chevrons
-- Requirements: agreed with the business
+- Needs: agreed with the business
 - Long list: [n] vendors invited
 - RFP: questions, pricing, references
 - Demos: scripted and scored by the panel
 - Due diligence: security, finance, references
-- Negotiation: best and final offers
+- Negotiate: best and final offers
 
 ## How the finalists scored
 | Criterion | Weight | Vendor A | Vendor B | Vendor C |

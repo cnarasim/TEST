@@ -62,7 +62,7 @@ Layout: swimlane handoffs
 - Resource manager: Someone free in time?
 - Resource manager: If yes, books the person
 - Project manager: If no, raises a gap with options
-- Steering committee: Decides backfill, partner or delay
+- Steering committee: Picks backfill or delay
 
 ## Capacity risks we watch
 | Risk | Early sign | Response |

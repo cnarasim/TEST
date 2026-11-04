@@ -21,7 +21,7 @@ order: 102
 - Every store has its launch quantity on day one
 - Remaining stock held at the DC to chase
 
-## Allocation turns one buy into store deliveries
+## Allocation splits a buy across stores
 Layout: swimlane handoffs
 - Merchant: Confirms buy and launch date
 - Allocator: Builds the allocation table

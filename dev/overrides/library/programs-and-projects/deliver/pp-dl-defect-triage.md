@@ -41,7 +41,7 @@ Layout: process diverge
 ## The daily triage
 Layout: swimlane handoffs
 - Tester: Logs the defect with evidence
-- Triage lead: Checks completeness and duplicates
+- Triage lead: Checks for duplicates
 - Triage board: A real defect?
 - Triage board: If yes, sets severity, priority, owner
 - Triage lead: If no, rejects or reroutes it

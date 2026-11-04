@@ -39,7 +39,7 @@ order: 603
 | Identity | Many logins | Single sign-on for every app |
 
 ## Transition in three stages
-Layout: timeline template-roadmap
+Layout: timeline phases
 - Foundations: Jan 2027 to Dec 2027 (Year 1)
 - Scale: Jan 2028 to Dec 2028 (Year 2)
 - Optimize: Jan 2029 to Dec 2029 (Year 3)

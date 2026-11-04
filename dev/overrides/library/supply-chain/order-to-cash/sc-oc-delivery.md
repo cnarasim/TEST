@@ -21,15 +21,15 @@ order: 305
 - Goods issued and stock reduced on time
 - A delivery the customer can match to the order
 
-## The DC ships, the carrier takes over at the door
+## The DC ships, the carrier delivers
 Layout: swimlane handoffs
-- Shipping planner: Creates deliveries from due list
-- DC picker: Picks the delivery
-- DC packer: Packs and labels the cartons
-- DC packer: Quantity matches the delivery?
-- DC packer: If yes, stage for loading
+- Shipping planner: Creates deliveries
+- DC floor: Picks the delivery
+- DC floor: Packs and labels cartons
+- DC floor: Quantity matches?
+- DC floor: If yes, stage for loading
 - DC lead: If no, short-pick or re-pick
-- DC loader: Loads and posts goods issue
+- DC floor: Loads, posts goods issue
 - Carrier: Collects and sends tracking
 
 ## The systems and data it runs on

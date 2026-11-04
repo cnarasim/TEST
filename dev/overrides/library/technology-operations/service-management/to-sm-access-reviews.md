@@ -35,7 +35,7 @@ The right access for every associate, granted fast, removed on time and proven t
 Layout: swimlane handoffs
 - Requester: Requests a role
 - Line manager: Approves the business need
-- Identity team: Conflicts with existing access?
+- Identity team: Access conflict?
 - Data owner: If yes, approves or rejects
 - Identity team: If no, grants the role
 - Identity team: Logs the evidence for audit

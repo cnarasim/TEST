@@ -23,9 +23,9 @@ order: 406
 
 ## The WMS directs, the operator confirms
 Layout: swimlane handoffs
-- Receiver: Releases the received pallet
+- Receiver: Releases the pallet
 - WMS: Suggests a location by rule
-- Putaway operator: Suggested location usable?
+- Putaway operator: Location usable?
 - Putaway operator: If yes, scans it to confirm
 - Inventory control: If no, clears the location issue
 - WMS: Releases the stock for picking

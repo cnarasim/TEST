@@ -36,7 +36,7 @@ Find failures before guests, stores and DCs do, and page the right person once, 
 Layout: swimlane handoffs
 - Monitoring: Detects a threshold breach
 - Monitoring: Pages on-call with context
-- On-call engineer: Acknowledges within target
+- On-call engineer: Confirms the alert
 - On-call engineer: Real impact on service?
 - On-call engineer: If yes, opens an incident
 - On-call engineer: If no, tunes the alert

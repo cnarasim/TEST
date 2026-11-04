@@ -23,12 +23,12 @@ order: 404
 
 ## FP&A explains, merchants act
 Layout: swimlane handoffs
-- Accounting: Posts sales, cost and adjustments
+- Accounting: Posts sales and cost
 - FP&A: Builds the margin bridge
 - FP&A: Margin on plan?
 - FP&A: If yes, publish the margin pack
 - Merchants: If no, explain and plan actions
-- Leadership: Reviews actions every month
+- Leadership: Reviews actions monthly
 
 ## Five drivers explain the margin change
 | Driver | What moves it | Who owns it |

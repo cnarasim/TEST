@@ -21,9 +21,9 @@ order: 202
 - Promotions live on time in every channel
 - A clear read on what each promotion earned
 
-## Marketing plans, merchants price, supply chain builds stock
+## Three teams plan, price and stock a promo
 Layout: swimlane handoffs
-- Marketing: Sets the promotion calendar
+- Marketing: Sets the promo calendar
 - Merchant: Chooses articles and offer
 - Pricing analyst: Sets the promo price
 - Demand planner: Forecasts the lift
@@ -41,7 +41,7 @@ Layout: swimlane handoffs
 | Stock build | Lift added to forecast or allocation | Lift, allocation |
 | Results | Sales during vs before the event | Promotion results |
 
-## Five steps take a promotion from idea to results
+## Five steps from promotion idea to results
 Layout: process numbered
 - Plan: calendar and offer
 - Price: promo price

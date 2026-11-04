@@ -40,7 +40,7 @@ Layout: swimlane handoffs
 | Cross-dock routing | The WMS sends each carton to its store lane | Sortation tasks |
 | Ship | Store loads leave the outbound doors | Store deliveries |
 
-## Cartons cross the dock to stores without being stored
+## Cartons cross the dock, never stored
 Layout: retail cross-dock
 
 ## Controls and exceptions

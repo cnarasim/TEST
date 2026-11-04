@@ -23,7 +23,7 @@ order: 307
 
 ## Receipts and shipments drive the accrual
 Layout: swimlane handoffs
-- DC and stores: Post receipts to received-not-invoiced
+- DC and stores: Accrue open receipts
 - Transportation: Shares shipments and carrier rates
 - GL accountant: Invoice in by the cut-off?
 - GL accountant: If yes, the invoice clears the receipt

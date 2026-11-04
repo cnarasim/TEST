@@ -58,9 +58,9 @@ Layout: swimlane handoffs
 
 ## Prove it in one category, then scale
 Layout: timeline phases
-- Pilot in one category: Jan 2027 to Mar 2027 (Content team)
-- Read the results: Apr 2027 to Apr 2027 (Product team)
-- Scale to new items: May 2027 to Aug 2027 (Content team)
+- Pilot one category: Jan 2027 to Mar 2027
+- Read the results: Apr 2027 to Apr 2027
+- Scale up: May 2027 to Aug 2027
 > Notes: example dates; scale only if the pilot meets its targets.
 
 ## Approve a one-category pilot

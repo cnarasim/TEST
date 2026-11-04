@@ -21,7 +21,7 @@ order: 306
 - An invoice per delivery, sent and posted
 - Revenue and receivables on the right accounts
 
-## Billing runs nightly, exceptions the next morning
+## Bills run nightly, exceptions next morning
 Layout: swimlane handoffs
 - Delivery: Goods issue posted
 - Billing run: Invoices the due list

@@ -24,7 +24,7 @@ order: 106
 ## Planning decides, DCs move the stock
 Layout: swimlane handoffs
 - Supply planning: Splits the inbound by forecast
-- Supply planning: Checks network balance weekly
+- Supply planning: Checks network balance
 - Supply planning: A DC short, another long?
 - Supply planning: If yes, raises a transfer order
 - Supply planning: If no, keeps the current plan

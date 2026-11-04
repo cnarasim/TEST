@@ -21,7 +21,7 @@ order: 402
 - Every route loaded before its cut-off
 - Units picked once, checked once
 
-## Waves keep the floor busy and trucks on time
+## Waves keep the floor busy, trucks on time
 Layout: swimlane handoffs
 - Wave planner: Releases waves by route
 - Picker: Picks to tote or cart
@@ -40,7 +40,7 @@ Layout: swimlane handoffs
 | Loading | Cartons loaded by stop and door | Load, trailer |
 | Goods issue | Shipped stock leaves the books | Goods issue, ASN to the customer |
 
-## Five zones turn vendor trailers into store deliveries
+## Five zones turn trailers into deliveries
 Layout: retail dc-operations
 
 ## Controls and exceptions

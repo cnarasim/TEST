@@ -21,7 +21,7 @@ order: 201
 - Confirmed POs with price, date and quantity
 - Open orders the DC can schedule
 
-## Buyers turn requirements into confirmed orders
+## Buyers turn needs into confirmed orders
 Layout: swimlane handoffs
 - Replenishment: Creates the requirement
 - Buyer: Converts it to a PO
@@ -40,7 +40,7 @@ Layout: swimlane handoffs
 | Approval | Orders above a limit route to an approver | Approval workflow |
 | Send and confirm | The order goes by EDI or portal; the vendor confirms | PO message, vendor confirmation |
 
-## Five documents take a purchase from order to payment
+## Five documents take a purchase to payment
 Layout: retail procure-to-pay
 
 ## Controls and exceptions

@@ -21,7 +21,7 @@ order: 302
 - A net price and tax on every line
 - Revenue, discounts and freight on the right accounts
 
-## Pricing rules are set once, used on every order
+## Price rules set once apply to every order
 Layout: swimlane handoffs
 - Pricing analyst: Agrees the price and discount
 - Pricing analyst: Maintains the price records

@@ -23,7 +23,7 @@ order: 312
 
 ## Owners run controls, internal audit tests
 Layout: swimlane handoffs
-- Control owner: Performs the control, keeps evidence
+- Control owner: Runs it, keeps evidence
 - Internal audit: Tests a control sample
 - Internal audit: Control worked as designed?
 - Internal audit: If yes, conclude it is effective

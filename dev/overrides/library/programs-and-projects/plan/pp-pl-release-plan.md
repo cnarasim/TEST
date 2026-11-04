@@ -58,7 +58,7 @@ Layout: timeline quarters
 ## How scope moves between releases
 Layout: swimlane handoffs
 - Product owner: Proposes moving an item
-- Release manager: Checks capacity and dependencies
+- Release manager: Checks capacity
 - Release manager: Release goal still holds?
 - Release manager: If yes, updates the release plan
 - Steering committee: If no, decides on scope or date

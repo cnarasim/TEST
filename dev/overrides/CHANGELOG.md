@@ -70,6 +70,31 @@ its drawn shapes, template run styles, fit, accessibility, type scale, plain pun
 - A headline computed from the data is added after the author's heading or not at all, never in its place, and a
   timeline grouped by periods (Year 1, Q3, Wave 2) is not counted as "teams".
 - Library builds print the engine's own warnings as CHECK lines (they were only in the build log).
+- A slide quality pass over all 294 library decks, rendered, every contact sheet and engine warning read (178 warnings
+  and 7 failing decks before it). Engine fixes:
+  - The milestones template finds its event circles and year labels by shape: the page engine clears a template
+    timeline's sample text first, so the filler found no circle and every milestone slide kept 11 empty shapes.
+  - A template timeline is used only when its filler takes the data with no problem at all (a name too long for its
+    circle, more events than it holds); otherwise the section is drawn as lanes.
+  - Swimlane hand-off numbers always show: with no free stretch of line, the number sits on the receiving step's
+    corner (66 numbers were missing; the side panel listed hand-offs the drawing did not number).
+  - The template funnel reports a stage written without its detail (the four boxes beside the funnel stayed white),
+    and the gate's empty-shape FAIL says what to write (`- Stage: detail`).
+  - Closing asks written as bullets ("- Decision: ...", "- Ask: ...", "- Next step: ...") become three cards; the list
+    reader dropped every ask line and left one wide box of three bullets.
+  - A headline computed from the data states a fact (the last milestone and its date, the largest share), never a
+    count: "What comes next: 2 teams, 3 tasks" and "8 steps, 4 teams" are gone.
+  - A dated line's closing parenthesis is its team only when it is a name (1-3 words); a sentence there is the item's
+    detail ("(two features moved to phase 2)" had become a lane).
+  - A page's SIPOC (`Suppliers:`, `Inputs:`, `Process: step, step, step`, `Outputs:`, `Customers:`) fills the five
+    columns; they were drawn empty.
+  - KPI cards keep the words around the number ("5 against a target of 0", "9 days per claim") as a caption and are
+    sized to their content; big-number cards accept months and years ("14 months").
+- Library content: 52 headings over 42 characters shortened (they printed smaller than the deck's other titles; the
+  verifier now fails a longer one), 50 swimlane steps and decisions shortened to fit their boxes (about 24 characters,
+  no word over 10 letters), and 30 pages fixed for their layout's rules: explicit Now / Next / Later columns (the
+  columns followed today's date and showed two empty), countdowns that end at the go-live, 2-5 swimlane lanes, phases
+  named in 1-3 words, plans longer than 24 months drawn as phases, shorter OGSM measures and house goals.
 - Scorecards fill both lists: "Lowlight:" / "Highlight:" lines in the page, else the page's own KPIs by status (off
   target under Lowlights). The Studio left both empty, so every scorecard kept the template's empty rows.
 - A template infographic (scorecard, OGSM, vision house, quad, funnel, donut, map) is filled on the template's own

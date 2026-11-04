@@ -63,7 +63,7 @@ Layout: ranking
 
 ## When a site lags
 Layout: swimlane handoffs
-- Change lead: Flags sites below target weekly
+- Change lead: Flags sites below target
 - District manager: Finds the cause with stores
 - District manager: A skills gap?
 - Champion: If yes, coaches the team on shift

@@ -37,7 +37,7 @@ Layout: swimlane handoffs
 | Transport lanes | Lanes with carriers, modes and transit times | Lanes, zones |
 | Stock by site | One view of stock across the network | Network stock snapshot |
 
-## One network of DCs serves stores and online guests
+## One DC network serves stores and online
 Layout: retail supply-chain
 
 ## Controls and exceptions

@@ -29,7 +29,7 @@ Layout: swimlane handoffs
 - Inventory accountant: Count loss within the rate?
 - Inventory accountant: If yes, true up the reserve
 - Loss prevention: If no, investigate and reset the rate
-- Controller: Approves the book-to-physical entry
+- Controller: Approves shrink entry
 
 ## Sales since the count drive the reserve
 Layout: process io
